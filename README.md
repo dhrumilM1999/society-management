@@ -211,3 +211,19 @@ The public directory is secondary utility, not the main product entry point. Sig
 - House-card-level quick assignment shortcuts still need to be wired to the token form.
 - Current receipt totals count token records marked received; the society must confirm whether token_count represents individual members or physical tokens before using the pending total as an attendance guarantee.
 - Test token entry, receipt status, totals, Gujarati labels, and phone layouts against the live deployment. No production database records were changed.
+
+
+## House quick actions and token follow-up — 12 Oct 2026
+
+### Done in code
+- House numbers 31–49 remain the primary tap targets in a compact mobile grid. Selecting a house opens its participant-count details and automatic contribution calculation.
+- Each house tile now shows a green paid / red payment-pending indicator based on recorded contributions.
+- Added compact per-house **Quick token** and **Receive money** shortcuts. Quick token preselects the house in the token form; Receive money jumps to that house's contribution entry.
+- Added **Call** and **WhatsApp** follow-up links beside pending token records when an administrator has a saved resident contact phone number. The WhatsApp link opens a prefilled message; the admin must tap Send in WhatsApp. The call link opens the phone dialer and does not place a call automatically.
+- Contact numbers are queried only for admin sessions and are not shown in the public house directory.
+
+### Limitations / verify
+- WhatsApp is a user-initiated wa.me link, not a background WhatsApp notification. Automated WhatsApp delivery requires an approved provider/API and explicit configuration; none is connected yet.
+- If a house has no saved phone number, the UI explains that no number is available rather than inventing one.
+- Confirm admin profile read policies allow the contact lookup, then test house shortcuts, paid/pending colors, call and WhatsApp links on a real phone.
+- Code is committed to GitHub; the live Cloudflare deployment and browser behavior have not yet been verified. No database schema or production transactions were changed.
