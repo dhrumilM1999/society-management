@@ -175,3 +175,23 @@ The public directory is secondary utility, not the main product entry point. Sig
 - The current data model stores the per-person rate on each household row, not as a festival-season setting. This UI iteration enforces ₹500 consistently when an admin saves a household, but does not add a season-level configurable rate. If the society needs to change the amount for a future festival, the schema and admin season settings should be migrated to store the rate once on navratri_seasons and derive every household's due from that season value.
 - Custom picker behavior is implemented in code but still needs browser/phone testing for keyboard navigation, long option lists, and all dynamic forms.
 - No database schema or production festival records were changed in this iteration.
+
+
+## Festival household entry workflow — 12 Oct 2026
+
+### Done
+- Reworked the Navratri household setup around one shared per-person festival rate input.
+- Added an "apply rate to all houses" action that updates the rate on all household rows in the current season while retaining each home's participant count.
+- Added tappable house-number cards. Each card shows people and the calculated household due amount.
+- Tapping a house opens a mobile bottom sheet with the participant count, live automatic total calculation, Save, Cancel, and Close actions.
+- Existing household data can be corrected by tapping the same house card and saving the corrected participant count.
+- Retained the payment recording controls and existing contribution ledger list beneath the house picker.
+
+### Important behavior
+- The shared rate is stored across the season's household rows because the current schema does not have a season-level rate column. This keeps the rate consistent in the current UI, but a proper database migration to store the rate once on the season remains the cleaner long-term design.
+- The amount is calculated as participant count × shared rate. A count of zero produces a zero contribution due.
+
+### Remaining verification
+- Test that rate changes persist across reloads and that due totals recalculate correctly for all 19 houses.
+- Test edit/save flows and contribution recording on a phone, including keyboard and bottom-sheet behavior.
+- Check that this newest commit has deployed to Cloudflare. No production database schema changes were made by this UI iteration.
