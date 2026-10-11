@@ -287,3 +287,16 @@ The public directory is secondary utility, not the main product entry point. Sig
 - Inspect every form in a browser, including custom mobile dropdowns, Gujarati labels, keyboard behavior, and validation.
 - Confirm no numeric values are accidentally accepted as fractional member/token counts.
 - Check the live Cloudflare deployment; the commit is in GitHub but live behavior is not verified.
+
+
+## Festival flow decluttering — 12 Oct 2026
+
+### Done in code
+- Removed repeated explanatory paragraphs from the festival header, household setup, and daily token workspace.
+- Removed redundant helper text from the waiting-member list while keeping the member labels and all token actions intact.
+- Kept contribution totals, household member/due cards, payment ledger and entry form, daily token counts, waiting list, token records, and expense entry available.
+
+### Still to verify
+- Review the Navratri screen on a phone and confirm the shorter flow is easier to scan.
+- Verify the latest commit has deployed to Cloudflare; browser and live deployment checks have not been performed.
+- This was a presentation-only change; no database or financial records were changed.
