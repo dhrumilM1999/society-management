@@ -119,3 +119,28 @@ The project was previously deployed by the owner at a `workers.dev` address. A W
 The production schema and hardening migrations are applied. Houses 31–49 are present. Five production Navratri tables have RLS enabled and remain empty. The prior production security advisor check reported that leaked-password protection was disabled.
 
 The test project's minimal Navratri schema has been created and checked. Do not use real financial records until test admin/resident sign-in, row isolation, payment calculations, fund separation and permissions have been exercised. Programme share calculation/finalization, browser push and WhatsApp delivery remain future implementation work.
+
+
+## Mobile-first UI iteration — 12 Oct 2026
+
+### Done
+- Added a phone-first layout layer while retaining the Refero Styles editorial direction (white canvas, restrained ink/gray palette, serif display headings, quiet borders).
+- Made the society header sticky and compact on small screens, with larger language/sign-out tap targets.
+- Reworked mobile navigation into a sticky, horizontally scrollable chip bar so all resident/admin sections remain reachable without a cramped multi-row menu.
+- Highlighted the active mobile navigation item with a high-contrast treatment.
+- Improved small-screen reading order, content spacing, metric cards, festival/programme records, and form controls.
+- Increased mobile input and select sizing to reduce iOS zoom, and made primary form actions full-width for easier tapping.
+- Added safe-area awareness, narrow-screen fallbacks, touch-friendly controls, and reduced-motion handling.
+
+### Ongoing / verify before calling complete
+- The CSS has been committed, but visual testing on real iPhone/Android viewport sizes and the live Cloudflare deployment is still required.
+- Check every view (Overview, Notices, Payments, Fund records, Navratri, Programmes, Manage houses, Admin review), especially long forms and Gujarati labels.
+- Confirm horizontal navigation can reach every tab and that sticky header/navigation do not obscure content or focused fields.
+- Verify no horizontal page overflow at 320px, 360px, 390px, and 430px widths; then refine any screen-specific issues.
+
+### Remaining
+- Run authenticated mobile smoke tests for both admin and resident accounts.
+- Verify touch targets, keyboard behavior, scrolling, and browser back/refresh behavior on a physical phone.
+- Confirm the newest commit has deployed to Cloudflare before relying on the live site.
+
+This iteration changes presentation only; it does not change the database schema, permissions, or production festival data.
