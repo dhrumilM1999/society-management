@@ -14,6 +14,7 @@ A static, responsive resident portal for **Sonalpark Society Gate-2**, serving h
 - Production RLS is enabled on all five Navratri tables; policies restrict writes to admins and limit resident reads to their own house where applicable.
 - Initial Navratri UI is committed: create/close a season, set participant counts and per-person contribution, record payments, add/mark daily tokens received, and record expenses.
 - Polished the Navratri and Programmes screens with a season hero/status panel, clearer festival metric cards, consistent section/form styling, responsive mobile layouts, and grouped programme expense/share cards.
+- Applied a Refero Styles-inspired editorial UI layer: white canvas, restrained charcoal/gray palette, serif display headings, pill-shaped primary actions, quieter borders, and consistent form/card styling. Reference: https://styles.refero.design/.
 - Separate Supabase test project `sonalpark-gate-2-test` was created manually by the owner.
 - Test project base schema for houses/profiles and the five Navratri tables has been created. All 19 house numbers (31–49) are seeded; RLS is enabled on all five Navratri tables.
 - Initial security advisor scan on the test project returned no security findings.
@@ -56,7 +57,7 @@ A static, responsive resident portal for **Sonalpark Society Gate-2**, serving h
 - Ensure expenses paid from the main society fund do not reduce the Navratri contribution balance.
 - Verify the resident dashboard avoids admin-only expense queries in an authenticated resident session (the current frontend code has been adjusted, but browser verification is pending).
 - Test empty states, error handling, duplicate submissions and mobile form behavior.
-- Visually inspect the refreshed festival and programme views in desktop and mobile browsers; CSS/UI changes are committed but not yet browser-verified.
+- Visually inspect the refreshed festival and programme views in desktop and mobile browsers; Refero-inspired CSS changes are committed but not yet browser-verified.
 - Enable leaked-password protection in production; a prior security-advisor check reported this setting disabled.
 - Verify Cloudflare deployment status and test on a real phone.
 - Browser push and WhatsApp delivery, plus broader society modules, remain future work.
