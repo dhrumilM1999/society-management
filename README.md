@@ -17,6 +17,8 @@ A static, responsive resident portal for **Sonalpark Society Gate-2**, serving h
 - Test project base schema for houses/profiles and the five Navratri tables has been created. All 19 house numbers (31–49) are seeded; RLS is enabled on all five Navratri tables.
 - Initial security advisor scan on the test project returned no security findings.
 - Added test-project indexes for common Navratri foreign-key and season/date lookups.
+- Fixed two Navratri UI issues in GitHub: resident sessions no longer query admin-only expense rows, and the collected total now formats paise as rupees correctly.
+- Season creation now uses the exact inserted season ID instead of querying the newest season by creator, avoiding a concurrent-create race.
 - The README is maintained as the project status record.
 
 ### Ongoing — current priority
