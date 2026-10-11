@@ -41,6 +41,10 @@ The `index.html` portal uses the Supabase URL and **publishable** key. Publishab
 
 The GitHub `main` branch was updated with the portal. If the deployed site is connected to this repository through Cloudflare's Git integration, it should automatically redeploy. Verify the deployment status and open the deployed URL to confirm.
 
+## House-number login
+
+The resident portal maps a house number such as `31` to an internal synthetic Auth email (`house31@sonalpark-gate2.invalid`) and still requires a password. Residents enter the house number, not this internal email. These synthetic addresses cannot receive email, so password resets must be handled by the administrator using **Manage houses** to set a new temporary password. Admins continue to sign in with their actual email address. The public directory shows only house numbers and active/inactive status; resident names and contact phones remain private.
+
 ## Current features in the portal
 
 - Email/password sign-in (no public sign-up).
