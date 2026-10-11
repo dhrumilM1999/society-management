@@ -4,6 +4,9 @@ A static, responsive resident portal for **Sonalpark Society Gate-2**, serving h
 
 ## Current portal
 
+- Admin sign-in with email/password; residents sign in using their house number (31–49) and password.
+- Read-only public directory shows house numbers and active status without exposing resident names or phone numbers.
+- Admin-only house management form stores resident name and private contact phone, creates the house login, and can disable a house login.
 - Email/password sign-in; public sign-up is intentionally disabled.
 - English/Gujarati interface toggle.
 - Published notices and meetings.
@@ -49,4 +52,4 @@ The project was previously deployed by the owner at a `workers.dev` address. A W
 
 The initial schema and hardening migrations are applied. The database has 12 public tables with RLS enabled and 19 house records for 31–49. The Supabase security advisor currently returns no findings.
 
-Real authentication and role-isolation tests are still pending because the project has no provisioned Auth users or profiles yet. Do not use real financial records until the first admin and a test resident are provisioned and payment confirmation/rejection are exercised. Programme share calculation/finalization, browser push and WhatsApp delivery remain future implementation work.
+The administrator profile is provisioned and admin sign-in has been confirmed by the owner. No resident profiles have been created yet, so house-number login and resident/admin role-isolation still need end-to-end testing with a test resident. Do not use real financial records until the first admin and a test resident are provisioned and payment confirmation/rejection are exercised. Programme share calculation/finalization, browser push and WhatsApp delivery remain future implementation work.
