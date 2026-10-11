@@ -5,32 +5,41 @@ A static, responsive resident portal for **Sonalpark Society Gate-2**, serving h
 ## Latest project status — 12 October 2026
 
 ### Done
-- Supabase project is connected; houses 31–49 (19 houses) are present.
+- Supabase project is connected; all 19 houses (31–49) exist.
 - Admin login has been confirmed by the owner; house-management and house-number login code is committed.
-- Read-only public house directory and English/Gujarati UI are present.
+- Public house-number directory, English/Gujarati toggle and resident portal are present.
 - Supabase Edge Function `manage-house-resident` is deployed.
-- Replaced the old text-bearing logo asset with a standalone, bolder emblem; favicon now matches. The adjacent header text remains the only place the society name is written.
-- Created five Navratri tables: seasons, household participation/contribution targets, contribution payments, daily token records and daily expenses.
-- Enabled RLS on all five Navratri tables and added admin/resident read rules.
-- Added an initial Navratri page for season setup, household contributions, payment records, daily token status and expenses.
-- Added responsive CSS adjustments for small/mobile screens.
+- Header now uses a bold, standalone society emblem with no duplicate wording; favicon matches the emblem.
+- Five Navratri tables have been created: seasons, household participation/contribution targets, contributions received, daily tokens and expenses.
+- RLS is enabled on all five Navratri tables; policies restrict writes to admins and limit resident reads to their own house where applicable.
+- Initial Navratri UI is committed: create/close a season, set each household's participant count and per-person contribution, record household payments, add/mark daily tokens received, and record expenses.
+- Initial responsive CSS changes support smaller/mobile screens.
+- The README is maintained as the project status record.
 
 ### Ongoing — current priority
-- Verify the updated site after Cloudflare redeploys and test the Navratri screens on a phone.
-- Run end-to-end tests for household setup, contribution totals, token receipt updates, expense entry and permissions.
-- Check and improve accounting behavior before real money is recorded.
+- Validate Navratri calculations and permissions before real financial use.
+- Verify latest GitHub changes have reached the live Cloudflare deployment.
+- Test the full experience on an actual mobile phone.
+
+### Navratri database status
+- Houses: 19 (31–49).
+- Navratri seasons created: 0.
+- Household participation records: 0.
+- Contributions, token records and expenses: 0.
+- No test or real festival transactions have been inserted yet.
 
 ### Remaining
-- Create the first Navratri season in the UI; no season or real festival records have been created yet.
-- Test login for a real resident and ensure one house cannot read another house's private contribution/token data.
-- Improve token workflows with a clear daily pending list and quick phone follow-up.
-- Verify that festival balance is calculated correctly when an expense is paid from the main society fund versus Navratri contributions.
-- Enable Supabase leaked-password protection; the security advisor currently warns that this is disabled.
-- Independently verify Cloudflare deployment and real-device responsive behavior.
-- Push notifications, WhatsApp delivery and the other non-Navratri modules remain future work.
+- Create a test Navratri season; its initial household rows are created when the admin creates the season.
+- Add a clear date-specific token distribution view with pending-first filtering and a quick contact action for households whose tokens are pending.
+- Verify collection totals, household paid/pending amounts, and remaining balance with sample records.
+- Ensure expenses paid from the main society fund do not reduce the Navratri contribution balance.
+- Test that residents can see only their own household's contribution/token information and cannot create or modify admin records.
+- Test empty states, error handling, duplicate submissions and mobile form behavior.
+- Enable Supabase leaked-password protection; the security advisor reported this setting is disabled.
+- Browser push and WhatsApp delivery, plus broader society modules, remain future work.
 
-### Safety before real financial use
-The Navratri schema and first UI are in place, but this is an initial implementation, not yet fully tested for production accounting. Use test records first. Festival contributions must remain separate from the main society fund, and do not enter real financial data until totals, permissions and expense balances have been checked.
+### Accounting and security caution
+The Navratri module is an initial implementation, not yet production-verified. It currently records contributions and expenses separately, but sample-based reconciliation and permission tests are still required. Use test records only until totals, fund separation, resident privacy and admin-only writes are confirmed. Never place a Supabase service-role/secret key in browser code.
 
 ## Current portal
 
@@ -80,6 +89,6 @@ The project was previously deployed by the owner at a `workers.dev` address. A W
 
 ## Database and test status
 
-The initial schema and hardening migrations are applied. Houses 31–49 are present. The five Navratri tables have RLS enabled. The current security advisor reports a warning: leaked-password protection is disabled.
+The initial schema and hardening migrations are applied. Houses 31–49 are present. Five Navratri tables have RLS enabled. The current security advisor reported a warning: leaked-password protection is disabled. Navratri tables are empty until an admin creates a season and test records.
 
-The administrator profile is provisioned and admin sign-in has been confirmed by the owner. Resident/admin role-isolation still needs an end-to-end test with a confirmed resident account. Do not use real financial records until the first admin and a test resident are provisioned and payment confirmation/rejection are exercised. Programme share calculation/finalization, browser push and WhatsApp delivery remain future implementation work.
+The administrator profile is provisioned and admin sign-in has been confirmed by the owner. Resident/admin role-isolation still needs an end-to-end test with a confirmed resident account. Do not use real financial records until a test resident is verified and payment confirmation/rejection, Navratri totals, fund separation and permissions have been exercised. Programme share calculation/finalization, browser push and WhatsApp delivery remain future implementation work.
