@@ -109,3 +109,14 @@ Keep the festival workflow simple. Count household members and record the househ
 - [ ] Payment form remains available; the interface does not technically lock a household after its first payment. Keep admin corrections possible.
 - [ ] Review status display on the house-number cards so it also distinguishes overpayment.
 - [ ] Verify the flow and totals with the real house/member list before marking the festival as initialized.
+
+
+## Form input type and styling pass — 12 Oct 2026
+
+- [x] Explicit text types on free-text fields (titles, names, member labels, descriptions, notes).
+- [x] Numeric fields retain number types; member and token counts use integer steps and numeric keyboard hints.
+- [x] Money/rate inputs use decimal keyboard hints.
+- [x] Phone, date, password, and checkbox fields retain appropriate semantic types.
+- [x] Improved label hierarchy, input sizing, placeholder contrast, focus states, and disabled styling.
+- [ ] Browser-test every form and custom picker in English and Gujarati.
+- [ ] Confirm mobile keyboard and validation behavior on a real phone and verify live deployment.
