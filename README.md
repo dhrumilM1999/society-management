@@ -5,35 +5,32 @@ A static, responsive resident portal for **Sonalpark Society Gate-2**, serving h
 ## Latest project status — 12 October 2026
 
 ### Done
-- Supabase project connected; 19 houses (31–49) exist in the database.
-- Administrator sign-in has been confirmed by the owner.
-- Admin house-management workflow and house-number login support have been added to the codebase.
-- Read-only public house-number directory and English/Gujarati UI are present.
+- Supabase project is connected; houses 31–49 (19 houses) are present.
+- Admin login has been confirmed by the owner; house-management and house-number login code is committed.
+- Read-only public house directory and English/Gujarati UI are present.
 - Supabase Edge Function `manage-house-resident` is deployed.
-- SVG logo, favicon and welcome banner assets exist in `assets/`.
+- Replaced the old text-bearing logo asset with a standalone, bolder emblem; favicon now matches. The adjacent header text remains the only place the society name is written.
+- Created five Navratri tables: seasons, household participation/contribution targets, contribution payments, daily token records and daily expenses.
+- Enabled RLS on all five Navratri tables and added admin/resident read rules.
+- Added an initial Navratri page for season setup, household contributions, payment records, daily token status and expenses.
+- Added responsive CSS adjustments for small/mobile screens.
 
 ### Ongoing — current priority
-- Replace the text-based/old header logo with a bold standalone emblem; keep the society name only in the adjacent heading.
-- Simplify the UI and tune layouts for mobile-first use.
-- Focus development on the Navratri Festival module before expanding other modules.
+- Verify the updated site after Cloudflare redeploys and test the Navratri screens on a phone.
+- Run end-to-end tests for household setup, contribution totals, token receipt updates, expense entry and permissions.
+- Check and improve accounting behavior before real money is recorded.
 
-### Planned for Navratri
-- House-wise participating member counts and contribution amounts (₹400/₹500/₹600 or admin-defined amount).
-- Household contribution, paid, pending and payment-status tracking.
-- Daily token distribution by household/member, with received/pending lists and contact follow-up.
-- Daily expense entry with category, description, amount, date and audit trail.
-- Automatic totals for collections, expenses and remaining festival balance, kept separate from the main society fund.
-- Mobile-first dashboard and Gujarati/English labels.
-
-### Not done / needs verification
-- The generated replacement emblem has not yet been installed in the repository.
-- The latest Cloudflare deployment has not been independently verified after recent commits.
-- End-to-end resident sign-in and authorization tests need a confirmed test resident.
-- Navratri data tables, calculations, payment/token flows and real-device mobile testing are not yet complete.
-- Push/WhatsApp notifications and automatic festival share finalization remain future work.
+### Remaining
+- Create the first Navratri season in the UI; no season or real festival records have been created yet.
+- Test login for a real resident and ensure one house cannot read another house's private contribution/token data.
+- Improve token workflows with a clear daily pending list and quick phone follow-up.
+- Verify that festival balance is calculated correctly when an expense is paid from the main society fund versus Navratri contributions.
+- Enable Supabase leaked-password protection; the security advisor currently warns that this is disabled.
+- Independently verify Cloudflare deployment and real-device responsive behavior.
+- Push notifications, WhatsApp delivery and the other non-Navratri modules remain future work.
 
 ### Safety before real financial use
-Do not enter real festival collections or expenses until the Navratri tables, RLS policies, accounting calculations and payment/token workflows have been tested with test records. Festival funds must remain separate from the main society fund.
+The Navratri schema and first UI are in place, but this is an initial implementation, not yet fully tested for production accounting. Use test records first. Festival contributions must remain separate from the main society fund, and do not enter real financial data until totals, permissions and expense balances have been checked.
 
 ## Current portal
 
@@ -83,6 +80,6 @@ The project was previously deployed by the owner at a `workers.dev` address. A W
 
 ## Database and test status
 
-The initial schema and hardening migrations are applied. The database has 12 public tables with RLS enabled and 19 house records for 31–49. The Supabase security advisor currently returns no findings.
+The initial schema and hardening migrations are applied. Houses 31–49 are present. The five Navratri tables have RLS enabled. The current security advisor reports a warning: leaked-password protection is disabled.
 
-The administrator profile is provisioned and admin sign-in has been confirmed by the owner. No resident profiles have been created yet, so house-number login and resident/admin role-isolation still need end-to-end testing with a test resident. Do not use real financial records until the first admin and a test resident are provisioned and payment confirmation/rejection are exercised. Programme share calculation/finalization, browser push and WhatsApp delivery remain future implementation work.
+The administrator profile is provisioned and admin sign-in has been confirmed by the owner. Resident/admin role-isolation still needs an end-to-end test with a confirmed resident account. Do not use real financial records until the first admin and a test resident are provisioned and payment confirmation/rejection are exercised. Programme share calculation/finalization, browser push and WhatsApp delivery remain future implementation work.
