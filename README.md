@@ -227,3 +227,11 @@ The public directory is secondary utility, not the main product entry point. Sig
 - If a house has no saved phone number, the UI explains that no number is available rather than inventing one.
 - Confirm admin profile read policies allow the contact lookup, then test house shortcuts, paid/pending colors, call and WhatsApp links on a real phone.
 - Code is committed to GitHub; the live Cloudflare deployment and browser behavior have not yet been verified. No database schema or production transactions were changed.
+
+
+## Auto-generated token waiting list — 12 Oct 2026
+
+- The “People still waiting” list is now generated from each household's saved participant/member count; it no longer depends on an admin manually creating a token record for every member before they appear in the list.
+- Each house produces Member 1, Member 2, etc. until the number of members marked received for today reaches that household's participant count.
+- Admins can mark a generated member received; this writes a received token record for that house/member and refreshes the dashboard.
+- Limitation: household data currently stores a member count, not individual member names. Generated labels are placeholders (Member 1, Member 2). The list is a count-based tracker, so do not treat it as verified named-person attendance until individual member profiles or names are stored. Test with existing pending token rows before relying on the live totals.
