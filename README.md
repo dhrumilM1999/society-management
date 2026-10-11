@@ -13,6 +13,7 @@ A static, responsive resident portal for **Sonalpark Society Gate-2**, serving h
 - Production has five Navratri tables: seasons, household participation/contribution targets, contributions received, daily tokens and expenses.
 - Production RLS is enabled on all five Navratri tables; policies restrict writes to admins and limit resident reads to their own house where applicable.
 - Initial Navratri UI is committed: create/close a season, set participant counts and per-person contribution, record payments, add/mark daily tokens received, and record expenses.
+- Polished the Navratri and Programmes screens with a season hero/status panel, clearer festival metric cards, consistent section/form styling, responsive mobile layouts, and grouped programme expense/share cards.
 - Separate Supabase test project `sonalpark-gate-2-test` was created manually by the owner.
 - Test project base schema for houses/profiles and the five Navratri tables has been created. All 19 house numbers (31–49) are seeded; RLS is enabled on all five Navratri tables.
 - Initial security advisor scan on the test project returned no security findings.
@@ -25,6 +26,7 @@ A static, responsive resident portal for **Sonalpark Society Gate-2**, serving h
 - Validate actual test-project sign-in and resident/admin RLS behavior using the configured fake accounts; profile rows and synthetic data are loaded, but browser login and authenticated row-isolation are still pending.
 - Exercise contribution calculations, token workflows, expenses and fund separation through the UI and authenticated sessions.
 - Inspect and fix frontend issues discovered during tests.
+- Verify the latest Navratri/Programmes visual changes in the live Cloudflare deployment and check mobile breakpoints.
 - Verify latest GitHub changes have reached the live Cloudflare deployment.
 - Test the full experience on an actual mobile phone.
 
@@ -54,6 +56,7 @@ A static, responsive resident portal for **Sonalpark Society Gate-2**, serving h
 - Ensure expenses paid from the main society fund do not reduce the Navratri contribution balance.
 - Verify the resident dashboard avoids admin-only expense queries in an authenticated resident session (the current frontend code has been adjusted, but browser verification is pending).
 - Test empty states, error handling, duplicate submissions and mobile form behavior.
+- Visually inspect the refreshed festival and programme views in desktop and mobile browsers; CSS/UI changes are committed but not yet browser-verified.
 - Enable leaked-password protection in production; a prior security-advisor check reported this setting disabled.
 - Verify Cloudflare deployment status and test on a real phone.
 - Browser push and WhatsApp delivery, plus broader society modules, remain future work.
