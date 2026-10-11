@@ -57,8 +57,8 @@ Keep the festival workflow simple. Count household members and record the househ
 ## Remaining work
 
 ### Priority 1 — UI workflow
-- [ ] Reorder the Navratri screen so token assignment, waiting list, and today's records appear before contribution details.
-- [ ] Make household setup/payment collection a separate, secondary section.
+- [ ] Consider moving the daily token desk above setup/collection if the owner wants token-first screen order; current workflow labels the setup step first and daily token step second.
+- [ ] Make household setup/payment collection collapsible or otherwise less prominent after initial setup, without hiding corrections or the ledger.
 - [ ] Consider a one-time collection completion indicator per house without locking legitimate admin corrections.
 - [ ] Ensure the Quick token action leads to a clear, focused token-entry state on small screens.
 - [ ] Make payment status explicitly distinguish **Pending**, **Paid**, and **Overpaid**; display the excess amount without automatically carrying it forward.
@@ -84,10 +84,10 @@ Keep the festival workflow simple. Count household members and record the househ
 |---|---|
 | House/member setup | Implemented in code; needs verification |
 | Shared per-person rate | Implemented in UI; rate is stored on household rows rather than once per season |
-| Contribution entry and ledger | Implemented; not yet a locked one-time workflow |
+| Contribution entry and ledger | Implemented; labeled as setup/collection step, not locked |
 | Quick token action | Implemented; house is preselected |
 | Waiting/received list | Implemented with generated placeholder labels; logic needs testing |
-| Overpayment display | Not implemented yet |
+| Overpayment display | Household ledger distinguishes overpaid amount in UI; house-card status still needs consistency pass |
 | Mobile-first styling | Implemented in CSS; physical-device verification pending |
 | Test-project authenticated checks | Pending |
 | Live Cloudflare verification | Pending |
@@ -98,3 +98,14 @@ Keep the festival workflow simple. Count household members and record the househ
 - Do not automatically apply overpayment to a future season unless the society explicitly chooses that accounting rule.
 - Do not claim browser, physical-phone, RLS, or deployment tests are complete until they are actually run.
 - Keep the Refero Styles reference as the default design reference unless the owner changes it.
+
+
+## Workflow clarification — 12 Oct 2026
+
+- [x] Labeled household member count and money collection as **Step 1 — Setup and collection**.
+- [x] Explained that each household payment should be recorded during setup/collection and daily work should then use the token desk.
+- [x] Labeled token assignment, waiting list, and receipt tracking as **Step 2 — Daily token workflow**.
+- [x] Contribution ledger now labels an overpayment and shows the excess amount instead of calling it simply paid.
+- [ ] Payment form remains available; the interface does not technically lock a household after its first payment. Keep admin corrections possible.
+- [ ] Review status display on the house-number cards so it also distinguishes overpayment.
+- [ ] Verify the flow and totals with the real house/member list before marking the festival as initialized.
