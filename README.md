@@ -271,3 +271,19 @@ The public directory is secondary utility, not the main product entry point. Sig
 - House-number cards still need their payment status to distinguish overpayment consistently.
 - Test the whole flow with the real list before entering real production data. No production records were changed by this UI update.
 - Browser, physical-phone, and Cloudflare deployment checks are still pending.
+
+
+## Form input semantics and mobile styling — 12 Oct 2026
+
+### Done in code
+- Added explicit text input types to free-text fields such as notice titles, names, member labels, and expense descriptions.
+- Kept amounts and contribution rates as decimal-capable number inputs, with decimal input hints.
+- Kept member counts and token counts as integer number inputs with numeric keyboard hints and whole-number steps.
+- Kept phone numbers as telephone inputs, dates as date inputs, passwords as password inputs, and the checkbox as a checkbox.
+- Improved field labels, placeholder contrast, focus rings, disabled states, spacing, and phone-sized input height; preserved 16px text sizing on mobile to reduce browser zoom.
+- Added email input-mode and capitalization/spellcheck hints to the mixed house-number/email login field.
+
+### Still to verify
+- Inspect every form in a browser, including custom mobile dropdowns, Gujarati labels, keyboard behavior, and validation.
+- Confirm no numeric values are accidentally accepted as fractional member/token counts.
+- Check the live Cloudflare deployment; the commit is in GitHub but live behavior is not verified.
