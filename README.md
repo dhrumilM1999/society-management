@@ -161,3 +161,17 @@ This iteration changes presentation only; it does not change the database schema
 
 ### Design decision
 The public directory is secondary utility, not the main product entry point. Sign-in and authenticated society tasks should carry the visual priority. This change is presentation-only; no database or production data was changed.
+
+
+## Mobile selection and festival contribution consistency — 12 Oct 2026
+
+### Done
+- Replaced all 8 native select menus in the UI with a shared custom picker. On phones, choices open in a bottom-sheet style panel with large tap targets, a dimmed backdrop, selected-state styling, and a clear close/selection action. The underlying select remains the form value source so existing FormData flows continue to work.
+- Applied the same selection interaction to house, fund, payment method, preferred language, festival category/source, and other dropdowns.
+- Removed the per-household contribution-rate dropdown in the Navratri form. The current UI now applies one fixed rate of ₹500 per participating member to each household for the festival; the rate is no longer independently selectable per house.
+- Kept the rate explanation visible so admins understand that the amount is consistent across households.
+
+### Important limitation / next decision
+- The current data model stores the per-person rate on each household row, not as a festival-season setting. This UI iteration enforces ₹500 consistently when an admin saves a household, but does not add a season-level configurable rate. If the society needs to change the amount for a future festival, the schema and admin season settings should be migrated to store the rate once on navratri_seasons and derive every household's due from that season value.
+- Custom picker behavior is implemented in code but still needs browser/phone testing for keyboard navigation, long option lists, and all dynamic forms.
+- No database schema or production festival records were changed in this iteration.
