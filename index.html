@@ -73,7 +73,7 @@ async function saveHouse(e){
  e.preventDefault();const form=e.currentTarget,fd=new FormData(form),btn=form.querySelector('button[type=submit]');btn.disabled=true;
  try{const {data:{session:s}}=await supabase.auth.getSession();if(!s)throw new Error('Sign in again.');
  const res=await fetch(SUPABASE_URL+'/functions/v1/manage-house-resident',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+s.access_token,'apikey':SUPABASE_PUBLISHABLE_KEY},body:JSON.stringify({house_number:Number(fd.get('house_number')),display_name:fd.get('display_name'),contact_phone:fd.get('contact_phone'),password:fd.get('password'),preferred_language:fd.get('preferred_language'),is_active:fd.get('is_active')==='on'})});
- const out=await res.json();if(!res.ok||!out.ok)throw new Error(out.error||'Could not save.');setMsg('houseFormMsg','Saved. Resident login number: '+out.login_id+'. '+out.message);await loadPublicHouses();await renderHouses($('viewContent'));
+ const out=await res.json();if(!res.ok||!out.ok)throw new Error(out.error||'Could not save.');await loadPublicHouses();await renderHouses($('viewContent'));setMsg('appMsg','Saved. Resident login number: '+out.login_id+'. '+out.message);
  }catch(err){setMsg('houseFormMsg',err.message||'Could not save. Check fields and permissions.')}finally{btn.disabled=false}
 }
 
