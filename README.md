@@ -2,6 +2,39 @@
 
 A static, responsive resident portal for **Sonalpark Society Gate-2**, serving houses **31–49 (19 houses)**. The frontend is connected to Supabase using a browser-safe publishable key.
 
+## Latest project status — 12 October 2026
+
+### Done
+- Supabase project connected; 19 houses (31–49) exist in the database.
+- Administrator sign-in has been confirmed by the owner.
+- Admin house-management workflow and house-number login support have been added to the codebase.
+- Read-only public house-number directory and English/Gujarati UI are present.
+- Supabase Edge Function `manage-house-resident` is deployed.
+- SVG logo, favicon and welcome banner assets exist in `assets/`.
+
+### Ongoing — current priority
+- Replace the text-based/old header logo with a bold standalone emblem; keep the society name only in the adjacent heading.
+- Simplify the UI and tune layouts for mobile-first use.
+- Focus development on the Navratri Festival module before expanding other modules.
+
+### Planned for Navratri
+- House-wise participating member counts and contribution amounts (₹400/₹500/₹600 or admin-defined amount).
+- Household contribution, paid, pending and payment-status tracking.
+- Daily token distribution by household/member, with received/pending lists and contact follow-up.
+- Daily expense entry with category, description, amount, date and audit trail.
+- Automatic totals for collections, expenses and remaining festival balance, kept separate from the main society fund.
+- Mobile-first dashboard and Gujarati/English labels.
+
+### Not done / needs verification
+- The generated replacement emblem has not yet been installed in the repository.
+- The latest Cloudflare deployment has not been independently verified after recent commits.
+- End-to-end resident sign-in and authorization tests need a confirmed test resident.
+- Navratri data tables, calculations, payment/token flows and real-device mobile testing are not yet complete.
+- Push/WhatsApp notifications and automatic festival share finalization remain future work.
+
+### Safety before real financial use
+Do not enter real festival collections or expenses until the Navratri tables, RLS policies, accounting calculations and payment/token workflows have been tested with test records. Festival funds must remain separate from the main society fund.
+
 ## Current portal
 
 - Admin sign-in with email/password; residents sign in using their house number (31–49) and password.
