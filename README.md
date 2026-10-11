@@ -195,3 +195,19 @@ The public directory is secondary utility, not the main product entry point. Sig
 - Test that rate changes persist across reloads and that due totals recalculate correctly for all 19 houses.
 - Test edit/save flows and contribution recording on a phone, including keyboard and bottom-sheet behavior.
 - Check that this newest commit has deployed to Cloudflare. No production database schema changes were made by this UI iteration.
+
+
+## Token receipt tracking and mobile controls — 12 Oct 2026
+
+### Done
+- Added token dashboard totals for total participating members, tokens marked received today, and outstanding count.
+- Added a "People still waiting" list with red pending status and a quick action to mark a token record as received.
+- Added today's token record list with green received / red pending statuses.
+- Added a dedicated quick-assignment token form with house, member label, and token count.
+- Reduced bottom navigation button height and padding for a less bulky mobile footer.
+
+### Still remaining
+- The household cards do not yet include a working call button. A reliable call action needs a real, authorized resident contact number for each house; the UI must not fabricate or expose private numbers.
+- House-card-level quick assignment shortcuts still need to be wired to the token form.
+- Current receipt totals count token records marked received; the society must confirm whether token_count represents individual members or physical tokens before using the pending total as an attendance guarantee.
+- Test token entry, receipt status, totals, Gujarati labels, and phone layouts against the live deployment. No production database records were changed.
