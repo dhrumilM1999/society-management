@@ -298,7 +298,7 @@ function syncMobileSelect(select){
  if(!wrap)return;
  const button=wrap.querySelector('.mobile-select-trigger');
  const current=select.options[select.selectedIndex];
- button.textContent=current?current.textContent.trim():t('Choose an option','વિકલ્પ પસંદ કરો');
+ const labelNode=button.firstChild;if(labelNode&&labelNode.nodeType===3)labelNode.nodeValue=current?current.textContent.trim():t('Choose an option','વિકલ્પ પસંદ કરો');
  button.setAttribute('aria-label',(select.closest('.field')?.querySelector('label')?.textContent||'Select')+': '+button.textContent);
  wrap.querySelectorAll('.mobile-select-option').forEach((b,i)=>{const opt=select.options[i];b.classList.toggle('selected',!!opt&&opt.value===select.value);b.setAttribute('aria-selected',String(!!opt&&opt.value===select.value));});
 }
