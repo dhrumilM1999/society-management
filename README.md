@@ -22,8 +22,8 @@ A static, responsive resident portal for **Sonalpark Society Gate-2**, serving h
 - The README is maintained as the project status record.
 
 ### Ongoing — current priority
-- Configure test Auth users and validate resident/admin RLS behavior using fake accounts and fake data only.
-- Exercise contribution calculations, token workflows, expenses and fund separation.
+- Validate actual test-project sign-in and resident/admin RLS behavior using the configured fake accounts; SQL/profile setup is complete, but browser login and authenticated row-isolation are still pending.
+- Exercise contribution calculations, token workflows, expenses and fund separation through the UI and authenticated sessions.
 - Inspect and fix frontend issues discovered during tests.
 - Verify latest GitHub changes have reached the live Cloudflare deployment.
 - Test the full experience on an actual mobile phone.
@@ -42,18 +42,27 @@ A static, responsive resident portal for **Sonalpark Society Gate-2**, serving h
 - Schema check: 19 houses; five Navratri tables; RLS enabled on all five.
 - Security advisor: no findings at the initial scan.
 - Performance advisor: index/policy efficiency notices were returned; common lookup indexes were added, but the advisor should be rerun.
-- End-to-end sign-in and row-isolation tests have **not** yet been run. The test project does not yet contain test Auth users or sample Navratri transactions.
+- Test admin profile is linked to Auth UUID `8c810fc3-7d6c-46bf-8ce4-11fd4cedb395`; test resident profile is linked to Auth UUID `e4478c53-75f1-4528-90d1-7b440e99d44e` and house 33.
+- Added synthetic test-only data: one active season, one house-33 household (2 participants × ₹500 = ₹1,000 due), ₹500 collected, ₹100 Navratri-funded expense, and 2 pending tokens. SQL reconciliation returned ₹500 outstanding; test data is clearly labeled and isolated to this test project.
+- Auth user IDs were accepted by the profile foreign-key relationship, but browser sign-in and authenticated RLS row-isolation have **not** yet been verified.
 
 ### Remaining
-- Create fake admin and resident Auth users in the test project and verify login.
+- Open the test-project frontend configured with the test project's URL and publishable key, then verify sign-in as admin and house 33 resident.
 - Test that residents can see only their own household contribution/token information and cannot create or modify admin records.
-- Verify collection totals, household paid/pending amounts, and remaining balance with sample records.
+- Verify collection totals, household paid/pending amounts, and remaining balance in the UI; the initial SQL reconciliation is correct.
 - Ensure expenses paid from the main society fund do not reduce the Navratri contribution balance.
 - Fix the resident dashboard's expenses query if it requests admin-only expense data; verify with an authenticated resident session.
 - Test empty states, error handling, duplicate submissions and mobile form behavior.
 - Enable leaked-password protection in production; a prior security-advisor check reported this setting disabled.
 - Verify Cloudflare deployment status and test on a real phone.
 - Browser push and WhatsApp delivery, plus broader society modules, remain future work.
+
+### Test data currently loaded (test project only)
+- Season: `TEST ONLY — Navratri 2026` (active; 17–25 October 2026).
+- House 33: 2 participants × ₹500 each = ₹1,000 due; ₹500 collected; ₹500 outstanding.
+- Navratri-funded test expense: ₹100. Main-society-fund test expense: ₹0.
+- Test tokens: 2 pending for house 33.
+- All entries are synthetic; production remains unchanged and its Navratri tables remain empty.
 
 ### Accounting and security caution
 The Navratri module is an initial implementation, not yet production-verified. The test schema is a minimal isolated harness for the Navratri workflow, not a full clone of every production society table. Sample-based reconciliation and permission tests are still required. Use test records only until totals, fund separation, resident privacy and admin-only writes are confirmed. Never place a Supabase service-role/secret key in browser code.
