@@ -144,3 +144,20 @@ The test project's minimal Navratri schema has been created and checked. Do not 
 - Confirm the newest commit has deployed to Cloudflare before relying on the live site.
 
 This iteration changes presentation only; it does not change the database schema, permissions, or production festival data.
+
+
+## Final mobile UI refinement — 12 Oct 2026
+
+### Done
+- Changed the public House Directory from a large always-visible block to a collapsed disclosure. It no longer competes visually with sign-in; residents' names and contact details remain private.
+- Changed authenticated mobile navigation to a fixed bottom navigation strip with safe-area spacing, clearer active state, and touch-friendly controls.
+- Kept the mobile UI aligned to the selected Refero Styles editorial system: white canvas, ink typography, quiet borders, and restrained secondary surfaces.
+- Used mobile navigation and data-entry design principles from the official Anthropic Claude Code frontend-design skill as a quality reference, alongside Refero's real-screen UX research.
+
+### Still to verify
+- Confirm the bottom navigation is usable across all 8 sections on a physical phone and that horizontal scrolling is discoverable.
+- Test long admin forms, keyboard focus, Gujarati text, and browser safe areas on 320px–430px screens.
+- Verify the live Cloudflare deployment and run admin/resident authenticated smoke tests. These have not been claimed as complete.
+
+### Design decision
+The public directory is secondary utility, not the main product entry point. Sign-in and authenticated society tasks should carry the visual priority. This change is presentation-only; no database or production data was changed.
