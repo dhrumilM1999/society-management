@@ -235,3 +235,24 @@ The public directory is secondary utility, not the main product entry point. Sig
 - Each house produces Member 1, Member 2, etc. until the number of members marked received for today reaches that household's participant count.
 - Admins can mark a generated member received; this writes a received token record for that house/member and refreshes the dashboard.
 - Limitation: household data currently stores a member count, not individual member names. Generated labels are placeholders (Member 1, Member 2). The list is a count-based tracker, so do not treat it as verified named-person attendance until individual member profiles or names are stored. Test with existing pending token rows before relying on the live totals.
+
+
+## Token-first household workflow — 12 Oct 2026
+
+### Done in code
+- Removed the per-house **Receive money** shortcut from the house grid so it no longer competes with daily token work.
+- Kept **Quick token** as the house-level action for the repeated daily workflow.
+- Kept the contribution ledger and payment-entry form available for the one-time household setup/collection process; existing payment records are not deleted or rewritten.
+- Added a separate planning document: [SOCIETY_WORKFLOW_PLAN.md](SOCIETY_WORKFLOW_PLAN.md), listing what is needed, what is already implemented, and what remains.
+
+### Workflow decision
+1. Set the household member count.
+2. Calculate the household contribution due from the shared per-person rate.
+3. Record the household's contribution/payment once during setup/collection.
+4. After setup, use the Navratri workspace primarily for quick token assignment and marking tokens received each day.
+
+### Still to do / verify
+- The payment-entry form is still visible in the household contribution list; a future UI pass should make setup/payment collection a clearly separate, less prominent step without losing the ledger.
+- Decide whether the one-time collection should be locked after recording, or remain editable for admin corrections/refunds. Current code does not lock it.
+- Verify token quick action, contribution records, and mobile layout in a browser and on the live Cloudflare deployment.
+- The live deployment has not been verified by this code change. No database schema or production financial records were changed.
