@@ -256,3 +256,18 @@ The public directory is secondary utility, not the main product entry point. Sig
 - Decide whether the one-time collection should be locked after recording, or remain editable for admin corrections/refunds. Current code does not lock it.
 - Verify token quick action, contribution records, and mobile layout in a browser and on the live Cloudflare deployment.
 - The live deployment has not been verified by this code change. No database schema or production financial records were changed.
+
+
+## Setup-to-token workflow clarification — 12 Oct 2026
+
+### Done in code
+- Labeled **Step 1 — Setup and collection** for household member counting and contribution entry.
+- Added explanatory copy: save each house's member count, calculate the due amount, and record the payment during collection.
+- Labeled **Step 2 — Daily token workflow** for token assignment, waiting members, and today's receipt records.
+- Contribution ledger now shows **Overpaid** and the extra amount when recorded payments exceed the household due amount. It does not carry the excess into a future season.
+
+### Remaining
+- The contribution form remains available to admins for corrections; it is not locked after the first payment.
+- House-number cards still need their payment status to distinguish overpayment consistently.
+- Test the whole flow with the real list before entering real production data. No production records were changed by this UI update.
+- Browser, physical-phone, and Cloudflare deployment checks are still pending.
