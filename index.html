@@ -301,7 +301,7 @@ async function renderNavratri(c){
    admin ? supabase.from('navratri_expenses').select('*').eq('season_id',season.id).order('spent_on',{ascending:false}).limit(100) : Promise.resolve({data:[],error:null})
   ]);
   for(const x of [householdsRes,contribRes,tokenRes,contactsRes,expenseRes])if(x.error)throw x.error;
-  const households=householdsRes.data, contributions=contribRes.data.filter(x=>householdsRes.data.some(h=>h.id===x.household_id)), tokens=tokenRes.data, expenses=expenseRes.data, contactPhones=new Map((contactsRes.data||[]).map(p=>[Number(p.house_number),String(p.contact_phone||'').replace(/\D/g,'')]));
+  const households=householdsRes.data, contributions=contribRes.data.filter(x=>householdsRes.data.some(h=>h.id===x.household_id)), tokens=tokenRes.data, expenses=expenseRes.data, contactPhones=new Map((contactsRes.data||[]).map(p=>{let phone=String(p.contact_phone||'').replace(/\D/g,'');if(phone.length===10)phone='91'+phone;return [Number(p.house_number),phone]}));
  const hhMap=new Map(households.map(h=>[h.id,h]));
  const collected=contributions.reduce((s,x)=>s+Number(x.amount_paise),0), spent=expenses.filter(x=>x.paid_from==='navratri_contributions').reduce((s,x)=>s+Number(x.amount_paise),0), due=households.reduce((s,h)=>s+Number(h.amount_due_paise),0), pending=Math.max(due-collected,0);
  const rupees=p=>new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:2}).format(Number(p||0)/100);
