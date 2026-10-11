@@ -1,38 +1,52 @@
-# Society Management — Coming Soon
+# Sonalpark Society Gate-2 Portal
 
-A minimal, responsive coming-soon page for the society management portal. The first release is plain static HTML/CSS/JavaScript so it can be published without installing dependencies. The React/Vite application can be introduced when feature development begins.
+A static, responsive resident portal for **Sonalpark Society Gate-2**, serving houses **31–49 (19 houses)**. The frontend is connected to Supabase using a browser-safe publishable key.
+
+## Current portal
+
+- Email/password sign-in; public sign-up is intentionally disabled.
+- English/Gujarati interface toggle.
+- Published notices and meetings.
+- Resident payment submission and payment history.
+- Admin payment review (database RPC atomically updates payment status, ledger and audit log).
+- Separate Maintenance, Festival and General fund ledger views.
+- Programme/expense-share display.
+- RLS enabled on all public tables.
 
 ## Preview locally
 
-Open `index.html` in a browser, or run a local static server:
+Open `index.html` in a browser, or run:
 
 ```bash
 python -m http.server 8000
 ```
 
-Then visit http://localhost:8000.
+Then visit http://localhost:8000. The page loads the Supabase JavaScript client from a pinned CDN version, so internet access is required.
 
-## Deploy to Cloudflare Pages with Git integration
+## Supabase setup
 
-This repository is configured as a static HTML site. In the Cloudflare dashboard:
+See [docs/supabase-setup.md](docs/supabase-setup.md) for project details, creating the first admin and adding resident accounts.
 
-1. Open **Workers & Pages** → **Create application** → **Pages** → **Connect to Git**.
-2. Connect GitHub and choose `dhrumilM1999/society-management`.
-3. Set the production branch to `main`.
-4. Leave the framework preset as **None** / **No framework**.
-5. Build command: `exit 0` (or leave it blank if Cloudflare allows it).
-6. Build output directory: `.` (repository root, where `index.html` lives).
-7. Select **Save and Deploy**.
+- Project ref: `cfrvkrsqomtrgvejxeub`
+- Region: Mumbai, India (`ap-south-1`)
+- Project URL: `https://cfrvkrsqomtrgvejxeub.supabase.co`
 
-Cloudflare will provide a `*.pages.dev` URL when the deployment succeeds. Confirm the deployment status is **Success** and open that URL to verify the page. Future commits to `main` deploy automatically after Git integration is connected.
+**Never put a Supabase service-role or secret key in this repository or browser code.** The publishable key in `index.html` is designed for browser use; RLS is the actual data-access boundary.
 
-Official guide: https://developers.cloudflare.com/pages/framework-guides/deploy-anything/
+## Deployment
 
-## Files
+The `main` branch is updated. If your current Cloudflare deployment is connected to this GitHub repository, a new deployment should start automatically after the commit. Check Cloudflare's deployment status and open the live URL after it finishes.
 
-- `index.html` — responsive Coming Soon landing page.
-- `_headers` — basic browser security headers for Cloudflare Pages.
+For a new Cloudflare Pages Git deployment:
+1. Choose repository `dhrumilM1999/society-management` and branch `main`.
+2. Framework preset: **None**.
+3. Build command: blank or `exit 0`.
+4. Output directory: `.`.
 
-## Important
+The project was previously deployed by the owner at a `workers.dev` address. A Workers deployment and a Pages deployment are distinct; use the existing deployment method unless you intend to migrate it.
 
-This is only a public landing page, not the resident management application. Authentication, resident data, billing, and fund accounting have not been implemented. Do not add private resident information or credentials to this repository. Supabase and any production secrets should be configured separately when those features are developed.
+## Database and test status
+
+The initial schema and hardening migrations are applied. The database has 12 public tables with RLS enabled and 19 house records for 31–49. The Supabase security advisor currently returns no findings.
+
+Real authentication and role-isolation tests are still pending because the project has no provisioned Auth users or profiles yet. Do not use real financial records until the first admin and a test resident are provisioned and payment confirmation/rejection are exercised. Programme share calculation/finalization, browser push and WhatsApp delivery remain future implementation work.
