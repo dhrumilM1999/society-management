@@ -22,7 +22,7 @@ A static, responsive resident portal for **Sonalpark Society Gate-2**, serving h
 - The README is maintained as the project status record.
 
 ### Ongoing — current priority
-- Validate actual test-project sign-in and resident/admin RLS behavior using the configured fake accounts; SQL/profile setup is complete, but browser login and authenticated row-isolation are still pending.
+- Validate actual test-project sign-in and resident/admin RLS behavior using the configured fake accounts; profile rows and synthetic data are loaded, but browser login and authenticated row-isolation are still pending.
 - Exercise contribution calculations, token workflows, expenses and fund separation through the UI and authenticated sessions.
 - Inspect and fix frontend issues discovered during tests.
 - Verify latest GitHub changes have reached the live Cloudflare deployment.
@@ -44,14 +44,15 @@ A static, responsive resident portal for **Sonalpark Society Gate-2**, serving h
 - Performance advisor: index/policy efficiency notices were returned; common lookup indexes were added, but the advisor should be rerun.
 - Test admin profile is linked to Auth UUID `8c810fc3-7d6c-46bf-8ce4-11fd4cedb395`; test resident profile is linked to Auth UUID `e4478c53-75f1-4528-90d1-7b440e99d44e` and house 33.
 - Added synthetic test-only data: one active season, one house-33 household (2 participants × ₹500 = ₹1,000 due), ₹500 collected, ₹100 Navratri-funded expense, and 2 pending tokens. SQL reconciliation returned ₹500 outstanding; test data is clearly labeled and isolated to this test project.
-- Auth user IDs were accepted by the profile foreign-key relationship, but browser sign-in and authenticated RLS row-isolation have **not** yet been verified.
+- Auth user IDs are present in test profiles with roles/house assignment as intended. Browser sign-in and authenticated RLS row-isolation have **not** yet been verified.
+- Fresh security advisor scan reports one warning: leaked-password protection is disabled in this test project. Performance advisor reports three unindexed foreign keys and multiple permissive SELECT-policy notices; these are performance notices, not confirmed data-access bypasses.
 
 ### Remaining
 - Open the test-project frontend configured with the test project's URL and publishable key, then verify sign-in as admin and house 33 resident.
-- Test that residents can see only their own household contribution/token information and cannot create or modify admin records.
+- Test that residents can see only their own household contribution/token information and cannot create or modify admin records; current policy definitions have been inspected, but behavior under an authenticated JWT is not yet verified.
 - Verify collection totals, household paid/pending amounts, and remaining balance in the UI; the initial SQL reconciliation is correct.
 - Ensure expenses paid from the main society fund do not reduce the Navratri contribution balance.
-- Fix the resident dashboard's expenses query if it requests admin-only expense data; verify with an authenticated resident session.
+- Verify the resident dashboard avoids admin-only expense queries in an authenticated resident session (the current frontend code has been adjusted, but browser verification is pending).
 - Test empty states, error handling, duplicate submissions and mobile form behavior.
 - Enable leaked-password protection in production; a prior security-advisor check reported this setting disabled.
 - Verify Cloudflare deployment status and test on a real phone.
