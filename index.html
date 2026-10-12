@@ -707,7 +707,6 @@ async function renderNavratri(c){
    if(error){setMsg('householdMsg',error.message||t('Could not save household.','ઘરની વિગતો સાચવી શકાઈ નથી.'));return}
    closeSheet();
    const newDue=count*ratePaise,ready=count>0&&sheetHouse.paid>=newDue;
-   if(ready)navratriSeg='tokens';
    await rerender();
    if(count>0)setMsg('appMsg',ready?t('House ','ઘર ')+sheetHouse.n+t(' is paid — you can issue tokens now.',' ની ચુકવણી પૂર્ણ — હવે ટોકન આપી શકો.'):t('House ','ઘર ')+sheetHouse.n+t(' saved. Payment pending ',' સાચવ્યું. પેમેન્ટ બાકી ')+money(newDue-sheetHouse.paid)+t(' — tokens start after payment.',' — ચુકવણી પછી ટોકન મળશે.'));
   });
@@ -719,7 +718,6 @@ async function renderNavratri(c){
    if(error){setMsg('contributionMsg',error.message);return}
    closeSheet();
    const cleared=sheetHouse.members>0&&sheetHouse.paid+amount>=sheetHouse.due;
-   if(cleared)navratriSeg='tokens';
    await rerender();setMsg('appMsg',t('Payment recorded for house ','પેમેન્ટ નોંધાયું, ઘર ')+sheetHouse.n+': '+money(amount)+(cleared?' · '+t('tokens can be issued now.','હવે ટોકન આપી શકાય.'):''));
   });
  });
