@@ -17,6 +17,7 @@ async function open(qs, width = 390) {
   await page.route('**/*', r => { const u = r.request().url();
     if (u.startsWith('http://app.test/')) return r.fulfill({ contentType: 'text/html', body: fs.readFileSync(file, 'utf8') });
     if (u.includes('esm.sh/@supabase')) return r.fulfill({ contentType: 'application/javascript', body: mock });
+    if (u.includes('fonts.googleapis.com') || u.includes('fonts.gstatic.com')) return r.fulfill({ contentType: 'text/css', body: '' });
     return r.fulfill({ status: 404, body: '' }); });
   await page.goto('http://app.test/' + qs); await page.waitForTimeout(400);
   await go(page, 'navratri', width); await page.waitForTimeout(600);
@@ -58,7 +59,19 @@ for (const [n, m, pay] of [[36, 1, '1000'], [37, 1, null]]) {
 const kpi = await a.locator('.festival-kpis .metric strong').allInnerTexts();
 ok(kpi[0].includes('4,000') && kpi[1].includes('500'), 'pending is per-house (overpay at 36 does not hide 37 owing): ' + kpi.join(' | '));
 ok((await a.locator('[data-house-edit="31"] .house-payment-state').innerText()).includes('Not participating'), 'house with 0 members shows Not participating');
-ok((await a.locator('[data-house-edit="36"] .house-payment-state').innerText()).includes('Overpaid'), 'house 36 shows Overpaid');
+ok((await a.locator('[data-house-edit="36"] .house-payment-state').innerText()).includes('Overpaid'), 'house 36 shows Overpaid with amount');
+
+// Overpayment refund: house 36 overpaid -> record refund -> back to Paid
+await a.click('[data-house-edit="36"]'); await a.waitForTimeout(150);
+ok(await a.locator('#refundBox').isVisible(), 'overpaid house shows the refund box');
+const refundAmt = await a.inputValue('#refundAmount');
+await a.click('#refundForm button[type=submit]'); await settle(a);
+const refunds = (await db(a, 'navratri_contributions')).filter(x => x.entry_type === 'refund');
+ok(refunds.length === 1 && refunds[0].amount_paise === Number(refundAmt) * 100, 'refund recorded for exactly the overpaid amount (₹' + refundAmt + ')');
+ok((await a.locator('[data-house-edit="36"] .house-payment-state').innerText()).includes('Paid'), 'house 36 shows Paid after refund');
+await a.click('[data-house-edit="36"]'); await a.waitForTimeout(150);
+ok(!(await a.locator('#refundBox').isVisible()), 'refund box hidden once nothing is overpaid');
+await a.keyboard.press('Escape');
 
 await seg(a, 'tokens'); await a.click('[data-quick-token="35"]'); await a.waitForTimeout(200);
 ok(await a.inputValue('#tokenForm [name=house_number]') === '35', 'house selector preselects house 35');

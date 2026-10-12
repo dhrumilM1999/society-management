@@ -1,23 +1,23 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#174d36">
-<meta name="description" content="Sonalpark Society Gate-2 resident portal"><link rel="icon" type="image/svg+xml" href="/assets/favicon.svg"><link rel="apple-touch-icon" href="/assets/favicon.svg"><title>Sonalpark Society Gate-2</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1e3a8a">
+<meta name="description" content="Sonalpark Society Gate-2 resident portal"><link rel="icon" type="image/svg+xml" href="/assets/favicon.svg"><link rel="apple-touch-icon" href="/assets/favicon.svg"><title>Sonalpark Society Gate-2</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Gujarati:wght@400;500;600;700&display=swap">
 <style>
 /* Sonalpark Gate-2 — mobile-first design system.
    Brand colours come from the society emblem: deep green, navy ink, gold. */
 :root{
-  --bg:#f3f5f0;--card:#fff;--ink:#10283c;--text:#26373f;--muted:#64747d;--line:#e2e7e1;
-  --brand:#174d36;--brand-2:#1f6b4a;--brand-soft:#e7f1ea;--gold:#e7a92f;--gold-soft:#fff3d3;
-  --ok:#16804a;--ok-soft:#e3f4ea;--warn:#a96b0a;--warn-soft:#fff1d6;--bad:#b42318;--bad-soft:#fdeceb;
-  --r:16px;--r-sm:12px;--shadow:0 1px 2px #10283c0d,0 6px 18px #10283c0a;
+  --bg:#f4f6f9;--card:#fff;--ink:#0f1c33;--text:#334155;--muted:#64748b;--line:#e2e8f0;
+  --brand:#1e3a8a;--brand-2:#2563eb;--brand-soft:#eaf0fd;--gold:#93b4f5;--gold-soft:#f1f5f9;
+  --ok:#15803d;--ok-soft:#e6f4ea;--warn:#a16207;--warn-soft:#fef3c7;--bad:#b91c1c;--bad-soft:#fee9e9;
+  --r:16px;--r-sm:12px;--shadow:0 1px 2px #0f1c330d,0 6px 18px #0f1c330a;
   --tab-h:64px;--bar-h:56px;--safe-b:env(safe-area-inset-bottom,0px);
-  font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Gujarati",sans-serif;
+  font-family:"Inter","Noto Sans Gujarati",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-feature-settings:"cv11","ss01","tnum" 0;
   color:var(--text);background:var(--bg);font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
-body{margin:0;min-height:100vh;background:var(--bg);color:var(--text);font-size:15px;line-height:1.5}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--text);font-size:15px;line-height:1.55;font-weight:450;letter-spacing:-.003em}
 [hidden],.hidden{display:none!important}
 button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer;touch-action:manipulation}
@@ -32,12 +32,12 @@ p{margin:0}
 .subhead{margin:22px 0 10px}
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .ic{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
-:focus-visible{outline:3px solid #8fb9a3;outline-offset:2px}
+:focus-visible{outline:3px solid #93b4f5;outline-offset:2px}
 
 /* ---------- Buttons ---------- */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 18px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:var(--r-sm);font-weight:650;font-size:14px;transition:background .15s,border-color .15s,transform .1s}
 .btn:active{transform:scale(.98)}
-.btn:hover{border-color:#c8d1c8}
+.btn:hover{border-color:#b8c4d6}
 .btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
 .btn.primary:hover{background:var(--brand-2)}
 .btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
@@ -50,19 +50,19 @@ form .btn.primary{width:100%}
 .panel>h3:first-child,.panel>.eyebrow+h3{margin-bottom:4px}
 .field{display:grid;gap:6px;margin:14px 0}
 .field label{font-size:13px;font-weight:650;color:var(--ink);line-height:1.4}
-.field input:not([type=checkbox]),.field select,.field textarea{width:100%;min-width:0;min-height:50px;padding:12px 14px;border:1px solid #d3dad3;border-radius:var(--r-sm);background:#fff;font-size:16px;line-height:1.4;outline:none;transition:border-color .15s,box-shadow .15s}
+.field input:not([type=checkbox]),.field select,.field textarea{width:100%;min-width:0;min-height:50px;padding:12px 14px;border:1px solid #cbd5e1;border-radius:var(--r-sm);background:#fff;font-size:16px;line-height:1.4;outline:none;transition:border-color .15s,box-shadow .15s}
 .field textarea{min-height:90px;resize:vertical}
-.field input::placeholder,.field textarea::placeholder{color:#97a3a9}
-.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--brand-2);box-shadow:0 0 0 3px #1f6b4a22}
-.field input:disabled,.field select:disabled{background:#f1f3f0;color:var(--muted)}
+.field input::placeholder,.field textarea::placeholder{color:#94a3b8}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--brand-2);box-shadow:0 0 0 3px #2563eb22}
+.field input:disabled,.field select:disabled{background:#f1f5f9;color:var(--muted)}
 .field input[type=checkbox]{width:20px;height:20px;accent-color:var(--brand)}
 input[type=number]{font-variant-numeric:tabular-nums}
 input[type=date]{display:block;min-height:50px}
 .msg{font-size:13px;color:var(--bad);min-height:0;margin-top:10px}
 .msg:empty{display:none}
 .form-hint{font-size:12px;color:var(--muted);margin-top:4px}
-.noticebar{padding:12px 14px;background:var(--brand-soft);border:1px solid #d3e5d9;border-radius:var(--r-sm);color:#2c5a43;font-size:13px;line-height:1.55;margin:12px 0}
-.empty{padding:22px 14px;text-align:center;border:1.5px dashed #ccd5cc;border-radius:var(--r-sm);color:var(--muted);font-size:13px;background:#fafbf9}
+.noticebar{padding:12px 14px;background:var(--brand-soft);border:1px solid #cfdbf3;border-radius:var(--r-sm);color:#1e3a8a;font-size:13px;line-height:1.55;margin:12px 0}
+.empty{padding:22px 14px;text-align:center;border:1.5px dashed #cbd5e1;border-radius:var(--r-sm);color:var(--muted);font-size:13px;background:#f8fafc}
 .tag{display:inline-flex;align-items:center;border-radius:99px;background:var(--brand-soft);padding:4px 10px;font-size:11px;font-weight:700;color:var(--brand);align-self:flex-start;white-space:nowrap}
 
 /* ---------- Lists & metrics ---------- */
@@ -85,10 +85,10 @@ input[type=date]{display:block;min-height:50px}
 .brand-name{display:block;font-weight:800;color:var(--ink);letter-spacing:-.02em;font-size:15px;line-height:1.2}
 .brand small{display:block;color:var(--muted);font-size:11px;font-weight:550;margin-top:1px}
 .pub-main{max-width:1040px;margin:0 auto;padding:8px 16px 8px;display:grid;gap:16px}
-.hero-card{background:linear-gradient(160deg,var(--brand),#0f3a29);color:#fff;border-radius:22px;padding:22px 20px;overflow:hidden;position:relative}
-.hero-card .eyebrow{color:var(--gold)}
+.hero-card{background:linear-gradient(160deg,#1e3a8a,#0f1c33);color:#fff;border-radius:22px;padding:22px 20px;overflow:hidden;position:relative}
+.hero-card .eyebrow{color:#93b4f5}
 .hero-card h1{color:#fff;margin:10px 0}
-.hero-card p{color:#d3e6da;font-size:14px;line-height:1.6;max-width:480px}
+.hero-card p{color:#c9d6ee;font-size:14px;line-height:1.6;max-width:480px}
 .hero-card .chip{display:inline-block;margin-top:14px;background:#ffffff1f;border:1px solid #ffffff2e;color:#fff;border-radius:99px;padding:5px 12px;font-size:12px;font-weight:650}
 .hero-banner{width:100%;display:block;border-radius:14px;margin-bottom:16px;border:1px solid #ffffff22}
 .login-card{padding:20px 18px}
@@ -104,7 +104,7 @@ input[type=date]{display:block;min-height:50px}
 .directory-disclosure[open] .directory-open span{display:inline-block;transform:rotate(45deg)}
 .directory-panel{border:0!important;border-top:1px solid var(--line)!important;border-radius:0!important;box-shadow:none!important}
 .house-chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:8px;margin-top:12px}
-.house-chip{border:1px solid var(--line);border-radius:12px;padding:10px 6px;text-align:center;background:#fafbf9}
+.house-chip{border:1px solid var(--line);border-radius:12px;padding:10px 6px;text-align:center;background:#f8fafc}
 .house-chip strong{display:block;font-size:20px;color:var(--ink)}
 .house-chip span{font-size:11px;color:var(--muted)}
 .pub-foot{max-width:1040px;margin:0 auto;padding:0 16px 28px;color:var(--muted);font-size:12px;display:flex;flex-direction:column;gap:4px}
@@ -123,7 +123,7 @@ input[type=date]{display:block;min-height:50px}
 .lang-btn{font-size:13px;min-height:40px;padding:0 14px}
 
 /* bottom tab bar (phones) */
-.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:100;display:grid;grid-template-columns:repeat(5,1fr);padding:6px 6px calc(6px + var(--safe-b));background:rgba(255,255,255,.97);backdrop-filter:blur(14px);border-top:1px solid var(--line);box-shadow:0 -6px 22px #10283c10}
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:100;display:grid;grid-template-columns:repeat(5,1fr);padding:6px 6px calc(6px + var(--safe-b));background:rgba(255,255,255,.97);backdrop-filter:blur(14px);border-top:1px solid var(--line);box-shadow:0 -6px 22px #0f1c3310}
 .tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:52px;border:0;background:transparent;border-radius:14px;color:var(--muted);font-size:11px;font-weight:650;padding:4px 2px}
 .tab .ic{width:23px;height:23px}
 .tab.active{color:var(--brand)}
@@ -133,14 +133,14 @@ input[type=date]{display:block;min-height:50px}
 
 /* "More" sheet */
 .sheet-wrap{position:fixed;inset:0;z-index:150;display:flex;align-items:flex-end;justify-content:center}
-.sheet-backdrop{position:absolute;inset:0;border:0;background:#10283c66;width:100%;height:100%;padding:0;border-radius:0}
-.sheet{position:relative;width:100%;max-width:560px;max-height:88vh;overflow:auto;background:#fff;border-radius:24px 24px 0 0;padding:10px 16px calc(18px + var(--safe-b));box-shadow:0 -16px 48px #10283c33;animation:slideup .22s ease-out}
+.sheet-backdrop{position:absolute;inset:0;border:0;background:#0f1c3366;width:100%;height:100%;padding:0;border-radius:0}
+.sheet{position:relative;width:100%;max-width:560px;max-height:88vh;overflow:auto;background:#fff;border-radius:24px 24px 0 0;padding:10px 16px calc(18px + var(--safe-b));box-shadow:0 -16px 48px #0f1c3333;animation:slideup .22s ease-out}
 @keyframes slideup{from{transform:translateY(30px);opacity:.4}to{transform:none;opacity:1}}
-.grabber{width:40px;height:4px;border-radius:8px;background:#d3dad3;margin:2px auto 14px}
+.grabber{width:40px;height:4px;border-radius:8px;background:#cbd5e1;margin:2px auto 14px}
 .more-list{display:grid;gap:6px;margin:10px 0}
 .more-item{display:flex;align-items:center;gap:14px;width:100%;min-height:54px;padding:0 14px;border:1px solid var(--line);border-radius:14px;background:#fff;text-align:left;font-weight:650;color:var(--ink);font-size:15px}
 .more-item .ic{color:var(--brand)}
-.more-item.active{background:var(--brand-soft);border-color:#c5dccd}
+.more-item.active{background:var(--brand-soft);border-color:#c3d3f4}
 .user-card{display:flex;align-items:center;gap:12px;padding:12px;border-radius:14px;background:var(--brand-soft)}
 .avatar{width:42px;height:42px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:800;font-size:16px;flex-shrink:0}
 .user-card strong{display:block;color:var(--ink);font-size:15px;line-height:1.25}
@@ -148,15 +148,15 @@ input[type=date]{display:block;min-height:50px}
 .sheet-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
 
 /* toast */
-.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--tab-h) + var(--safe-b) + 14px);z-index:300;max-width:min(92vw,480px);background:var(--ink);color:#fff;padding:12px 16px;border-radius:14px;font-size:13px;font-weight:550;box-shadow:0 10px 30px #10283c40;text-align:center}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--tab-h) + var(--safe-b) + 14px);z-index:300;max-width:min(92vw,480px);background:var(--ink);color:#fff;padding:12px 16px;border-radius:14px;font-size:13px;font-weight:550;box-shadow:0 10px 30px #0f1c3340;text-align:center}
 .toast:empty{display:none}
 
 /* ---------- Navratri ---------- */
-.navratri-hero{display:flex;flex-direction:column;gap:12px;padding:18px;color:#fff;background:linear-gradient(150deg,var(--brand) 0%,#12402c 70%);border-radius:20px;margin-bottom:14px;position:relative;overflow:hidden}
-.navratri-hero:after{content:"";position:absolute;right:-30px;top:-30px;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,#e7a92f66,#e7a92f00 70%)}
-.navratri-hero .eyebrow{color:var(--gold)}
+.navratri-hero{display:flex;flex-direction:column;gap:12px;padding:18px;color:#fff;background:linear-gradient(150deg,#1e3a8a 0%,#0f1c33 78%);border-radius:20px;margin-bottom:14px;position:relative;overflow:hidden}
+.navratri-hero:after{content:"";position:absolute;right:-30px;top:-30px;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,#60a5fa44,#60a5fa00 70%)}
+.navratri-hero .eyebrow{color:#93b4f5}
 .navratri-hero h3{color:#fff;font-size:22px;margin:6px 0 2px}
-.navratri-hero .tiny{color:#cfe3d7}
+.navratri-hero .tiny{color:#c0cde6}
 .navratri-hero .tag{background:#ffffff22;color:#fff}
 .navratri-hero .btn{background:#ffffff18;border-color:#ffffff40;color:#fff;min-height:38px;font-size:13px}
 .navratri-hero .row{position:relative;z-index:1}
@@ -164,11 +164,11 @@ input[type=date]{display:block;min-height:50px}
 .festival-kpis .metric:first-child{grid-column:1/-1}
 .festival-kpis .metric:first-child strong{font-size:clamp(26px,8vw,32px)}
 
-.segmented{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:4px;padding:4px;background:#e6ebe5;border-radius:14px;margin:0 0 14px;position:sticky;top:calc(var(--bar-h) + 8px);z-index:20}
+.segmented{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:4px;padding:4px;background:#e6ebf2;border-radius:14px;margin:0 0 14px;position:sticky;top:calc(var(--bar-h) + 8px);z-index:20}
 .seg-btn{min-height:42px;border:0;border-radius:11px;background:transparent;color:var(--muted);font-weight:700;font-size:14px}
-.seg-btn.active{background:#fff;color:var(--brand);box-shadow:0 1px 4px #10283c1f}
+.seg-btn.active{background:#fff;color:var(--brand);box-shadow:0 1px 4px #0f1c331f}
 
-.festival-rate-form{display:grid;gap:10px;padding:14px;margin:14px 0;background:#f6f8f4;border:1px solid var(--line);border-radius:var(--r-sm)}
+.festival-rate-form{display:grid;gap:10px;padding:14px;margin:14px 0;background:#f4f7fb;border:1px solid var(--line);border-radius:var(--r-sm)}
 .festival-rate-form .field{margin:0}
 .rate-summary{font-size:12px;color:var(--muted)}
 .house-number-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:14px 0 4px}
@@ -183,42 +183,42 @@ button.house-number-card:active{transform:scale(.97)}
 .house-payment-state{font-size:10px;font-weight:750;padding:2px 8px;border-radius:99px;margin-top:2px}
 .house-payment-state.is-paid,.house-payment-state.is-over{color:var(--ok);background:var(--ok-soft)}
 .house-payment-state.is-pending{color:var(--bad);background:var(--bad-soft)}
-.house-payment-state.is-none{color:var(--muted);background:#eef0ee}
+.house-payment-state.is-none{color:var(--muted);background:#eef1f5}
 
 .token-day-field{margin:12px 0}
 .token-summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}
-.token-summary{padding:10px;border:1px solid var(--line);border-radius:12px;background:#f6f8f4}
+.token-summary{padding:10px;border:1px solid var(--line);border-radius:12px;background:#f4f7fb}
 .token-summary small{display:block;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.03em}
 .token-summary strong{display:block;font-size:22px;margin-top:4px;color:var(--ink)}
 .house-selector{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin:14px 0 8px}
-.house-selector-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-width:0;min-height:50px;padding:6px 2px;border:1px solid #d3dad3;border-radius:12px;background:#fff;color:var(--ink);font-weight:750;font-size:15px}
+.house-selector-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-width:0;min-height:50px;padding:6px 2px;border:1px solid #cbd5e1;border-radius:12px;background:#fff;color:var(--ink);font-weight:750;font-size:15px}
 .house-selector-btn:hover{border-color:var(--brand-2);background:var(--brand-soft)}
 .house-selector-btn:disabled{opacity:.55;cursor:default}
 .house-token-dots{display:flex;gap:4px;justify-content:center;min-height:8px}
 .token-dot{display:inline-block;width:8px;height:8px;border-radius:50%}
 .token-dot.green{background:#27834a}.token-dot.red{background:#d64545}
-.token-entry-form{padding:14px;background:#f6f8f4;border:1px solid var(--line);border-radius:var(--r-sm);margin:12px 0}
+.token-entry-form{padding:14px;background:#f4f7fb;border:1px solid var(--line);border-radius:var(--r-sm);margin:12px 0}
 .token-pending-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:var(--r-sm);background:#fff}
 .token-pending-row>div{min-width:0;overflow-wrap:anywhere}
 .token-pending-row .btn{grid-column:1/-1;min-height:40px;font-size:13px}
 .token-status{font-size:12px;font-weight:700}
 .token-status.is-done{color:var(--ok)}.token-status.is-pending{color:var(--bad)}
-.token-undo-btn{border-color:#efc3bf;color:var(--bad)}
+.token-undo-btn{border-color:#f3c4c4;color:var(--bad)}
 
 /* household sheet */
 .household-modal{position:fixed;inset:0;z-index:200;display:flex;align-items:flex-end;justify-content:center}
-.household-modal-backdrop{position:absolute;inset:0;width:100%;height:100%;border:0;background:#10283c66;border-radius:0;padding:0}
-.household-modal-sheet{position:relative;width:min(100%,520px);max-height:90vh;overflow:auto;padding:10px 16px calc(18px + var(--safe-b));background:#fff;border-radius:24px 24px 0 0;box-shadow:0 -16px 48px #10283c33;animation:slideup .22s ease-out}
-.modal-grabber{width:40px;height:4px;border-radius:8px;background:#d3dad3;margin:2px auto 12px}
+.household-modal-backdrop{position:absolute;inset:0;width:100%;height:100%;border:0;background:#0f1c3366;border-radius:0;padding:0}
+.household-modal-sheet{position:relative;width:min(100%,520px);max-height:90vh;overflow:auto;padding:10px 16px calc(18px + var(--safe-b));background:#fff;border-radius:24px 24px 0 0;box-shadow:0 -16px 48px #0f1c3333;animation:slideup .22s ease-out}
+.modal-grabber{width:40px;height:4px;border-radius:8px;background:#cbd5e1;margin:2px auto 12px}
 .modal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px}
 .modal-head h3{font-size:20px}
 .stepper{display:grid;grid-template-columns:56px minmax(0,1fr) 56px;gap:8px;align-items:center}
-.step-btn{height:56px;border:1px solid #d3dad3;border-radius:var(--r-sm);background:#fff;font-size:26px;font-weight:600;color:var(--brand);line-height:1}
+.step-btn{height:56px;border:1px solid #cbd5e1;border-radius:var(--r-sm);background:#fff;font-size:26px;font-weight:600;color:var(--brand);line-height:1}
 .step-btn:active{background:var(--brand-soft)}
 .step-btn:disabled{opacity:.4}
 .stepper input{text-align:center;font-size:24px!important;font-weight:750;min-height:56px!important}
-.calculated-due{display:grid;gap:3px;padding:14px 16px;border-radius:var(--r-sm);background:var(--gold-soft);border:1px solid #f1dca4;margin:14px 0}
-.calculated-due span,.calculated-due small{font-size:12px;color:#7a5b12}
+.calculated-due{display:grid;gap:3px;padding:14px 16px;border-radius:var(--r-sm);background:var(--gold-soft);border:1px solid #dbe3ee;margin:14px 0}
+.calculated-due span,.calculated-due small{font-size:12px;color:#475569}
 .calculated-due strong{font-size:30px;letter-spacing:-.03em;color:var(--ink)}
 .modal-actions{display:grid}
 .modal-section{border-top:1px solid var(--line);margin-top:18px;padding-top:14px}
@@ -227,17 +227,21 @@ body.modal-open{overflow:hidden}
 
 /* programmes */
 .programme-card{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:12px;box-shadow:var(--shadow)}
-.programme-date{display:inline-flex;border-radius:8px;background:var(--gold-soft);padding:5px 10px;color:#7a5b12;font-size:12px;font-weight:750;margin-bottom:10px}
+.programme-date{display:inline-flex;border-radius:8px;background:var(--gold-soft);padding:5px 10px;color:#475569;font-size:12px;font-weight:750;margin-bottom:10px}
 .programme-card h3{font-size:18px;margin-bottom:6px}
 .programme-details{white-space:pre-wrap;line-height:1.7;color:var(--muted);font-size:14px}
-.programme-expenses{margin:12px 0 0;padding-left:12px;border-left:3px solid #d3e5d9}
+.programme-expenses{margin:12px 0 0;padding-left:12px;border-left:3px solid #cfdbf3}
 
+.refund-box{margin:16px 0 4px;padding:14px;border:1px solid #fcd9a8;border-radius:var(--r-sm);background:#fff8ec}
+.refund-box>strong{color:#92400e;font-size:14px}
+.item.is-refund{background:#fff8ec;border-color:#fcd9a8}
+.refund-tag{background:#fde7c4;color:#92400e}
 /* ---------- Custom select (bottom sheet on phones) ---------- */
 .mobile-select{position:relative;width:100%;min-width:0}
 .mobile-select .native-select-source{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important;clip-path:inset(50%)!important;overflow:hidden!important}
-.mobile-select-trigger{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:50px;padding:12px 14px;border:1px solid #d3dad3;border-radius:var(--r-sm);background:#fff;color:var(--ink);text-align:left;font-size:16px;font-weight:550}
+.mobile-select-trigger{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:50px;padding:12px 14px;border:1px solid #cbd5e1;border-radius:var(--r-sm);background:#fff;color:var(--ink);text-align:left;font-size:16px;font-weight:550}
 .mobile-select-caret{color:var(--muted);font-size:20px;line-height:1;flex-shrink:0}
-.mobile-select-menu{position:absolute;top:calc(100% + 6px);left:0;right:0;z-index:230;max-height:min(320px,55vh);overflow:auto;padding:6px;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 14px 40px #10283c26}
+.mobile-select-menu{position:absolute;top:calc(100% + 6px);left:0;right:0;z-index:230;max-height:min(320px,55vh);overflow:auto;padding:6px;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 14px 40px #0f1c3326}
 .mobile-select-option{display:block;width:100%;min-height:46px;padding:12px;text-align:left;border:0;border-radius:10px;background:#fff;color:var(--ink);font-size:15px}
 .mobile-select-option.selected{background:var(--brand-soft);font-weight:750;color:var(--brand)}
 .mobile-select-option:disabled{opacity:.45}
@@ -252,9 +256,9 @@ body.modal-open{overflow:hidden}
 }
 /* ---------- Phones: sheet-style custom select ---------- */
 @media(max-width:899px){
-  .mobile-select.is-open .mobile-select-backdrop{display:block;position:fixed;inset:0;z-index:225;background:#10283c66;border:0;width:100%;height:100%;padding:0;border-radius:0}
-  .mobile-select.is-open .mobile-select-menu{position:fixed;top:auto;left:0;right:0;bottom:0;z-index:230;max-height:min(70vh,620px);padding:14px 12px calc(12px + var(--safe-b));border-radius:24px 24px 0 0;box-shadow:0 -12px 40px #10283c33}
-  .mobile-select.is-open .mobile-select-menu:before{content:"";display:block;width:40px;height:4px;border-radius:9px;background:#d3dad3;margin:0 auto 12px}
+  .mobile-select.is-open .mobile-select-backdrop{display:block;position:fixed;inset:0;z-index:225;background:#0f1c3366;border:0;width:100%;height:100%;padding:0;border-radius:0}
+  .mobile-select.is-open .mobile-select-menu{position:fixed;top:auto;left:0;right:0;bottom:0;z-index:230;max-height:min(70vh,620px);padding:14px 12px calc(12px + var(--safe-b));border-radius:24px 24px 0 0;box-shadow:0 -12px 40px #0f1c3333}
+  .mobile-select.is-open .mobile-select-menu:before{content:"";display:block;width:40px;height:4px;border-radius:9px;background:#cbd5e1;margin:0 auto 12px}
   .mobile-select-option{min-height:52px;padding:14px}
 }
 /* ---------- Tablet and up ---------- */
@@ -274,14 +278,18 @@ body.modal-open{overflow:hidden}
   .pub-main{grid-template-columns:1.1fr 1fr;align-items:center;gap:28px;padding-top:24px}
   .hero-card{padding:32px}
   .app{display:grid;grid-template-columns:268px minmax(0,1fr)}
-  .sidebar{display:flex;flex-direction:column;gap:16px;position:sticky;top:0;height:100vh;padding:20px 14px;background:#fff;border-right:1px solid var(--line);overflow:auto}
+  .sidebar{display:flex;flex-direction:column;gap:16px;position:sticky;top:0;height:100vh;padding:20px 14px;background:#0f1c33;border-right:1px solid #0f1c33;overflow:auto;color:#e2e8f0}
+  .sidebar .brand-name{color:#fff}.sidebar .brand small{color:#94a3b8}
+  .sidebar .brand-logo{background:#fff;border-radius:12px;padding:4px}
+  .sidebar .user-card{background:#ffffff12}.sidebar .user-card strong{color:#fff}.sidebar .user-card small{color:#94a3b8}.sidebar .avatar{background:#2563eb}
+  .sidebar .btn{background:#ffffff10;border-color:#ffffff22;color:#e2e8f0}.sidebar .btn:hover{border-color:#ffffff55}
   .sidebar .brand{padding:0 8px}
   .sidebar .brand-logo{width:44px;height:44px}
   .side-nav{display:grid;gap:4px}
-  .side-nav button{display:flex;align-items:center;gap:12px;width:100%;min-height:46px;padding:0 12px;border:0;border-radius:12px;background:transparent;color:#4a5b64;font-weight:650;font-size:14px;text-align:left}
-  .side-nav button:hover{background:#f3f6f2;color:var(--ink)}
-  .side-nav button.active{background:var(--brand);color:#fff}
-  .side-label{font-size:11px;font-weight:750;letter-spacing:.1em;text-transform:uppercase;color:#93a0a6;padding:6px 12px 2px}
+  .side-nav button{display:flex;align-items:center;gap:12px;width:100%;min-height:46px;padding:0 12px;border:0;border-radius:12px;background:transparent;color:#cbd5e1;font-weight:650;font-size:14px;text-align:left}
+  .side-nav button:hover{background:#ffffff12;color:#fff}
+  .side-nav button.active{background:#2563eb;color:#fff}
+  .side-label{font-size:11px;font-weight:750;letter-spacing:.1em;text-transform:uppercase;color:#7c8ba3;padding:6px 12px 2px}
   .side-foot{margin-top:auto;display:grid;gap:8px}
   .appbar,.tabbar{display:none}
   .content{padding:32px 36px 48px;max-width:1000px;margin:0}
@@ -461,7 +469,7 @@ function toPaise(v){const p=Math.round(Number(v)*100);return Number.isSafeIntege
 async function withBusy(btn,fn){if(!btn||btn.disabled)return;btn.disabled=true;try{return await fn()}finally{btn.disabled=false}}
 function navratriPaymentState(due,paid){
  if(due<=0&&paid<=0)return {key:'none',label:t('Not participating','ભાગ લેતા નથી')};
- if(paid>due)return {key:'over',label:t('Overpaid','વધુ ચૂકવેલ')};
+ if(paid>due)return {key:'over',label:t('Overpaid','વધુ ચૂકવેલ')+' '+money(paid-due)};
  if(paid>=due)return {key:'paid',label:t('Paid','ચૂકવેલ')};
  return {key:'pending',label:paid>0?t('Partly paid','અંશતઃ ચૂકવેલ'):t('Payment pending','પેમેન્ટ બાકી')};
 }
@@ -513,7 +521,7 @@ async function renderNavratri(c){
  navratriSelectedDate=selectedDate;
  const empty0=Promise.resolve({data:[],error:null});
  const [contribRes,tokenRes,expenseRes]=await Promise.all([
-  householdIds.length?supabase.from('navratri_contributions').select('id,household_id,amount_paise,paid_on,payment_method,reference_note').in('household_id',householdIds).order('paid_on',{ascending:false}):empty0,
+  householdIds.length?supabase.from('navratri_contributions').select('*').in('household_id',householdIds).order('paid_on',{ascending:false}):empty0,
   supabase.from('navratri_tokens').select('*').eq('season_id',season.id).eq('token_date',selectedDate).order('house_number'),
   admin?supabase.from('navratri_expenses').select('*').eq('season_id',season.id).order('spent_on',{ascending:false}).limit(200):empty0
  ]);
@@ -526,7 +534,7 @@ async function renderNavratri(c){
  const houses=households.map(h=>{
   const due=Number(h.amount_due_paise)||0, members=Math.max(0,Number(h.participant_count)||0);
   const payments=contributions.filter(x=>x.household_id===h.id);
-  const paid=payments.reduce((s,x)=>s+Number(x.amount_paise),0);
+  const paid=payments.reduce((s,x)=>s+(x.entry_type==='refund'?-1:1)*Number(x.amount_paise),0);
   const dayRows=tokens.filter(x=>Number(x.house_number)===Number(h.house_number));
   const received=dayRows.filter(x=>x.status==='received').reduce((n,x)=>n+Number(x.token_count||0),0);
   const pendingRows=dayRows.filter(x=>x.status!=='received');
@@ -566,7 +574,7 @@ async function renderNavratri(c){
  const modal=admin?'<div class="household-modal" id="householdModal" hidden><button type="button" class="household-modal-backdrop" data-modal-close aria-label="'+t('Close','બંધ કરો')+'"></button><section class="household-modal-sheet" role="dialog" aria-modal="true" aria-labelledby="householdModalTitle"><div class="modal-grabber"></div><div class="modal-head"><h3 id="householdModalTitle">'+t('Household details','ઘરની વિગતો')+'</h3><button type="button" class="btn" data-modal-close>'+t('Close','બંધ કરો')+'</button></div>'
   +'<form id="householdForm"><input type="hidden" name="house_number"><div class="field"><label for="householdMemberCount">'+t('How many people?','કેટલા લોકો?')+'</label><div class="stepper"><button type="button" class="step-btn" data-step="-1" aria-label="'+t('One less','એક ઓછું')+'"'+(canEdit?'':' disabled')+'>−</button><input name="participant_count" id="householdMemberCount" type="number" inputmode="numeric" min="0" max="100" step="1" required'+(canEdit?'':' disabled')+'><button type="button" class="step-btn" data-step="1" aria-label="'+t('One more','એક વધુ')+'"'+(canEdit?'':' disabled')+'>+</button></div></div><div class="calculated-due"><span>'+t('Automatic contribution total','આપમેળે ગણાયેલ ફાળો')+'</span><strong id="householdDuePreview"></strong><small id="householdRateHint"></small></div>'+(canEdit?'<div class="row modal-actions"><button class="btn primary" type="submit">'+t('Save members','સભ્યો સાચવો')+'</button></div>':'')+'<div id="householdMsg" class="msg"></div></form>'
   +'<div class="modal-section"><h3>'+t('Payments','પેમેન્ટ')+'</h3><div class="tiny" id="householdPaidSummary"></div><div class="list payment-history" id="householdPayments"></div>'
-  +(canEdit?'<form id="contributionForm"><div class="field"><label for="contributionAmount">'+t('Amount received (₹)','મળેલી રકમ (₹)')+'</label><input id="contributionAmount" name="amount" type="number" inputmode="decimal" min="0.01" step="0.01" required></div><div class="field"><label>'+t('Payment method','પેમેન્ટ રીત')+'</label><select name="method"><option value="cash">'+t('Cash','રોકડ')+'</option><option value="upi">UPI</option><option value="bank">'+t('Bank','બેંક')+'</option><option value="other">'+t('Other','અન્ય')+'</option></select></div><button class="btn primary" type="submit">'+t('Record payment','પેમેન્ટ નોંધો')+'</button><div id="contributionMsg" class="msg"></div></form>':'')
+  +(canEdit?'<div id="refundBox" class="refund-box" hidden><strong>'+t('Overpaid — return the extra amount','વધુ ચૂકવેલ — વધારાની રકમ પાછી આપો')+'</strong><div class="tiny" id="refundHint"></div><form id="refundForm"><div class="field"><label for="refundAmount">'+t('Amount to return (₹)','પરત આપવાની રકમ (₹)')+'</label><input id="refundAmount" name="amount" type="number" inputmode="decimal" min="0.01" step="0.01" required></div><div class="field"><label>'+t('Returned by','કેવી રીતે પરત આપ્યા')+'</label><select name="method"><option value="cash">'+t('Cash','રોકડ')+'</option><option value="upi">UPI</option><option value="bank">'+t('Bank','બેંક')+'</option><option value="other">'+t('Other','અન્ય')+'</option></select></div><button class="btn primary" type="submit">'+t('Record refund','પરત રકમ નોંધો')+'</button><div id="refundMsg" class="msg"></div></form></div><form id="contributionForm"><div class="field"><label for="contributionAmount">'+t('Amount received (₹)','મળેલી રકમ (₹)')+'</label><input id="contributionAmount" name="amount" type="number" inputmode="decimal" min="0.01" step="0.01" required></div><div class="field"><label>'+t('Payment method','પેમેન્ટ રીત')+'</label><select name="method"><option value="cash">'+t('Cash','રોકડ')+'</option><option value="upi">UPI</option><option value="bank">'+t('Bank','બેંક')+'</option><option value="other">'+t('Other','અન્ય')+'</option></select></div><button class="btn primary" type="submit">'+t('Record payment','પેમેન્ટ નોંધો')+'</button><div id="contributionMsg" class="msg"></div></form>':'')
   +'</div></section></div>':'';
 
  const firstWaiting=houses.find(x=>x.remaining>0);
@@ -612,7 +620,8 @@ async function renderNavratri(c){
   $('householdModalTitle').textContent=t('House ','ઘર ')+n;
   $('householdForm').elements.house_number.value=n;memberInput.value=x.members;setMsg('householdMsg','');updateDue();
   $('householdPaidSummary').textContent=t('Due','ચૂકવવાનું')+' '+money(x.due)+' · '+t('Paid','ચૂકવેલ')+' '+money(x.paid)+' · '+(x.paid>x.due?t('Extra paid','વધારાની રકમ')+' '+money(x.paid-x.due):t('Pending','બાકી')+' '+money(Math.max(x.due-x.paid,0)));
-  $('householdPayments').innerHTML=x.payments.map(p=>'<article class="item"><div class="itemtop"><div><h3>'+money(p.amount_paise)+'</h3><div class="tiny">'+escapeHtml(day(p.paid_on))+' · '+escapeHtml(p.payment_method)+'</div></div></div></article>').join('')||empty(t('No payments recorded yet.','હજી કોઈ પેમેન્ટ નોંધાયું નથી.'));
+  $('householdPayments').innerHTML=x.payments.map(p=>{const rf=p.entry_type==='refund';return '<article class="item'+(rf?' is-refund':'')+'"><div class="itemtop"><div><h3>'+(rf?'− ':'')+money(p.amount_paise)+'</h3><div class="tiny">'+escapeHtml(day(p.paid_on))+' · '+escapeHtml(p.payment_method)+'</div></div>'+(rf?'<span class="tag refund-tag">'+t('Refund','પરત')+'</span>':'')+'</div></article>'}).join('')||empty(t('No payments recorded yet.','હજી કોઈ પેમેન્ટ નોંધાયું નથી.'));
+  const over=Math.max(0,x.paid-x.due),rb=$('refundBox');if(rb){rb.hidden=!(over>0);if(over>0){$('refundHint').textContent=t('This house paid ','આ ઘરે ')+money(over)+t(' more than due.',' વધુ ચૂકવ્યા છે.');$('refundAmount').value=over/100;setMsg('refundMsg','')}}
   const amount=$('contributionAmount');if(amount)amount.value=x.due>x.paid?(x.due-x.paid)/100:'';setMsg('contributionMsg','');
   sheet.hidden=false;document.body.classList.add('modal-open');document.addEventListener('keydown',onKey);
   (canEdit?memberInput:sheet.querySelector('[data-modal-close].btn'))?.focus({preventScroll:true});
@@ -646,6 +655,17 @@ async function renderNavratri(c){
    const {error}=await supabase.from('navratri_contributions').insert({household_id:sheetHouse.h.id,amount_paise:amount,payment_method:fd.get('method'),received_by:profile.id});
    if(error){setMsg('contributionMsg',error.message);return}
    closeSheet();await rerender();setMsg('appMsg',t('Payment recorded for house ','પેમેન્ટ નોંધાયું, ઘર ')+sheetHouse.n+': '+money(amount));
+  });
+ });
+
+ $('refundForm').addEventListener('submit',e=>{e.preventDefault();const form=e.currentTarget,fd=new FormData(form),amount=toPaise(fd.get('amount'));
+  const over=sheetHouse?Math.max(0,sheetHouse.paid-sheetHouse.due):0;
+  if(!sheetHouse||!amount||amount>over){setMsg('refundMsg',t('Enter an amount up to ','આટલી રકમ સુધી દાખલ કરો: ')+money(over));return}
+  if(!confirm(t('Return ','પરત આપવા: ')+money(amount)+t(' to house ',' ઘર ')+sheetHouse.n+'?'))return;
+  withBusy(form.querySelector('button[type=submit]'),async()=>{
+   const {error}=await supabase.from('navratri_contributions').insert({household_id:sheetHouse.h.id,amount_paise:amount,payment_method:fd.get('method'),entry_type:'refund',reference_note:'Refund of overpayment',received_by:profile.id});
+   if(error){setMsg('refundMsg',/entry_type/.test(error.message||'')?t('Refunds need the database update (docs/migrations). Ask the developer.','પરત રકમ માટે ડેટાબેઝ અપડેટ જરૂરી છે.'):error.message);return}
+   closeSheet();await rerender();setMsg('appMsg',t('Refund recorded for house ','પરત રકમ નોંધાઈ, ઘર ')+sheetHouse.n+': '+money(amount));
   });
  });
 
