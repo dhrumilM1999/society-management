@@ -5,6 +5,7 @@ A static, responsive resident portal for **Sonalpark Society Gate-2**, serving h
 ## Latest project status — 12 October 2026
 
 ### Done
+- **UI redesign (12 Oct 2026, mobile-first):** new design system using the emblem's green/navy/gold; bottom tab bar with a "More" sheet on phones and a left sidebar on screens ≥900px; login page reordered so sign-in is first; Navratri split into Houses / Tokens / Expenses tabs; house member entry uses a large +/– stepper; toast messages replace the inline status line. Data logic is unchanged and `tests/navratri/e2e.mjs` covers the new layout.
 - Production Supabase project is connected; all 19 houses (31–49) exist.
 - Admin login has been confirmed by the owner; house-management and house-number login code is committed.
 - Public house-number directory, English/Gujarati toggle and resident portal are present.

@@ -1,248 +1,379 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f7f7f4">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#174d36">
 <meta name="description" content="Sonalpark Society Gate-2 resident portal"><link rel="icon" type="image/svg+xml" href="/assets/favicon.svg"><link rel="apple-touch-icon" href="/assets/favicon.svg"><title>Sonalpark Society Gate-2</title>
 <style>
-:root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#22251f;background:#f7f7f4;font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;--muted:#70766d;--line:#e5e7df;--green:#566b50;--soft:#edf2e9}*{box-sizing:border-box}body{margin:0;min-height:100vh}button,input,select,textarea{font:inherit}button{cursor:pointer}.shell{max-width:1180px;margin:auto;padding:0 24px}.top{display:flex;align-items:center;justify-content:space-between;padding:22px 0;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:11px;font-weight:700;letter-spacing:-.03em}.brand-logo{width:52px;height:52px;object-fit:contain;flex-shrink:0;display:block}.brand{gap:9px}.hero-banner{width:100%;max-width:680px;display:block;border-radius:18px;border:1px solid var(--line);margin:0 0 22px;box-shadow:0 10px 30px #17385212}.welcome-copy{padding:8px 0}.welcome-copy .eyebrow{margin-top:0}.mark{width:38px;height:38px;border-radius:12px;background:#222722;color:white;display:grid;place-items:center}.brand small{display:block;color:var(--muted);font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;margin-top:3px}.topactions{display:flex;gap:9px;align-items:center}.btn{border:1px solid #dfe2da;background:white;border-radius:10px;padding:10px 14px;font-weight:600;font-size:13px;color:#33382f}.btn.primary{background:#252b24;border-color:#252b24;color:#fff}.btn:disabled{opacity:.5;cursor:not-allowed}.page{padding:48px 0 70px}.eyebrow{font-size:11px;font-weight:750;letter-spacing:.14em;text-transform:uppercase;color:var(--green)}h1{font-size:clamp(34px,5vw,55px);line-height:1.08;letter-spacing:-.06em;margin:16px 0}h2{font-size:24px;letter-spacing:-.04em;margin:0 0 7px}h3{font-size:16px;letter-spacing:-.02em;margin:0 0 10px}.muted{color:var(--muted);line-height:1.7;font-size:14px}.hero{display:grid;grid-template-columns:1fr .85fr;gap:60px;align-items:center}.hero p{max-width:520px}.panel{background:white;border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:0 12px 35px #29332408}.field{display:grid;gap:7px;margin:15px 0}.field label{font-size:12px;font-weight:650;color:#51574e}.field input,.field select,.field textarea{width:100%;border:1px solid #dfe2da;border-radius:10px;padding:12px;background:#fff;color:#242821;outline:none}.field input:focus,.field textarea:focus{border-color:#83927b;box-shadow:0 0 0 3px #edf2e9}.msg{font-size:13px;color:#9b4e3e;min-height:18px;margin-top:10px}.hidden{display:none!important}.layout{display:grid;grid-template-columns:225px 1fr;gap:24px}.side{align-self:start;position:sticky;top:16px}.nav{display:grid;gap:5px;margin-top:20px}.nav button{text-align:left;border:0;background:transparent;border-radius:10px;padding:12px;color:#596056;font-size:13px}.nav button.active,.nav button:hover{background:var(--soft);color:#283526}.contenthead{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:22px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:18px 0}.metric{background:white;border:1px solid var(--line);border-radius:14px;padding:19px}.metric small{font-size:11px;color:var(--muted);font-weight:650;letter-spacing:.05em;text-transform:uppercase}.metric strong{display:block;font-size:25px;letter-spacing:-.05em;margin:9px 0}.metric span{font-size:12px;color:var(--muted)}.list{display:grid;gap:10px}.item{border:1px solid var(--line);border-radius:12px;padding:16px;background:#fff}.itemtop{display:flex;justify-content:space-between;gap:12px}.item p{white-space:pre-wrap;font-size:13px;color:#62685f;line-height:1.65;margin:9px 0 0}.tag{display:inline-flex;border-radius:99px;background:var(--soft);padding:5px 8px;font-size:10px;font-weight:700;color:#53674c;align-self:flex-start}.split{display:grid;grid-template-columns:1fr 1fr;gap:14px}.empty{padding:25px;text-align:center;border:1px dashed #dfe2da;border-radius:12px;color:var(--muted);font-size:13px}.noticebar{padding:12px 14px;background:#f0f3ec;border:1px solid #e0e7da;border-radius:12px;color:#495b43;font-size:12px;line-height:1.6;margin:14px 0}.footer{border-top:1px solid var(--line);padding:20px 0;color:#8a8f86;font-size:12px;display:flex;justify-content:space-between;gap:12px}.language{font-size:12px}.subhead{margin:26px 0 12px}.row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.tiny{font-size:11px;color:var(--muted)}@media(max-width:800px){.hero{grid-template-columns:1fr;gap:25px}.layout{grid-template-columns:1fr}.side{position:static}.nav{grid-template-columns:repeat(3,minmax(0,1fr))}.nav button{text-align:center;padding:10px 5px}.grid{grid-template-columns:1fr 1fr}.split{grid-template-columns:1fr}.page{padding-top:30px}}@media(max-width:480px){.shell{padding:0 16px}.top{padding:16px 0}.grid{grid-template-columns:1fr}.panel{padding:18px}.contenthead{flex-direction:column}.footer{flex-direction:column}}
-@media(max-width:760px){.shell{padding:0 14px}.top{padding:12px 0;gap:10px}.brand-logo{width:44px;height:44px}.brand{font-size:14px}.brand small{font-size:9px}.topactions{gap:5px}.topactions .btn{padding:8px 10px}.page{padding:24px 0 42px}.hero{display:block;gap:18px}.hero-banner{max-width:100%;margin-bottom:16px}.layout{display:block}.side{position:static;margin-bottom:16px}.nav{display:flex;gap:6px;overflow-x:auto;margin-top:12px;padding-bottom:5px;scrollbar-width:thin}.nav button{flex:0 0 auto;white-space:nowrap;padding:10px 12px;font-size:12px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:12px 0}.metric{padding:14px}.metric strong{font-size:21px}.panel{padding:16px;border-radius:14px}.contenthead{display:block}.split{display:block}.split>div+div{margin-top:20px}.item{padding:13px}.contributionForm .row{display:grid;grid-template-columns:1fr 1fr}.contributionForm .row input{grid-column:1/-1}.contributionForm .row button{grid-column:1/-1}.field input,.field select,.field textarea{font-size:16px;padding:13px}button{min-height:40px}}@media(max-width:390px){.grid{grid-template-columns:1fr}.brand small{letter-spacing:.02em}}
-/* Festival and programme workspace polish */
-.navratri-hero{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;padding:22px;background:linear-gradient(135deg,#f7f3e8,#edf2e9 72%);border:1px solid #e1e5d9;border-radius:18px;margin-bottom:16px}
-.navratri-hero h3{font-size:21px;letter-spacing:-.04em;margin:7px 0}
-.navratri-hero .tiny{line-height:1.7}
-.festival-section{margin-top:16px}
-.festival-section>h3{display:flex;align-items:center;gap:9px}
-.festival-section>h3:before{content:"";width:4px;height:18px;background:#77886b;border-radius:4px}
-.festival-form{background:#fafbf8;border:1px solid #e8ebe3;border-radius:13px;padding:16px;margin:14px 0}
-.festival-form .field{margin:10px 0}
-.festival-form .row{align-items:end}
-.festival-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
-.festival-kpis .metric{position:relative;overflow:hidden}
-.festival-kpis .metric:after{content:"";position:absolute;width:70px;height:70px;border-radius:50%;background:#edf2e9;right:-24px;top:-25px}
-.festival-kpis .metric strong,.festival-kpis .metric small,.festival-kpis .metric span{position:relative;z-index:1}
-.festival-record{border:1px solid var(--line);border-radius:14px;padding:16px;background:#fff;margin:10px 0}
-.festival-record .record-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
-.festival-record .record-title{font-weight:750;font-size:15px;margin-bottom:5px}
-.festival-record .record-meta{font-size:12px;color:var(--muted);line-height:1.7}
-.festival-record .record-money{font-size:18px;font-weight:750;white-space:nowrap}
-.festival-record .record-actions{margin-top:12px;padding-top:12px;border-top:1px solid #eef0eb}
-.programme-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 7px 22px #29332406}
-.programme-card .programme-date{display:inline-flex;border-radius:8px;background:#f1f3ed;padding:6px 9px;color:#58664f;font-size:11px;font-weight:750;margin-bottom:10px}
-.programme-card h3{font-size:18px;margin-bottom:8px}
-.programme-card .programme-details{white-space:pre-wrap;line-height:1.75;color:#62685f;font-size:13px}
-.programme-expenses{margin:12px 0 0 12px;padding-left:12px;border-left:2px solid #e5e9df}
-.form-hint{font-size:11px;line-height:1.6;color:var(--muted);margin-top:5px}
-@media(max-width:760px){.navratri-hero{padding:17px;display:block}.festival-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.festival-form{padding:12px}.festival-record{padding:13px}.programme-card{padding:15px}}
-@media(max-width:420px){.festival-kpis{grid-template-columns:1fr}.festival-record .record-head{display:block}.festival-record .record-money{display:block;margin-top:8px}}
-
-/* Refero Styles reference: editorial ink, white canvas, restrained chrome */
-:root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#13151b;background:#fff;--muted:#777d90;--line:#e1e4eb;--green:#13151b;--soft:#f3f5f8}
-body{background:#fff;color:#13151b}
-h1,h2{font-family:Georgia,"Times New Roman",serif;font-weight:400;letter-spacing:-.025em;color:#090a0c}
-h1{line-height:1.12}
-h2{line-height:1.2}
-h3{color:#13151b;letter-spacing:-.02em}
-.top{border-bottom-color:#e1e4eb}
-.brand{letter-spacing:-.025em}
-.mark{background:#13151b}
-.btn{border:1px solid #d9dde6;background:#fff;border-radius:999px;padding:10px 17px;color:#282d38;transition:background .16s ease,border-color .16s ease,transform .16s ease}
-.btn:hover{border-color:#13151b}
-.btn.primary{background:#000;border-color:#000;color:#fff;border-radius:999px}
-.btn.primary:hover{background:#282d38}
-.panel,.metric,.item,.festival-record,.programme-card{background:#fff;border-color:#e1e4eb;box-shadow:inset 0 0 0 1px rgba(12,41,126,.025)}
-.panel{border-radius:20px}
-.metric{border-radius:16px}
-.item,.festival-record,.programme-card{border-radius:16px}
-.field input,.field select,.field textarea{border-color:#d9dde6;border-radius:12px;background:#fff}
-.field input:focus,.field textarea:focus,.field select:focus{border-color:#525769;box-shadow:0 0 0 3px rgba(12,41,126,.07)}
-.nav button{border-radius:999px;color:#525769}
-.nav button.active,.nav button:hover{background:#f3f5f8;color:#13151b}
-.tag{background:#f3f5f8;color:#525769;border-radius:8px}
-.noticebar{background:#f7f8fb;border-color:#e1e4eb;color:#525769}
-.empty{border-color:#d9dde6;color:#777d90}
-.hero-banner{box-shadow:none}
-.navratri-hero{background:#f7f8fb;border-color:#e1e4eb;border-radius:20px}
-.festival-kpis .metric:after{background:#f3f5f8}
-.festival-section>h3:before{background:#13151b}
-.programme-card .programme-date{background:#f3f5f8;color:#525769;border-radius:8px}
-.footer{border-top-color:#e1e4eb}
-@media(prefers-reduced-motion:reduce){.btn{transition:none}}
-
-/* Mobile-first interaction pass: designed for one-handed phone use */
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-button,.btn{touch-action:manipulation}
-input,select,textarea{max-width:100%;min-width:0}
-@media(max-width:760px){
-  body{font-size:15px;padding-bottom:env(safe-area-inset-bottom)}
-  .shell{padding:0 12px}
-  .top{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);padding:9px 0;min-height:62px}
-  .brand{min-width:0;gap:7px}.brand-logo{width:36px;height:36px}.brand small{font-size:9px;letter-spacing:0}
-  .topactions{flex-shrink:0}.topactions .btn{min-height:42px;padding:8px 11px}
-  .page{padding:18px 0 28px}
-  .hero{display:flex;flex-direction:column;align-items:stretch;gap:18px}
-  .hero h1{font-size:clamp(32px,9vw,43px);margin:10px 0}
-  .hero-banner{border-radius:14px}
-  .panel{padding:16px;border-radius:16px}
-  .layout{display:block}
-  .side{position:sticky;top:62px;z-index:40;margin:0 -12px 18px;padding:10px 12px;border-radius:0 0 16px 16px;border-left:0;border-right:0;background:rgba(255,255,255,.97);backdrop-filter:blur(12px);box-shadow:0 8px 20px #1018280a}
-  .side>.eyebrow,.side>#userGreeting,.side>#userSub,.side>.noticebar{display:none}
-  .nav{display:flex;flex-wrap:nowrap;gap:7px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;margin:0;padding:2px 0 5px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
-  .nav::-webkit-scrollbar{display:none}
-  .nav button{flex:0 0 auto;scroll-snap-align:start;min-height:42px;padding:10px 14px;border:1px solid #e1e4eb;background:#fff;text-align:center;font-size:12px;font-weight:650;white-space:nowrap}
-  .nav button.active{background:#13151b;color:#fff;border-color:#13151b}
-  .contenthead{display:flex;flex-direction:column;align-items:stretch;gap:10px;margin-bottom:16px}
-  .contenthead h2{font-size:28px;margin:5px 0}
-  #refreshBtn{width:100%;min-height:46px}
-  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}
-  .metric{padding:12px;border-radius:14px;min-width:0}
-  .metric small{font-size:10px;letter-spacing:.025em}
-  .metric strong{font-size:clamp(18px,5vw,23px);overflow-wrap:anywhere;margin:7px 0}
-  .metric span{font-size:11px;line-height:1.45}
-  .festival-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .split{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
-  .item,.festival-record,.programme-card{padding:13px;border-radius:14px;min-width:0}
-  .itemtop,.festival-record .record-head{gap:8px}
-  .itemtop>*,.record-head>*{min-width:0;overflow-wrap:anywhere}
-  .item h3,.programme-card h3{font-size:16px;line-height:1.35}
-  .tag{white-space:normal;line-height:1.35}
-  .field{gap:6px;margin:12px 0}
-  .field label{font-size:13px;line-height:1.4}
-  .field input,.field select,.field textarea{min-height:48px;padding:12px;font-size:16px;border-radius:12px}
-  .field input[type=checkbox]{min-height:20px;width:20px}
-  .btn,button{min-height:44px}
-  .btn{padding:11px 15px;font-size:13px}
-  .btn.primary{width:100%}
-  form .row{display:grid;grid-template-columns:minmax(0,1fr);gap:9px}
-  form .row>*{width:100%;min-width:0}
-  .contributionForm .row{grid-template-columns:minmax(0,1fr)}
-  .contributionForm .row input,.contributionForm .row button{grid-column:auto}
-  .festival-form{padding:12px}
-  .navratri-hero{padding:15px;border-radius:16px}
-  .navratri-hero .row{display:flex;flex-wrap:wrap;margin-top:12px}
-  .navratri-hero .row .btn{width:auto}
-  .noticebar{font-size:12px}
-  .empty{padding:20px 14px}
-  .footer{padding:16px 0;gap:5px;font-size:11px}
-  #publicDirectory{padding-bottom:20px}
+/* Sonalpark Gate-2 — mobile-first design system.
+   Brand colours come from the society emblem: deep green, navy ink, gold. */
+:root{
+  --bg:#f3f5f0;--card:#fff;--ink:#10283c;--text:#26373f;--muted:#64747d;--line:#e2e7e1;
+  --brand:#174d36;--brand-2:#1f6b4a;--brand-soft:#e7f1ea;--gold:#e7a92f;--gold-soft:#fff3d3;
+  --ok:#16804a;--ok-soft:#e3f4ea;--warn:#a96b0a;--warn-soft:#fff1d6;--bad:#b42318;--bad-soft:#fdeceb;
+  --r:16px;--r-sm:12px;--shadow:0 1px 2px #10283c0d,0 6px 18px #10283c0a;
+  --tab-h:64px;--bar-h:56px;--safe-b:env(safe-area-inset-bottom,0px);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Gujarati",sans-serif;
+  color:var(--text);background:var(--bg);font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;
 }
-@media(max-width:380px){
-  .shell{padding:0 10px}
-  .brand{font-size:12px}.brand-logo{width:32px;height:32px}
-  .topactions .btn{padding:7px 9px;font-size:11px}
-  .side{margin-left:-10px;margin-right:-10px;padding-left:10px;padding-right:10px}
-  .grid,.festival-kpis{grid-template-columns:minmax(0,1fr)}
-  .metric strong{font-size:22px}
-  .nav button{padding:9px 12px}
-}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--text);font-size:15px;line-height:1.5}
+[hidden],.hidden{display:none!important}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;touch-action:manipulation}
+h1,h2,h3{color:var(--ink);margin:0;font-weight:750;letter-spacing:-.02em}
+h1{font-size:clamp(28px,8vw,40px);line-height:1.12}
+h2{font-size:22px;line-height:1.2}
+h3{font-size:16px;line-height:1.3}
+p{margin:0}
+.muted{color:var(--muted);font-size:14px;line-height:1.6}
+.tiny{font-size:12px;color:var(--muted);line-height:1.55}
+.eyebrow{font-size:11px;font-weight:750;letter-spacing:.12em;text-transform:uppercase;color:var(--brand-2)}
+.subhead{margin:22px 0 10px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.ic{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+:focus-visible{outline:3px solid #8fb9a3;outline-offset:2px}
 
+/* ---------- Buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 18px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:var(--r-sm);font-weight:650;font-size:14px;transition:background .15s,border-color .15s,transform .1s}
+.btn:active{transform:scale(.98)}
+.btn:hover{border-color:#c8d1c8}
+.btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+.btn.primary:hover{background:var(--brand-2)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn.sm{min-height:36px;padding:0 12px;font-size:12px;border-radius:10px}
+.icon-btn{width:44px;height:44px;padding:0;border-radius:12px}
+form .btn.primary{width:100%}
 
-/* Final mobile workflow refinement: reduce clutter and prioritize tasks */
-.directory-disclosure{border:1px solid #e1e4eb;border-radius:16px;background:#fff;overflow:hidden}
-.directory-disclosure>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 16px;list-style:none;cursor:pointer}
+/* ---------- Cards, forms ---------- */
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;box-shadow:var(--shadow)}
+.panel>h3:first-child,.panel>.eyebrow+h3{margin-bottom:4px}
+.field{display:grid;gap:6px;margin:14px 0}
+.field label{font-size:13px;font-weight:650;color:var(--ink);line-height:1.4}
+.field input:not([type=checkbox]),.field select,.field textarea{width:100%;min-width:0;min-height:50px;padding:12px 14px;border:1px solid #d3dad3;border-radius:var(--r-sm);background:#fff;font-size:16px;line-height:1.4;outline:none;transition:border-color .15s,box-shadow .15s}
+.field textarea{min-height:90px;resize:vertical}
+.field input::placeholder,.field textarea::placeholder{color:#97a3a9}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--brand-2);box-shadow:0 0 0 3px #1f6b4a22}
+.field input:disabled,.field select:disabled{background:#f1f3f0;color:var(--muted)}
+.field input[type=checkbox]{width:20px;height:20px;accent-color:var(--brand)}
+input[type=number]{font-variant-numeric:tabular-nums}
+input[type=date]{display:block;min-height:50px}
+.msg{font-size:13px;color:var(--bad);min-height:0;margin-top:10px}
+.msg:empty{display:none}
+.form-hint{font-size:12px;color:var(--muted);margin-top:4px}
+.noticebar{padding:12px 14px;background:var(--brand-soft);border:1px solid #d3e5d9;border-radius:var(--r-sm);color:#2c5a43;font-size:13px;line-height:1.55;margin:12px 0}
+.empty{padding:22px 14px;text-align:center;border:1.5px dashed #ccd5cc;border-radius:var(--r-sm);color:var(--muted);font-size:13px;background:#fafbf9}
+.tag{display:inline-flex;align-items:center;border-radius:99px;background:var(--brand-soft);padding:4px 10px;font-size:11px;font-weight:700;color:var(--brand);align-self:flex-start;white-space:nowrap}
+
+/* ---------- Lists & metrics ---------- */
+.list{display:grid;gap:10px}
+.item{border:1px solid var(--line);border-radius:var(--r-sm);padding:14px;background:#fff;min-width:0}
+.itemtop{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.itemtop>*{min-width:0;overflow-wrap:anywhere}
+.item p{white-space:pre-wrap;font-size:13px;color:var(--muted);line-height:1.6;margin-top:8px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0}
+.metric{background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm);padding:14px;min-width:0;box-shadow:var(--shadow)}
+.metric small{display:block;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.metric strong{display:block;font-size:clamp(20px,6vw,26px);letter-spacing:-.03em;color:var(--ink);margin:6px 0 2px;overflow-wrap:anywhere}
+.metric span{font-size:12px;color:var(--muted);line-height:1.4}
+.split{display:grid;gap:18px}
+
+/* ---------- Public landing ---------- */
+.pub-top{display:flex;align-items:center;justify-content:space-between;gap:10px;max-width:1040px;margin:0 auto;padding:12px 16px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand-logo{width:42px;height:42px;object-fit:contain;flex-shrink:0}
+.brand-name{display:block;font-weight:800;color:var(--ink);letter-spacing:-.02em;font-size:15px;line-height:1.2}
+.brand small{display:block;color:var(--muted);font-size:11px;font-weight:550;margin-top:1px}
+.pub-main{max-width:1040px;margin:0 auto;padding:8px 16px 8px;display:grid;gap:16px}
+.hero-card{background:linear-gradient(160deg,var(--brand),#0f3a29);color:#fff;border-radius:22px;padding:22px 20px;overflow:hidden;position:relative}
+.hero-card .eyebrow{color:var(--gold)}
+.hero-card h1{color:#fff;margin:10px 0}
+.hero-card p{color:#d3e6da;font-size:14px;line-height:1.6;max-width:480px}
+.hero-card .chip{display:inline-block;margin-top:14px;background:#ffffff1f;border:1px solid #ffffff2e;color:#fff;border-radius:99px;padding:5px 12px;font-size:12px;font-weight:650}
+.hero-banner{width:100%;display:block;border-radius:14px;margin-bottom:16px;border:1px solid #ffffff22}
+.login-card{padding:20px 18px}
+.login-card h2{margin-top:8px}
+.pub-dir{max-width:1040px;margin:0 auto;padding:8px 16px 28px}
+.directory-disclosure{border:1px solid var(--line);border-radius:var(--r);background:#fff;overflow:hidden;box-shadow:var(--shadow)}
+.directory-disclosure>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 16px;list-style:none;cursor:pointer;min-height:56px}
 .directory-disclosure>summary::-webkit-details-marker{display:none}
-.directory-disclosure>summary>span:first-child{display:grid;gap:4px}
-.directory-disclosure summary strong{font-size:14px;font-weight:650}
-.directory-disclosure summary small{font-size:11px;color:#777d90}
-.directory-open{font-size:12px;color:#525769;white-space:nowrap}
+.directory-disclosure>summary>span:first-child{display:grid;gap:3px}
+.directory-disclosure summary strong{font-size:14px;color:var(--ink)}
+.directory-disclosure summary small{font-size:12px;color:var(--muted)}
+.directory-open{font-size:13px;font-weight:650;color:var(--brand);white-space:nowrap}
 .directory-disclosure[open] .directory-open span{display:inline-block;transform:rotate(45deg)}
-.directory-panel{border:0!important;border-top:1px solid #e1e4eb!important;border-radius:0!important;box-shadow:none!important}
-@media(max-width:760px){
-  body{padding-bottom:calc(78px + env(safe-area-inset-bottom))}
-  #app .side{position:fixed;top:auto;bottom:0;left:0;right:0;width:100%;margin:0;padding:8px 10px calc(8px + env(safe-area-inset-bottom));border:0;border-top:1px solid #e1e4eb;border-radius:16px 16px 0 0;background:rgba(255,255,255,.97);box-shadow:0 -8px 28px #10182812;z-index:100}
-  #app .nav{display:flex;gap:4px;justify-content:space-between;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;margin:0;padding:0;scrollbar-width:none}
-  #app .nav button{flex:0 0 auto;min-width:max-content;min-height:48px;padding:10px 12px;border:1px solid transparent;background:transparent;font-size:11px;font-weight:650;scroll-snap-align:center}
-  #app .nav button.active{background:#13151b;color:#fff;border-color:#13151b}
-  #app .nav button:focus-visible,.directory-disclosure summary:focus-visible{outline:3px solid #9fa5ba;outline-offset:2px}
-  #app .layout>section{padding-bottom:10px}
-  #publicDirectory{padding-top:4px!important}
-  .directory-disclosure>summary{padding:13px}
-  .directory-open{font-size:11px}
-}
-@media(min-width:761px){.directory-disclosure{max-width:100%}}
+.directory-panel{border:0!important;border-top:1px solid var(--line)!important;border-radius:0!important;box-shadow:none!important}
+.house-chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:8px;margin-top:12px}
+.house-chip{border:1px solid var(--line);border-radius:12px;padding:10px 6px;text-align:center;background:#fafbf9}
+.house-chip strong{display:block;font-size:20px;color:var(--ink)}
+.house-chip span{font-size:11px;color:var(--muted)}
+.pub-foot{max-width:1040px;margin:0 auto;padding:0 16px 28px;color:var(--muted);font-size:12px;display:flex;flex-direction:column;gap:4px}
 
+/* ---------- App shell ---------- */
+.app{min-height:100vh}
+.sidebar{display:none}
+.appbar{position:sticky;top:0;z-index:50;height:var(--bar-h);display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 14px;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.appbar .brand-logo{width:34px;height:34px}
+.appbar .brand-name{font-size:14px}
+.appbar .brand small{font-size:10px}
+.content{padding:16px 14px calc(var(--tab-h) + var(--safe-b) + 28px);max-width:960px;margin:0 auto}
+.contenthead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}
+.contenthead h2{margin:4px 0 2px;font-size:26px;letter-spacing:-.03em}
+.contenthead .muted{font-size:13px}
+.lang-btn{font-size:13px;min-height:40px;padding:0 14px}
 
-/* Accessible custom picker: bottom-sheet options on phones, anchored menu on larger screens */
+/* bottom tab bar (phones) */
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:100;display:grid;grid-template-columns:repeat(5,1fr);padding:6px 6px calc(6px + var(--safe-b));background:rgba(255,255,255,.97);backdrop-filter:blur(14px);border-top:1px solid var(--line);box-shadow:0 -6px 22px #10283c10}
+.tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:52px;border:0;background:transparent;border-radius:14px;color:var(--muted);font-size:11px;font-weight:650;padding:4px 2px}
+.tab .ic{width:23px;height:23px}
+.tab.active{color:var(--brand)}
+.tab.active .ic-wrap{background:var(--brand-soft)}
+.ic-wrap{display:grid;place-items:center;width:52px;height:30px;border-radius:99px;transition:background .15s}
+.tab>span:last-child{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* "More" sheet */
+.sheet-wrap{position:fixed;inset:0;z-index:150;display:flex;align-items:flex-end;justify-content:center}
+.sheet-backdrop{position:absolute;inset:0;border:0;background:#10283c66;width:100%;height:100%;padding:0;border-radius:0}
+.sheet{position:relative;width:100%;max-width:560px;max-height:88vh;overflow:auto;background:#fff;border-radius:24px 24px 0 0;padding:10px 16px calc(18px + var(--safe-b));box-shadow:0 -16px 48px #10283c33;animation:slideup .22s ease-out}
+@keyframes slideup{from{transform:translateY(30px);opacity:.4}to{transform:none;opacity:1}}
+.grabber{width:40px;height:4px;border-radius:8px;background:#d3dad3;margin:2px auto 14px}
+.more-list{display:grid;gap:6px;margin:10px 0}
+.more-item{display:flex;align-items:center;gap:14px;width:100%;min-height:54px;padding:0 14px;border:1px solid var(--line);border-radius:14px;background:#fff;text-align:left;font-weight:650;color:var(--ink);font-size:15px}
+.more-item .ic{color:var(--brand)}
+.more-item.active{background:var(--brand-soft);border-color:#c5dccd}
+.user-card{display:flex;align-items:center;gap:12px;padding:12px;border-radius:14px;background:var(--brand-soft)}
+.avatar{width:42px;height:42px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:800;font-size:16px;flex-shrink:0}
+.user-card strong{display:block;color:var(--ink);font-size:15px;line-height:1.25}
+.user-card small{color:var(--muted);font-size:12px}
+.sheet-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+
+/* toast */
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--tab-h) + var(--safe-b) + 14px);z-index:300;max-width:min(92vw,480px);background:var(--ink);color:#fff;padding:12px 16px;border-radius:14px;font-size:13px;font-weight:550;box-shadow:0 10px 30px #10283c40;text-align:center}
+.toast:empty{display:none}
+
+/* ---------- Navratri ---------- */
+.navratri-hero{display:flex;flex-direction:column;gap:12px;padding:18px;color:#fff;background:linear-gradient(150deg,var(--brand) 0%,#12402c 70%);border-radius:20px;margin-bottom:14px;position:relative;overflow:hidden}
+.navratri-hero:after{content:"";position:absolute;right:-30px;top:-30px;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,#e7a92f66,#e7a92f00 70%)}
+.navratri-hero .eyebrow{color:var(--gold)}
+.navratri-hero h3{color:#fff;font-size:22px;margin:6px 0 2px}
+.navratri-hero .tiny{color:#cfe3d7}
+.navratri-hero .tag{background:#ffffff22;color:#fff}
+.navratri-hero .btn{background:#ffffff18;border-color:#ffffff40;color:#fff;min-height:38px;font-size:13px}
+.navratri-hero .row{position:relative;z-index:1}
+.festival-kpis{grid-template-columns:repeat(2,minmax(0,1fr));margin:0 0 14px}
+.festival-kpis .metric:first-child{grid-column:1/-1}
+.festival-kpis .metric:first-child strong{font-size:clamp(26px,8vw,32px)}
+
+.segmented{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:4px;padding:4px;background:#e6ebe5;border-radius:14px;margin:0 0 14px;position:sticky;top:calc(var(--bar-h) + 8px);z-index:20}
+.seg-btn{min-height:42px;border:0;border-radius:11px;background:transparent;color:var(--muted);font-weight:700;font-size:14px}
+.seg-btn.active{background:#fff;color:var(--brand);box-shadow:0 1px 4px #10283c1f}
+
+.festival-rate-form{display:grid;gap:10px;padding:14px;margin:14px 0;background:#f6f8f4;border:1px solid var(--line);border-radius:var(--r-sm)}
+.festival-rate-form .field{margin:0}
+.rate-summary{font-size:12px;color:var(--muted)}
+.house-number-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:14px 0 4px}
+.house-card-wrap{min-width:0}
+.house-number-card{width:100%;min-width:0;min-height:112px;padding:12px 6px;border:1px solid var(--line);border-radius:14px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--ink);text-align:center;box-shadow:var(--shadow)}
+button.house-number-card:hover{border-color:var(--brand-2)}
+button.house-number-card:active{transform:scale(.97)}
+.house-number-card strong{font-size:26px;letter-spacing:-.03em;line-height:1}
+.house-number-card small{font-size:11px;color:var(--muted)}
+.house-number-card b{font-size:13px}
+.house-number-card.is-static{cursor:default}
+.house-payment-state{font-size:10px;font-weight:750;padding:2px 8px;border-radius:99px;margin-top:2px}
+.house-payment-state.is-paid,.house-payment-state.is-over{color:var(--ok);background:var(--ok-soft)}
+.house-payment-state.is-pending{color:var(--bad);background:var(--bad-soft)}
+.house-payment-state.is-none{color:var(--muted);background:#eef0ee}
+
+.token-day-field{margin:12px 0}
+.token-summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}
+.token-summary{padding:10px;border:1px solid var(--line);border-radius:12px;background:#f6f8f4}
+.token-summary small{display:block;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.03em}
+.token-summary strong{display:block;font-size:22px;margin-top:4px;color:var(--ink)}
+.house-selector{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin:14px 0 8px}
+.house-selector-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-width:0;min-height:50px;padding:6px 2px;border:1px solid #d3dad3;border-radius:12px;background:#fff;color:var(--ink);font-weight:750;font-size:15px}
+.house-selector-btn:hover{border-color:var(--brand-2);background:var(--brand-soft)}
+.house-selector-btn:disabled{opacity:.55;cursor:default}
+.house-token-dots{display:flex;gap:4px;justify-content:center;min-height:8px}
+.token-dot{display:inline-block;width:8px;height:8px;border-radius:50%}
+.token-dot.green{background:#27834a}.token-dot.red{background:#d64545}
+.token-entry-form{padding:14px;background:#f6f8f4;border:1px solid var(--line);border-radius:var(--r-sm);margin:12px 0}
+.token-pending-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:var(--r-sm);background:#fff}
+.token-pending-row>div{min-width:0;overflow-wrap:anywhere}
+.token-pending-row .btn{grid-column:1/-1;min-height:40px;font-size:13px}
+.token-status{font-size:12px;font-weight:700}
+.token-status.is-done{color:var(--ok)}.token-status.is-pending{color:var(--bad)}
+.token-undo-btn{border-color:#efc3bf;color:var(--bad)}
+
+/* household sheet */
+.household-modal{position:fixed;inset:0;z-index:200;display:flex;align-items:flex-end;justify-content:center}
+.household-modal-backdrop{position:absolute;inset:0;width:100%;height:100%;border:0;background:#10283c66;border-radius:0;padding:0}
+.household-modal-sheet{position:relative;width:min(100%,520px);max-height:90vh;overflow:auto;padding:10px 16px calc(18px + var(--safe-b));background:#fff;border-radius:24px 24px 0 0;box-shadow:0 -16px 48px #10283c33;animation:slideup .22s ease-out}
+.modal-grabber{width:40px;height:4px;border-radius:8px;background:#d3dad3;margin:2px auto 12px}
+.modal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px}
+.modal-head h3{font-size:20px}
+.stepper{display:grid;grid-template-columns:56px minmax(0,1fr) 56px;gap:8px;align-items:center}
+.step-btn{height:56px;border:1px solid #d3dad3;border-radius:var(--r-sm);background:#fff;font-size:26px;font-weight:600;color:var(--brand);line-height:1}
+.step-btn:active{background:var(--brand-soft)}
+.step-btn:disabled{opacity:.4}
+.stepper input{text-align:center;font-size:24px!important;font-weight:750;min-height:56px!important}
+.calculated-due{display:grid;gap:3px;padding:14px 16px;border-radius:var(--r-sm);background:var(--gold-soft);border:1px solid #f1dca4;margin:14px 0}
+.calculated-due span,.calculated-due small{font-size:12px;color:#7a5b12}
+.calculated-due strong{font-size:30px;letter-spacing:-.03em;color:var(--ink)}
+.modal-actions{display:grid}
+.modal-section{border-top:1px solid var(--line);margin-top:18px;padding-top:14px}
+.modal-section .payment-history{margin:10px 0 14px}
+body.modal-open{overflow:hidden}
+
+/* programmes */
+.programme-card{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:12px;box-shadow:var(--shadow)}
+.programme-date{display:inline-flex;border-radius:8px;background:var(--gold-soft);padding:5px 10px;color:#7a5b12;font-size:12px;font-weight:750;margin-bottom:10px}
+.programme-card h3{font-size:18px;margin-bottom:6px}
+.programme-details{white-space:pre-wrap;line-height:1.7;color:var(--muted);font-size:14px}
+.programme-expenses{margin:12px 0 0;padding-left:12px;border-left:3px solid #d3e5d9}
+
+/* ---------- Custom select (bottom sheet on phones) ---------- */
 .mobile-select{position:relative;width:100%;min-width:0}
 .mobile-select .native-select-source{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important;clip-path:inset(50%)!important;overflow:hidden!important}
-.mobile-select-trigger{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:48px;padding:12px 14px;border:1px solid #d9dde6;border-radius:12px;background:#fff;color:#13151b;text-align:left;font-size:16px;font-weight:500}
-.mobile-select-trigger:focus-visible{outline:3px solid #a9b0c4;outline-offset:2px}
-.mobile-select-caret{color:#777d90;font-size:20px;line-height:1;flex-shrink:0}
-.mobile-select-menu{position:absolute;top:calc(100% + 6px);left:0;right:0;z-index:130;max-height: min(320px,55vh);overflow:auto;padding:6px;background:#fff;border:1px solid #e1e4eb;border-radius:14px;box-shadow:0 14px 40px #10182820}
-.mobile-select-option{display:block;width:100%;min-height:46px;padding:12px;text-align:left;border:0;border-radius:9px;background:#fff;color:#252936;font-size:15px}
-.mobile-select-option.selected{background:#f1f3f8;font-weight:700}
+.mobile-select-trigger{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:50px;padding:12px 14px;border:1px solid #d3dad3;border-radius:var(--r-sm);background:#fff;color:var(--ink);text-align:left;font-size:16px;font-weight:550}
+.mobile-select-caret{color:var(--muted);font-size:20px;line-height:1;flex-shrink:0}
+.mobile-select-menu{position:absolute;top:calc(100% + 6px);left:0;right:0;z-index:230;max-height:min(320px,55vh);overflow:auto;padding:6px;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 14px 40px #10283c26}
+.mobile-select-option{display:block;width:100%;min-height:46px;padding:12px;text-align:left;border:0;border-radius:10px;background:#fff;color:var(--ink);font-size:15px}
+.mobile-select-option.selected{background:var(--brand-soft);font-weight:750;color:var(--brand)}
 .mobile-select-option:disabled{opacity:.45}
 .mobile-select-backdrop{display:none}
-@media(max-width:760px){
- .mobile-select.is-open .mobile-select-backdrop{display:block;position:fixed;inset:0;z-index:125;background:#10182855;border:0;width:100%;height:100%;min-height:100%;padding:0}
- .mobile-select.is-open .mobile-select-menu{position:fixed;top:auto;left:0;right:0;bottom:0;z-index:130;max-height:min(70vh,620px);padding:12px 12px calc(12px + env(safe-area-inset-bottom));border-radius:20px 20px 0 0;border:1px solid #e1e4eb;box-shadow:0 -12px 40px #10182820}
- .mobile-select.is-open .mobile-select-menu:before{content:"";display:block;width:38px;height:4px;border-radius:9px;background:#d8dce5;margin:0 auto 12px}
- .mobile-select-option{min-height:50px;padding:14px;border-radius:10px}
+
+/* ---------- Small phones ---------- */
+@media(max-width:359px){
+  .grid,.festival-kpis{grid-template-columns:minmax(0,1fr)}
+  .house-number-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .token-summary-grid{grid-template-columns:1fr}
+  .tab{font-size:10px}
 }
-
-
-/* Festival data entry: shared rate, house buttons, editable calculation sheet */
-.festival-rate-form{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;padding:14px;margin:14px 0;background:#f7f8fb;border:1px solid #e1e4eb;border-radius:14px}
-.festival-rate-form .field{margin:0}.rate-summary{font-size:12px;color:#777d90}
-.house-number-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:16px 0}
-.house-number-card{display:flex;flex-direction:column;align-items:flex-start;gap:6px;text-align:left;min-width:0;min-height:140px;padding:13px;border:1px solid #e1e4eb;border-radius:14px;background:#fff;color:#13151b}
-.house-number-card strong{font:400 28px Georgia,serif}.house-number-card small,.house-number-card>span{font-size:11px;color:#777d90}.house-number-card b{font-size:14px}.house-edit-label{font-weight:650;color:#343b4d!important}
-.household-modal[hidden]{display:none!important}.household-modal{position:fixed;inset:0;z-index:200;display:flex;align-items:flex-end;justify-content:center}
-.household-modal-backdrop{position:absolute;inset:0;width:100%;height:100%;border:0;background:#10182866}
-.household-modal-sheet{position:relative;width:min(100%,520px);max-height:88vh;overflow:auto;padding:16px 18px calc(18px + env(safe-area-inset-bottom));background:#fff;border:1px solid #e1e4eb;border-radius:22px 22px 0 0;box-shadow:0 -16px 48px #10182824}
-.modal-grabber{width:38px;height:4px;border-radius:8px;background:#d8dce5;margin:0 auto 14px}.modal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
-.calculated-due{display:grid;gap:5px;padding:16px;border:1px solid #e1e4eb;border-radius:14px;background:#f7f8fb;margin:16px 0}.calculated-due span,.calculated-due small{font-size:12px;color:#777d90}.calculated-due strong{font:400 32px Georgia,serif}
-.modal-actions{display:grid;grid-template-columns:1fr 1.5fr;gap:9px}body.modal-open{overflow:hidden}
-@media(max-width:760px){.house-number-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.house-number-card{min-height:148px;padding:12px}.household-modal-sheet{width:100%;padding:15px 14px calc(16px + env(safe-area-inset-bottom))}}
-@media(min-width:761px){.household-modal{align-items:center;padding:20px}.household-modal-sheet{border-radius:22px}}
-
-
-/* Compact token tracking and phone-sized controls */
-.token-summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:12px 0}.token-summary{padding:10px;border:1px solid #e1e4eb;border-radius:12px;background:#f7f8fb}.token-summary small{display:block;color:#777d90;font-size:10px}.token-summary strong{display:block;font-size:21px;margin-top:5px}
-.token-entry-form{padding:12px;background:#f7f8fb;border:1px solid #e1e4eb;border-radius:14px;margin:12px 0}.token-pending-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;padding:11px;border:1px solid #e1e4eb;border-radius:12px;background:#fff}.token-pending-row>div{min-width:0;overflow-wrap:anywhere}.token-pending-row .btn{grid-column:1/-1;justify-self:start;min-height:32px;padding:6px 10px;font-size:11px}
-.token-status.is-done{color:#147a48}.token-status.is-pending{color:#b42318}
-@media(max-width:760px){.token-summary-grid{gap:5px}.token-summary{padding:8px}.token-summary strong{font-size:19px}#app .nav button{min-height:38px;padding:6px 8px;font-size:10px}#app .side{padding-top:4px;padding-bottom:calc(4px + env(safe-area-inset-bottom))}body{padding-bottom:calc(62px + env(safe-area-inset-bottom))}}
-@media(max-width:360px){.token-summary-grid{grid-template-columns:1fr}}
-
-
-/* House quick actions: compact number-first selector and payment status */
-.house-card-wrap{min-width:0;display:grid;gap:6px}.house-number-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:14px 0}.house-number-card{width:100%;min-width:0;min-height:116px;padding:12px 8px;border:1px solid #e1e4eb;border-radius:14px;background:#fff;display:flex;align-items:center;justify-content:center;gap:5px;flex-direction:column;color:#13151b}.house-number-card>span:first-child{display:none}.house-number-card strong{font:400 25px Georgia,serif}.house-number-card small{font-size:11px;color:#777d90}.house-number-card b{font-size:13px}.house-payment-state{font-size:10px;font-weight:700}.house-payment-state.is-paid{color:#16804a}.house-payment-state.is-unpaid{color:#b42318}.house-quick-actions{display:grid;grid-template-columns:1fr 1fr;gap:4px}.house-quick-actions .btn{min-width:0;min-height:34px;padding:6px 4px;font-size:10px;border-radius:9px;white-space:normal}.token-contact-actions{display:flex;gap:6px;flex-wrap:wrap}.token-contact-actions .btn{min-height:34px;padding:7px 11px;font-size:11px}.token-contact-actions .btn[aria-disabled=true]{opacity:.45;pointer-events:none}
-@media(max-width:760px){.house-number-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.house-number-card{min-height:106px;padding:9px 5px}.house-number-card strong{font-size:23px}.house-quick-actions{grid-template-columns:1fr}.house-quick-actions .btn{min-height:32px;font-size:10px}.token-contact-actions .btn{width:auto;min-height:38px}}
-@media(max-width:350px){.house-number-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-
-/* Form input polish: explicit semantics, readable labels, phone-friendly keyboards */
-.field label{display:block;font-size:13px;font-weight:650;line-height:1.45;color:#252936}
-.field input:not([type=checkbox]),.field select,.field textarea{width:100%;min-width:0;min-height:48px;padding:12px 14px;border:1px solid #d9dde6;border-radius:12px;background:#fff;color:#13151b;font-size:16px;line-height:1.4;box-shadow:none;transition:border-color .15s ease,box-shadow .15s ease}
-.field input::placeholder,.field textarea::placeholder{color:#9297a5;opacity:1}
-.field input:focus-visible,.field select:focus-visible,.field textarea:focus-visible{outline:none;border-color:#555d72;box-shadow:0 0 0 3px #e9ebf1}
-.field input:disabled,.field select:disabled,.field textarea:disabled{background:#f5f6f8;color:#777d90;cursor:not-allowed}
-input[type=number]{font-variant-numeric:tabular-nums}
-input[type=date]{display:block;min-height:48px}
-@media(max-width:760px){.field label{font-size:13px}.field input:not([type=checkbox]),.field select,.field textarea{font-size:16px;min-height:50px;padding:13px 14px}.field input[type=number]{text-align:left}}
-@media(prefers-reduced-motion:reduce){.field input,.field select,.field textarea{transition:none}}
-/* Compact 31–49 quick selector: tap a number to open that household's details */
-.house-selector{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px;margin:14px 0 8px}
-.house-selector-btn{min-width:0;min-height:44px;padding:8px 4px;border:1px solid #d9dde6;border-radius:10px;background:#fff;color:#13151b;font-weight:650;font-size:14px}
-.house-selector-btn:hover,.house-selector-btn:focus-visible{border-color:#13151b;background:#f3f5f8;outline:2px solid #a9b0c4;outline-offset:1px}
-@media(max-width:760px){.house-selector{grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}.house-selector-btn{min-height:46px;border-radius:12px}}
-
-/* Navratri: house cards, payment states and household sheet */
-.house-number-card.is-static{cursor:default}
-.house-payment-state.is-over{color:#16804a}
-.house-payment-state.is-paid{color:#16804a}
-.house-payment-state.is-none{color:#777d90}
-.house-payment-state.is-pending{color:#b42318}
-.house-selector-btn:disabled{opacity:.6;cursor:default}
-.modal-section{border-top:1px solid #e1e4eb;margin-top:16px;padding-top:14px}
-.modal-section .payment-history{margin:10px 0 14px}
-.token-day-field{margin:12px 0 16px}.house-token-dots{display:flex;gap:4px;justify-content:center;margin-top:3px}.token-dot{display:inline-block;width:8px;height:8px;border-radius:50%}.token-dot.green{background:#27834a}.token-dot.red{background:#d64545}.token-undo-btn{border-color:#e4b4b4;color:#a52c2c}.house-selector-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}</style>
+/* ---------- Phones: sheet-style custom select ---------- */
+@media(max-width:899px){
+  .mobile-select.is-open .mobile-select-backdrop{display:block;position:fixed;inset:0;z-index:225;background:#10283c66;border:0;width:100%;height:100%;padding:0;border-radius:0}
+  .mobile-select.is-open .mobile-select-menu{position:fixed;top:auto;left:0;right:0;bottom:0;z-index:230;max-height:min(70vh,620px);padding:14px 12px calc(12px + var(--safe-b));border-radius:24px 24px 0 0;box-shadow:0 -12px 40px #10283c33}
+  .mobile-select.is-open .mobile-select-menu:before{content:"";display:block;width:40px;height:4px;border-radius:9px;background:#d3dad3;margin:0 auto 12px}
+  .mobile-select-option{min-height:52px;padding:14px}
+}
+/* ---------- Tablet and up ---------- */
+@media(min-width:600px){
+  .house-number-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .house-selector{grid-template-columns:repeat(7,minmax(0,1fr))}
+  .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .festival-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .festival-kpis .metric:first-child{grid-column:auto}
+  form .btn.primary{width:auto;min-width:200px}
+  .modal-actions .btn.primary{width:100%}
+  .split{grid-template-columns:1fr 1fr}
+  .pub-foot{flex-direction:row;justify-content:space-between}
+}
+/* ---------- Desktop: left sidebar replaces the tab bar ---------- */
+@media(min-width:900px){
+  .pub-main{grid-template-columns:1.1fr 1fr;align-items:center;gap:28px;padding-top:24px}
+  .hero-card{padding:32px}
+  .app{display:grid;grid-template-columns:268px minmax(0,1fr)}
+  .sidebar{display:flex;flex-direction:column;gap:16px;position:sticky;top:0;height:100vh;padding:20px 14px;background:#fff;border-right:1px solid var(--line);overflow:auto}
+  .sidebar .brand{padding:0 8px}
+  .sidebar .brand-logo{width:44px;height:44px}
+  .side-nav{display:grid;gap:4px}
+  .side-nav button{display:flex;align-items:center;gap:12px;width:100%;min-height:46px;padding:0 12px;border:0;border-radius:12px;background:transparent;color:#4a5b64;font-weight:650;font-size:14px;text-align:left}
+  .side-nav button:hover{background:#f3f6f2;color:var(--ink)}
+  .side-nav button.active{background:var(--brand);color:#fff}
+  .side-label{font-size:11px;font-weight:750;letter-spacing:.1em;text-transform:uppercase;color:#93a0a6;padding:6px 12px 2px}
+  .side-foot{margin-top:auto;display:grid;gap:8px}
+  .appbar,.tabbar{display:none}
+  .content{padding:32px 36px 48px;max-width:1000px;margin:0}
+  .contenthead h2{font-size:30px}
+  .toast{bottom:24px}
+  .segmented{top:12px;max-width:440px}
+  .house-number-grid{grid-template-columns:repeat(6,minmax(0,1fr))}
+  .household-modal{align-items:center;padding:20px}
+  .household-modal-sheet{border-radius:24px;padding-top:18px}
+  .modal-grabber{display:none}
+  .sheet-wrap{display:none}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
 </head>
-<body><div class="shell">
-<header class="top"><div class="brand"><img class="brand-logo" src="/assets/sonalpark-logo.svg" alt="Society emblem"><div><span data-en="Sonalpark Society" data-gu="સોનલપાર્ક સોસાયટી">Sonalpark Society</span><small>Gate-2 · Houses 31–49</small></div></div><div class="topactions"><button class="btn language" id="langBtn">ગુજરાતી</button><button class="btn hidden" id="signOutBtn" data-en="Sign out" data-gu="સાઇન આઉટ">Sign out</button></div></header>
-<main id="welcome" class="page hero"><section class="welcome-copy"><img class="hero-banner" src="/assets/dashboard-banner.svg" alt="Sonalpark Society Gate-2 community banner"><div class="eyebrow" data-en="Your community, one place" data-gu="તમારી સોસાયટી, એક જ જગ્યા">Your community, one place</div><h1 data-en="A simpler way to manage society life." data-gu="સોસાયટી વ્યવસ્થાપન હવે વધુ સરળ.">A simpler way to manage society life.</h1><p class="muted" data-en="Notices, meetings, maintenance payments and community funds — with clearer records for every home." data-gu="નોટિસ, મિટિંગ, મેન્ટેનન્સ પેમેન્ટ અને સોસાયટી ફંડ — દરેક ઘર માટે સ્પષ્ટ રેકોર્ડ.">Notices, meetings, maintenance payments and community funds — with clearer records for every home.</p><div class="noticebar" data-en="Private resident portal. Accounts are created by the society administrator; public sign-up is disabled." data-gu="ખાનગી રહેવાસી પોર્ટલ. એકાઉન્ટ સોસાયટી એડમિન બનાવશે; જાહેર સાઇન-અપ બંધ છે.">Private resident portal. Accounts are created by the society administrator; public sign-up is disabled.</div><p class="tiny">19 houses · 31 to 49 inclusive</p></section><section class="panel"><div class="eyebrow" data-en="Resident / admin access" data-gu="રહેવાસી / એડમિન પ્રવેશ">Resident / admin access</div><h2 style="margin-top:12px" data-en="Welcome back" data-gu="ફરી સ્વાગત છે">Welcome back</h2><p class="muted" data-en="Sign in with the email and password provided by your administrator." data-gu="તમારા એડમિન દ્વારા આપેલા ઇમેઇલ અને પાસવર્ડથી સાઇન ઇન કરો.">Sign in with the email and password provided by your administrator.</p><form id="loginForm"><div class="field"><label for="email" data-en="House number or admin email" data-gu="ઘર નંબર અથવા એડમિન ઇમેઇલ">House number or admin email</label><input id="email" type="text" inputmode="email" autocomplete="username" autocapitalize="none" spellcheck="false" required placeholder="31 or admin@example.com"></div><div class="field"><label for="password" data-en="Password" data-gu="પાસવર્ડ">Password</label><input id="password" type="password" autocomplete="current-password" required minlength="6"></div><button class="btn primary" id="loginBtn" type="submit" style="width:100%" data-en="Sign in securely" data-gu="સુરક્ષિત સાઇન ઇન">Sign in securely</button><div id="loginMsg" class="msg" role="status"></div></form><p class="tiny" data-en="Need access? Contact your society administrator." data-gu="પ્રવેશ જોઈએ છે? સોસાયટી એડમિનનો સંપર્ક કરો.">Need access? Contact your society administrator.</p></section></main>
-<section id="publicDirectory" class="page" style="padding-top:0"><details class="directory-disclosure"><summary><span><strong>House directory</strong><small>Public view · house numbers and availability only</small></span><span class="directory-open">View directory <span aria-hidden="true">＋</span></span></summary><div class="panel directory-panel"><div class="eyebrow">Read-only public directory</div><p class="muted">Resident names and contact details are private. This list is optional and stays collapsed until opened.</p><div id="publicHouseList" class="grid"><div class="empty">Loading house directory…</div></div></div></details></section>
-<main id="app" class="page hidden"><div class="layout"><aside class="panel side"><div class="eyebrow" data-en="Society portal" data-gu="સોસાયટી પોર્ટલ">Society portal</div><h3 id="userGreeting" style="margin-top:10px">Welcome</h3><p id="userSub" class="tiny"></p><nav class="nav" id="nav"><button class="active" data-view="overview" data-en="Overview" data-gu="ઝાંખી">Overview</button><button data-view="notices" data-en="Notices & meetings" data-gu="નોટિસ અને મિટિંગ">Notices & meetings</button><button data-view="payments" data-en="Payments" data-gu="પેમેન્ટ">Payments</button><button data-view="funds" data-en="Fund records" data-gu="ફંડ રેકોર્ડ">Fund records</button><button data-view="navratri" data-en="Navratri festival" data-gu="નવરાત્રી ઉત્સવ">Navratri festival</button><button data-view="programmes" data-en="Programmes" data-gu="કાર્યક્રમો">Programmes</button><button data-view="houses" id="housesNav" class="hidden" data-en="Manage houses" data-gu="ઘર વ્યવસ્થાપન">Manage houses</button><button data-view="admin" id="adminNav" class="hidden" data-en="Admin review" data-gu="એડમિન સમીક્ષા">Admin review</button></nav><div class="noticebar" data-en="Amounts are stored in paise for accurate calculations." data-gu="ચોક્કસ ગણતરી માટે રકમ પૈસામાં સંગ્રહાય છે.">Amounts are stored in paise for accurate calculations.</div></aside><section><div class="contenthead"><div><div class="eyebrow" id="viewEyebrow">Sonalpark Society Gate-2</div><h2 id="viewTitle">Overview</h2><p id="viewDesc" class="muted"></p></div><button class="btn" id="refreshBtn" data-en="Refresh data" data-gu="ડેટા રિફ્રેશ">Refresh data</button></div><div id="viewContent"></div><div id="appMsg" class="msg" role="status"></div></section></div></main>
-<footer class="footer"><span>© <span id="year"></span> Sonalpark Society Gate-2</span><span data-en="Built for a more connected community." data-gu="વધુ જોડાયેલા સમુદાય માટે.">Built for a more connected community.</span></footer></div>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/></symbol>
+<symbol id="i-flame" viewBox="0 0 24 24"><path d="M12 3c1 3.5 5 5.5 5 10a5 5 0 01-10 0c0-2 1-3.2 2-4 0 2 1 3 2 3 0-3-1.5-5 1-9z"/></symbol>
+<symbol id="i-wallet" viewBox="0 0 24 24"><path d="M3 7.5A2.5 2.5 0 015.5 5H18v3M3 7.5V18a2 2 0 002 2h14a2 2 0 002-2v-8a2 2 0 00-2-2H5.5A2.5 2.5 0 013 7.5zM16 14h2"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16v-5a6 6 0 1112 0v5l2 2H4l2-2zM10 21h4"/></symbol>
+<symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="19" cy="12" r="1.4"/></symbol>
+<symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V11M10 20V4M16 20v-6M22 20H2"/></symbol>
+<symbol id="i-cal" viewBox="0 0 24 24"><path d="M4 6h16v14H4zM4 10h16M8 3v4M16 3v4"/></symbol>
+<symbol id="i-houses" viewBox="0 0 24 24"><path d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-6h6v6"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3zM9 12l2 2 4-4"/></symbol>
+<symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 10-2.3 5.7M20 4v7h-7"/></symbol>
+<symbol id="i-logout" viewBox="0 0 24 24"><path d="M15 4h4a1 1 0 011 1v14a1 1 0 01-1 1h-4M10 8l-4 4 4 4M6 12h11"/></symbol>
+</defs></svg>
+
+<!-- ============ Public landing (signed out) ============ -->
+<div id="public">
+<header class="pub-top"><div class="brand"><img class="brand-logo" src="/assets/sonalpark-logo.svg" alt="Society emblem"><div><span class="brand-name" data-en="Sonalpark Society" data-gu="સોનલપાર્ક સોસાયટી">Sonalpark Society</span><small>Gate-2 · Houses 31–49</small></div></div><button class="btn lang-btn" type="button">ગુજરાતી</button></header>
+<main id="welcome" class="pub-main">
+<section class="login-card panel" aria-labelledby="loginTitle"><div class="eyebrow" data-en="Resident / admin access" data-gu="રહેવાસી / એડમિન પ્રવેશ">Resident / admin access</div><h2 id="loginTitle" data-en="Welcome back" data-gu="ફરી સ્વાગત છે">Welcome back</h2><p class="muted" data-en="Sign in with the email and password provided by your administrator." data-gu="તમારા એડમિન દ્વારા આપેલા ઇમેઇલ અને પાસવર્ડથી સાઇન ઇન કરો.">Sign in with the email and password provided by your administrator.</p><form id="loginForm"><div class="field"><label for="email" data-en="House number or admin email" data-gu="ઘર નંબર અથવા એડમિન ઇમેઇલ">House number or admin email</label><input id="email" type="text" inputmode="email" autocomplete="username" autocapitalize="none" spellcheck="false" required placeholder="31 or admin@example.com"></div><div class="field"><label for="password" data-en="Password" data-gu="પાસવર્ડ">Password</label><input id="password" type="password" autocomplete="current-password" required minlength="6"></div><button class="btn primary" id="loginBtn" type="submit" data-en="Sign in securely" data-gu="સુરક્ષિત સાઇન ઇન">Sign in securely</button><div id="loginMsg" class="msg" role="status"></div></form><p class="tiny" style="margin-top:14px" data-en="Need access? Contact your society administrator." data-gu="પ્રવેશ જોઈએ છે? સોસાયટી એડમિનનો સંપર્ક કરો.">Need access? Contact your society administrator.</p></section>
+<section class="hero-card"><img class="hero-banner" src="/assets/dashboard-banner.svg" alt="Sonalpark Society Gate-2 community banner"><div class="eyebrow" data-en="Your community, one place" data-gu="તમારી સોસાયટી, એક જ જગ્યા">Your community, one place</div><h1 data-en="A simpler way to manage society life." data-gu="સોસાયટી વ્યવસ્થાપન હવે વધુ સરળ.">A simpler way to manage society life.</h1><p data-en="Notices, meetings, maintenance payments and community funds — with clearer records for every home." data-gu="નોટિસ, મિટિંગ, મેન્ટેનન્સ પેમેન્ટ અને સોસાયટી ફંડ — દરેક ઘર માટે સ્પષ્ટ રેકોર્ડ.">Notices, meetings, maintenance payments and community funds — with clearer records for every home.</p><span class="chip" data-en="Private portal · 19 houses (31–49)" data-gu="ખાનગી પોર્ટલ · 19 ઘર (31–49)">Private portal · 19 houses (31–49)</span></section>
+</main>
+<section id="publicDirectory" class="pub-dir"><details class="directory-disclosure"><summary><span><strong>House directory</strong><small>Public view · house numbers and availability only</small></span><span class="directory-open">View <span aria-hidden="true">＋</span></span></summary><div class="panel directory-panel"><p class="muted">Resident names and contact details are private. Only house numbers are listed here.</p><div id="publicHouseList" class="house-chips"><div class="empty">Loading house directory…</div></div></div></details></section>
+<footer class="pub-foot"><span>© <span id="year"></span> Sonalpark Society Gate-2</span><span data-en="Built for a more connected community." data-gu="વધુ જોડાયેલા સમુદાય માટે.">Built for a more connected community.</span></footer>
+</div>
+
+<!-- ============ Signed-in app ============ -->
+<div id="app" class="app hidden">
+<aside class="sidebar" aria-label="Main navigation">
+<div class="brand"><img class="brand-logo" src="/assets/sonalpark-logo.svg" alt="Society emblem"><div><span class="brand-name" data-en="Sonalpark Society" data-gu="સોનલપાર્ક સોસાયટી">Sonalpark Society</span><small>Gate-2 · Houses 31–49</small></div></div>
+<div class="user-card"><div class="avatar js-avatar">S</div><div><strong class="js-user-name">Welcome</strong><small class="js-user-sub"></small></div></div>
+<nav class="side-nav" id="nav">
+<button class="active" data-view="overview"><svg class="ic"><use href="#i-home"/></svg><span data-en="Overview" data-gu="ઝાંખી">Overview</span></button>
+<button data-view="navratri"><svg class="ic"><use href="#i-flame"/></svg><span data-en="Navratri festival" data-gu="નવરાત્રી ઉત્સવ">Navratri festival</span></button>
+<button data-view="payments"><svg class="ic"><use href="#i-wallet"/></svg><span data-en="Payments" data-gu="પેમેન્ટ">Payments</span></button>
+<button data-view="notices"><svg class="ic"><use href="#i-bell"/></svg><span data-en="Notices & meetings" data-gu="નોટિસ અને મિટિંગ">Notices & meetings</span></button>
+<button data-view="funds"><svg class="ic"><use href="#i-chart"/></svg><span data-en="Fund records" data-gu="ફંડ રેકોર્ડ">Fund records</span></button>
+<button data-view="programmes"><svg class="ic"><use href="#i-cal"/></svg><span data-en="Programmes" data-gu="કાર્યક્રમો">Programmes</span></button>
+<div class="side-label admin-only hidden" data-en="Admin" data-gu="એડમિન">Admin</div>
+<button class="admin-only hidden" data-view="houses"><svg class="ic"><use href="#i-houses"/></svg><span data-en="Manage houses" data-gu="ઘર વ્યવસ્થાપન">Manage houses</span></button>
+<button class="admin-only hidden" data-view="admin"><svg class="ic"><use href="#i-shield"/></svg><span data-en="Admin review" data-gu="એડમિન સમીક્ષા">Admin review</span></button>
+</nav>
+<div class="side-foot"><button class="btn lang-btn" type="button">ગુજરાતી</button><button class="btn sign-out-btn" type="button"><svg class="ic"><use href="#i-logout"/></svg><span data-en="Sign out" data-gu="સાઇન આઉટ">Sign out</span></button></div>
+</aside>
+
+<div class="main">
+<header class="appbar"><div class="brand"><img class="brand-logo" src="/assets/sonalpark-logo.svg" alt=""><div><span class="brand-name" data-en="Sonalpark Society" data-gu="સોનલપાર્ક સોસાયટી">Sonalpark Society</span><small class="js-user-sub"></small></div></div><button class="btn lang-btn" type="button">ગુજરાતી</button></header>
+<section class="content">
+<div class="contenthead"><div><div class="eyebrow" id="viewEyebrow">Sonalpark Society Gate-2</div><h2 id="viewTitle">Overview</h2><p id="viewDesc" class="muted"></p></div><button class="btn icon-btn" id="refreshBtn" type="button" aria-label="Refresh data" title="Refresh"><svg class="ic"><use href="#i-refresh"/></svg></button></div>
+<div id="viewContent"></div>
+</section>
+</div>
+
+<nav class="tabbar" id="tabbar" aria-label="Primary">
+<button class="tab active" data-view="overview"><span class="ic-wrap"><svg class="ic"><use href="#i-home"/></svg></span><span data-en="Home" data-gu="હોમ">Home</span></button>
+<button class="tab" data-view="navratri"><span class="ic-wrap"><svg class="ic"><use href="#i-flame"/></svg></span><span data-en="Navratri" data-gu="નવરાત્રી">Navratri</span></button>
+<button class="tab" data-view="payments"><span class="ic-wrap"><svg class="ic"><use href="#i-wallet"/></svg></span><span data-en="Payments" data-gu="પેમેન્ટ">Payments</span></button>
+<button class="tab" data-view="notices"><span class="ic-wrap"><svg class="ic"><use href="#i-bell"/></svg></span><span data-en="Notices" data-gu="નોટિસ">Notices</span></button>
+<button class="tab" id="moreBtn" type="button" aria-haspopup="dialog"><span class="ic-wrap"><svg class="ic"><use href="#i-more"/></svg></span><span data-en="More" data-gu="વધુ">More</span></button>
+</nav>
+
+<div class="sheet-wrap" id="moreSheet" hidden>
+<button class="sheet-backdrop" type="button" id="moreClose" aria-label="Close"></button>
+<div class="sheet" role="dialog" aria-modal="true" aria-label="More">
+<div class="grabber"></div>
+<div class="user-card"><div class="avatar js-avatar">S</div><div><strong class="js-user-name">Welcome</strong><small class="js-user-sub"></small></div></div>
+<div class="more-list">
+<button class="more-item" data-view="funds"><svg class="ic"><use href="#i-chart"/></svg><span data-en="Fund records" data-gu="ફંડ રેકોર્ડ">Fund records</span></button>
+<button class="more-item" data-view="programmes"><svg class="ic"><use href="#i-cal"/></svg><span data-en="Programmes" data-gu="કાર્યક્રમો">Programmes</span></button>
+<button class="more-item admin-only hidden" data-view="houses"><svg class="ic"><use href="#i-houses"/></svg><span data-en="Manage houses" data-gu="ઘર વ્યવસ્થાપન">Manage houses</span></button>
+<button class="more-item admin-only hidden" data-view="admin"><svg class="ic"><use href="#i-shield"/></svg><span data-en="Admin review" data-gu="એડમિન સમીક્ષા">Admin review</span></button>
+</div>
+<div class="sheet-actions"><button class="btn lang-btn" type="button">ગુજરાતી</button><button class="btn sign-out-btn" type="button"><svg class="ic"><use href="#i-logout"/></svg><span data-en="Sign out" data-gu="સાઇન આઉટ">Sign out</span></button></div>
+</div></div>
+
+<div id="appMsg" class="toast" role="status" aria-live="polite"></div>
+</div>
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.57.0';
 const SUPABASE_URL = 'https://cfrvkrsqomtrgvejxeub.supabase.co';
@@ -255,19 +386,25 @@ function t(en,gu){return lang==='gu'?gu:en}
 function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function money(paise){return new Intl.NumberFormat(lang==='gu'?'gu-IN':'en-IN',{style:'currency',currency:'INR',maximumFractionDigits:2}).format(Number(paise||0)/100)}
 function date(v){return v?new Date(v).toLocaleDateString(lang==='gu'?'gu-IN':'en-IN',{day:'numeric',month:'short',year:'numeric'}):''}
-function setMsg(id,msg){$(id).textContent=msg||''}
-function applyLang(){document.documentElement.lang=lang;document.querySelectorAll('[data-en]').forEach(el=>el.textContent=el.dataset[lang]);$('langBtn').textContent=lang==='en'?'ગુજરાતી':'English';if(session) renderView(); }
-$('langBtn').addEventListener('click',()=>{lang=lang==='en'?'gu':'en';applyLang()});
+let toastTimer;
+function setMsg(id,msg){$(id).textContent=msg||'';if(id==='appMsg'){clearTimeout(toastTimer);if(msg)toastTimer=setTimeout(()=>{$('appMsg').textContent=''},4500)}}
+function applyLang(){document.documentElement.lang=lang;document.querySelectorAll('[data-en]').forEach(el=>el.textContent=el.dataset[lang]);document.querySelectorAll('.lang-btn').forEach(b=>b.textContent=lang==='en'?'ગુજરાતી':'English');$('refreshBtn').setAttribute('aria-label',t('Refresh data','ડેટા રિફ્રેશ'));if(session) renderView(); }
+document.querySelectorAll('.lang-btn').forEach(b=>b.addEventListener('click',()=>{lang=lang==='en'?'gu':'en';applyLang()}));
 $('loginForm').addEventListener('submit',async e=>{e.preventDefault();setMsg('loginMsg','');$('loginBtn').disabled=true;try{const identifier=$('email').value.trim();const loginEmail=/^\d{1,2}$/.test(identifier)?('house'+identifier+'@sonalpark-gate2.invalid'):identifier;const {error}=await supabase.auth.signInWithPassword({email:loginEmail,password:$('password').value});if(error)throw error;}catch(err){setMsg('loginMsg',t('Could not sign in. Check your credentials or contact the administrator.','સાઇન ઇન થઈ શક્યું નથી. વિગતો તપાસો અથવા એડમિનનો સંપર્ક કરો.'));}finally{$('loginBtn').disabled=false}});
-$('signOutBtn').addEventListener('click',()=>supabase.auth.signOut());
+document.querySelectorAll('.sign-out-btn').forEach(b=>b.addEventListener('click',()=>{closeMore();supabase.auth.signOut()}));
 $('refreshBtn').addEventListener('click',async()=>{await loadView();setMsg('appMsg',t('Data refreshed.','ડેટા રિફ્રેશ થયો.'))});
-$('nav').addEventListener('click',e=>{const b=e.target.closest('button[data-view]');if(!b)return;activeView=b.dataset.view;renderView()});
+$('app').addEventListener('click',e=>{const b=e.target.closest('button[data-view]');if(!b)return;activeView=b.dataset.view;closeMore();window.scrollTo({top:0});renderView()});
+const MORE_VIEWS=['funds','programmes','houses','admin'];
+function openMore(){$('moreSheet').hidden=false;document.body.classList.add('modal-open')}
+function closeMore(){$('moreSheet').hidden=true;if($('householdModal')?.hidden!==false)document.body.classList.remove('modal-open')}
+$('moreBtn').addEventListener('click',openMore);$('moreClose').addEventListener('click',closeMore);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('moreSheet').hidden)closeMore()});
 supabase.auth.onAuthStateChange((_event,s)=>{session=s;setTimeout(()=>boot(),0)});
-async function loadPublicHouses(){const {data,error}=await supabase.from('houses').select('house_number,is_active').order('house_number');if(error){$('publicHouseList').textContent='Directory unavailable';return}$('publicHouseList').innerHTML=data.map(h=>'<div class="metric"><small>House number</small><strong>'+h.house_number+'</strong><span>'+(h.is_active?'Active':'Inactive')+'</span></div>').join('')}loadPublicHouses();
-async function boot(){if(!session){$('welcome').classList.remove('hidden');$('app').classList.add('hidden');$('signOutBtn').classList.add('hidden');profile=null;return}
-$('welcome').classList.add('hidden');$('app').classList.remove('hidden');$('signOutBtn').classList.remove('hidden');const {data,error}=await supabase.from('profiles').select('id,display_name,role,house_number,preferred_language').eq('id',session.user.id).maybeSingle();
+async function loadPublicHouses(){const {data,error}=await supabase.from('houses').select('house_number,is_active').order('house_number');if(error){$('publicHouseList').textContent='Directory unavailable';return}$('publicHouseList').innerHTML=data.map(h=>'<div class="house-chip"><strong>'+h.house_number+'</strong><span>'+(h.is_active?'Active':'Inactive')+'</span></div>').join('')}loadPublicHouses();
+async function boot(){if(!session){$('public').classList.remove('hidden');$('app').classList.add('hidden');profile=null;return}
+$('public').classList.add('hidden');$('app').classList.remove('hidden');const {data,error}=await supabase.from('profiles').select('id,display_name,role,house_number,preferred_language').eq('id',session.user.id).maybeSingle();
 if(error||!data){$('viewContent').innerHTML='<div class="panel"><h3>'+t('Your profile is not set up yet','તમારી પ્રોફાઇલ હજી સેટ થઈ નથી')+'</h3><p class="muted">'+t('Ask the society administrator to assign your account to a house (31–49) or administrator role.','તમારા એકાઉન્ટને ઘર (31–49) અથવા એડમિન ભૂમિકા આપવા સોસાયટી એડમિનને કહો.')+'</p></div>';return}
-profile=data;lang=data.preferred_language||lang;applyLang();$('adminNav').classList.toggle('hidden',profile.role!=='admin');$('housesNav').classList.toggle('hidden',profile.role!=='admin');$('userGreeting').textContent=profile.display_name;$('userSub').textContent=profile.role==='admin'?t('Administrator access','એડમિન પ્રવેશ'):t('House no. ','ઘર નં. ')+profile.house_number;await loadView()}
+profile=data;lang=data.preferred_language||lang;applyLang();document.querySelectorAll('.admin-only').forEach(el=>el.classList.toggle('hidden',profile.role!=='admin'));document.querySelectorAll('.js-user-name').forEach(el=>el.textContent=profile.display_name);document.querySelectorAll('.js-avatar').forEach(el=>el.textContent=(profile.role==='admin'?'A':String(profile.house_number??'?')));document.querySelectorAll('.js-user-sub').forEach(el=>el.textContent=profile.role==='admin'?t('Administrator access','એડમિન પ્રવેશ'):t('House no. ','ઘર નં. ')+profile.house_number);await loadView()}
 async function loadView(){cache={};await renderView()}
 function heading(title,desc){$('viewTitle').textContent=title;$('viewDesc').textContent=desc||'';$('viewEyebrow').textContent='Sonalpark Society Gate-2 · '+(profile?.house_number??t('Admin','એડમિન'))}
 function empty(text){return '<div class="empty">'+escapeHtml(text)+'</div>'}
@@ -275,7 +412,7 @@ function item(title,body,meta,tag){return '<article class="item"><div class="ite
 async function fetchNotices(){const [n,m]=await Promise.all([supabase.from('notices').select('id,title_en,body_en,title_gu,body_gu,published_at,status').eq('status','published').order('published_at',{ascending:false}).limit(30),supabase.from('meetings').select('id,title_en,details_en,title_gu,details_gu,starts_at,location,status').eq('status','published').order('starts_at',{ascending:true}).limit(30)]);if(n.error)throw n.error;if(m.error)throw m.error;return {notices:n.data,meetings:m.data}}
 function localTitle(x){return (lang==='gu'&&x.title_gu)||x.title_en}
 function localBody(x){return (lang==='gu'&&(x.body_gu||x.details_gu))||(x.body_en||x.details_en)||''}
-async function renderView(){if(!profile)return;document.querySelectorAll('#nav button[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===activeView));$('appMsg').textContent='';const c=$('viewContent');c.innerHTML='<div class="empty">'+t('Loading secure data…','સુરક્ષિત ડેટા લોડ થઈ રહ્યો છે…')+'</div>';
+async function renderView(){if(!profile)return;document.querySelectorAll('#app [data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===activeView));$('moreBtn').classList.toggle('active',MORE_VIEWS.includes(activeView));$('appMsg').textContent='';const c=$('viewContent');c.innerHTML='<div class="empty">'+t('Loading secure data…','સુરક્ષિત ડેટા લોડ થઈ રહ્યો છે…')+'</div>';
 try{
 if(activeView==='navratri'){await renderNavratri(c)}
 else if(activeView==='houses'&&profile.role==='admin'){await renderHouses(c)}
@@ -314,7 +451,7 @@ async function saveHouse(e){
    operator precedence and closing tags stay easy to check. */
 const NAVRATRI_HOUSES=Array.from({length:19},(_,i)=>31+i);
 const NAVRATRI_DEFAULT_RATE_PAISE=50000;
-let navratriSelectedDate=null;
+let navratriSelectedDate=null, navratriSeg='houses';
 function localToday(){return new Date().toLocaleDateString('en-CA')}
 // Date-only strings (YYYY-MM-DD) are parsed as local dates so they never shift by a day.
 function day(v){return v&&String(v).length===10?date(v+'T00:00:00'):date(v)}
@@ -423,11 +560,11 @@ async function renderNavratri(c){
   +(canEdit
    ?'<form id="festivalRateForm" class="festival-rate-form"><div class="field"><label>'+t('Festival contribution per person (₹)','દરેક સભ્ય દીઠ ઉત્સવ ફાળો (₹)')+'</label><input name="rate" type="number" inputmode="numeric" min="0" max="100000" step="1" value="'+ratePaise/100+'" required></div><div class="rate-summary">'+t('One shared rate for every house','દરેક ઘર માટે એક જ દર')+'</div><button class="btn primary" type="submit">'+t('Apply rate to all houses','બધા ઘર માટે દર લાગુ કરો')+'</button><div id="rateMsg" class="msg"></div></form>'
    :'<div class="noticebar">'+t('Festival contribution per person','દરેક સભ્ય દીઠ ઉત્સવ ફાળો')+': '+money(ratePaise)+'</div>')
-  +(admin?'<p class="tiny">'+t('Tap a house to set its members and record payments.','સભ્યો અને પેમેન્ટ નોંધવા ઘર પર ટેપ કરો.')+'</p>':'')
+  +(admin?'<p class="tiny">'+t('Tap a house to add its members and record payments.','સભ્યો ઉમેરવા અને પેમેન્ટ નોંધવા ઘર પર ટેપ કરો.')+' <b>'+houses.filter(x=>x.members>0).length+'/'+houses.length+'</b> '+t('houses have members set','ઘરોમાં સભ્યો નક્કી થયા')+' · '+totalMembers+' '+t('people','વ્યક્તિ')+'</p>':'')
   +'<div class="house-number-grid">'+(houses.map(houseCard).join('')||empty(t('No household record for your house in this season yet.','આ સીઝનમાં તમારા ઘરનો રેકોર્ડ હજી નથી.')))+'</div></div>';
 
  const modal=admin?'<div class="household-modal" id="householdModal" hidden><button type="button" class="household-modal-backdrop" data-modal-close aria-label="'+t('Close','બંધ કરો')+'"></button><section class="household-modal-sheet" role="dialog" aria-modal="true" aria-labelledby="householdModalTitle"><div class="modal-grabber"></div><div class="modal-head"><h3 id="householdModalTitle">'+t('Household details','ઘરની વિગતો')+'</h3><button type="button" class="btn" data-modal-close>'+t('Close','બંધ કરો')+'</button></div>'
-  +'<form id="householdForm"><input type="hidden" name="house_number"><div class="field"><label for="householdMemberCount">'+t('How many people?','કેટલા લોકો?')+'</label><input name="participant_count" id="householdMemberCount" type="number" inputmode="numeric" min="0" max="100" step="1" required'+(canEdit?'':' disabled')+'></div><div class="calculated-due"><span>'+t('Automatic contribution total','આપમેળે ગણાયેલ ફાળો')+'</span><strong id="householdDuePreview"></strong><small id="householdRateHint"></small></div>'+(canEdit?'<div class="row modal-actions"><button class="btn primary" type="submit">'+t('Save members','સભ્યો સાચવો')+'</button></div>':'')+'<div id="householdMsg" class="msg"></div></form>'
+  +'<form id="householdForm"><input type="hidden" name="house_number"><div class="field"><label for="householdMemberCount">'+t('How many people?','કેટલા લોકો?')+'</label><div class="stepper"><button type="button" class="step-btn" data-step="-1" aria-label="'+t('One less','એક ઓછું')+'"'+(canEdit?'':' disabled')+'>−</button><input name="participant_count" id="householdMemberCount" type="number" inputmode="numeric" min="0" max="100" step="1" required'+(canEdit?'':' disabled')+'><button type="button" class="step-btn" data-step="1" aria-label="'+t('One more','એક વધુ')+'"'+(canEdit?'':' disabled')+'>+</button></div></div><div class="calculated-due"><span>'+t('Automatic contribution total','આપમેળે ગણાયેલ ફાળો')+'</span><strong id="householdDuePreview"></strong><small id="householdRateHint"></small></div>'+(canEdit?'<div class="row modal-actions"><button class="btn primary" type="submit">'+t('Save members','સભ્યો સાચવો')+'</button></div>':'')+'<div id="householdMsg" class="msg"></div></form>'
   +'<div class="modal-section"><h3>'+t('Payments','પેમેન્ટ')+'</h3><div class="tiny" id="householdPaidSummary"></div><div class="list payment-history" id="householdPayments"></div>'
   +(canEdit?'<form id="contributionForm"><div class="field"><label for="contributionAmount">'+t('Amount received (₹)','મળેલી રકમ (₹)')+'</label><input id="contributionAmount" name="amount" type="number" inputmode="decimal" min="0.01" step="0.01" required></div><div class="field"><label>'+t('Payment method','પેમેન્ટ રીત')+'</label><select name="method"><option value="cash">'+t('Cash','રોકડ')+'</option><option value="upi">UPI</option><option value="bank">'+t('Bank','બેંક')+'</option><option value="other">'+t('Other','અન્ય')+'</option></select></div><button class="btn primary" type="submit">'+t('Record payment','પેમેન્ટ નોંધો')+'</button><div id="contributionMsg" class="msg"></div></form>':'')
   +'</div></section></div>':'';
@@ -436,7 +573,7 @@ async function renderNavratri(c){
  const dot=x=>x.members===0?'':x.remaining===0?'<i class="token-dot green"></i>':'<i class="token-dot red"></i>';
  const waitingRows=houses.filter(x=>x.remaining>0).map(x=>'<article class="token-pending-row"><div><strong>'+t('House ','ઘર ')+x.n+'</strong><div class="tiny">'+x.remaining+' '+t('of','માંથી')+' '+x.members+' '+t('still to collect','હજુ લેવાના બાકી')+(x.pendingTokens?' · '+x.pendingTokens+' '+t('assigned, not yet received','આપેલા, હજુ મળ્યા નથી'):'')+'</div></div><span class="token-status is-pending">● '+t('Waiting','બાકી')+'</span>'+(canEdit?'<button class="btn" type="button" data-household-tokens-received="'+x.n+'">'+t('Mark all received','બધા મળ્યા')+' ('+x.remaining+')</button>':'')+'</article>').join('');
  const recordRows=tokens.map(x=>'<article class="token-pending-row"><div><strong>'+t('House ','ઘર ')+escapeHtml(x.house_number)+' · '+escapeHtml(x.member_label)+'</strong><div class="tiny">'+escapeHtml(x.token_count)+' '+t('token(s)','ટોકન')+'</div></div><span class="token-status '+(x.status==='received'?'is-done':'is-pending')+'">● '+(x.status==='received'?t('Received','મળી ગયા'):t('Pending','બાકી'))+'</span>'+(canEdit&&x.status!=='received'?'<button class="btn" type="button" data-token-received="'+escapeHtml(x.id)+'">'+t('Mark received','મળ્યું')+'</button>':'')+(canEdit?'<button class="btn token-undo-btn" type="button" data-token-delete="'+escapeHtml(x.id)+'">'+t('Undo / remove','ભૂલ સુધારો / દૂર કરો')+'</button>':'')+'</article>').join('');
- const tokenDesk='<div class="panel token-workspace" style="margin-top:16px"><div class="eyebrow">'+t('Step 2 · Daily workflow','પગલું 2 · રોજિંદું કામ')+'</div><h3>'+t('Daily token desk','દૈનિક ટોકન વિતરણ')+'</h3>'
+ const tokenDesk='<div class="panel token-workspace"><div class="eyebrow">'+t('Step 2 · Daily workflow','પગલું 2 · રોજિંદું કામ')+'</div><h3>'+t('Daily token desk','દૈનિક ટોકન વિતરણ')+'</h3>'
   +'<div class="field token-day-field"><label for="tokenDayPicker">'+t('Festival day / date','ઉત્સવનો દિવસ / તારીખ')+'</label><input id="tokenDayPicker" type="date" min="'+escapeHtml(season.starts_on)+'" max="'+escapeHtml(season.ends_on)+'" value="'+escapeHtml(selectedDate)+'"></div>'
   +'<div class="token-summary-grid"><div class="token-summary"><small>'+t('Total members','કુલ સભ્યો')+'</small><strong>'+totalMembers+'</strong></div><div class="token-summary"><small>'+t('Received this day','આ દિવસે મળ્યા')+'</small><strong>'+receivedDay+'</strong></div><div class="token-summary"><small>'+t('Waiting','બાકી')+'</small><strong>'+Math.max(0,totalMembers-receivedDay)+'</strong></div></div>'
   +(admin?'<div class="house-selector" role="group" aria-label="'+t('Choose house number','ઘર નંબર પસંદ કરો')+'">'+houses.map(x=>'<button type="button" class="house-selector-btn" data-quick-token="'+x.n+'"'+(canEdit?'':' disabled')+'>'+x.n+'<span class="house-token-dots">'+dot(x)+'</span></button>').join('')+'</div>':'')
@@ -444,12 +581,19 @@ async function renderNavratri(c){
   +'<h3 class="subhead">'+t('People still waiting','હજુ રાહ જોઈ રહ્યા છે')+'</h3><div class="list">'+(waitingRows||empty(t('Nobody is waiting for tokens on this day.','આ દિવસે કોઈ ટોકન માટે બાકી નથી.')))+'</div>'
   +'<h3 class="subhead">'+t('Token records for ','ટોકન રેકોર્ડ: ')+dayLabel+'</h3><div class="list">'+(recordRows||empty(t('No tokens recorded on this day.','આ દિવસે ટોકન નોંધાયા નથી.')))+'</div></div>';
 
- const expensesPanel=admin?'<div class="panel" style="margin-top:16px"><h3>'+t('Daily expenses','દૈનિક ખર્ચ')+'</h3><div class="tiny">'+t('From Navratri fund','નવરાત્રી ફંડમાંથી')+': '+money(spent)+' · '+t('From main society fund','મુખ્ય સોસાયટી ફંડમાંથી')+': '+money(mainFundSpent)+'</div>'
+ const expensesPanel=admin?'<div class="panel"><h3>'+t('Daily expenses','દૈનિક ખર્ચ')+'</h3><div class="tiny">'+t('From Navratri fund','નવરાત્રી ફંડમાંથી')+': '+money(spent)+' · '+t('From main society fund','મુખ્ય સોસાયટી ફંડમાંથી')+': '+money(mainFundSpent)+'</div>'
   +(canEdit?'<form id="expenseForm"><div class="field"><label>'+t('Date','તારીખ')+'</label><input name="spent_on" type="date" value="'+localToday()+'" required></div><div class="field"><label>'+t('Category','કેટેગરી')+'</label><select name="category"><option value="snacks">'+t('Snacks','નાસ્તો')+'</option><option value="drinks">'+t('Drinks','પીણાં')+'</option><option value="decorations">'+t('Decorations','સજાવટ')+'</option><option value="sound">'+t('Sound','સાઉન્ડ')+'</option><option value="supplies">'+t('Supplies','સામગ્રી')+'</option><option value="other">'+t('Other','અન્ય')+'</option></select></div><div class="field"><label>'+t('Description','વિગત')+'</label><input name="description" type="text" required minlength="2" maxlength="240"></div><div class="field"><label>'+t('Amount ₹','રકમ ₹')+'</label><input name="amount" type="number" inputmode="decimal" min="0.01" step="0.01" required></div><div class="field"><label>'+t('Paid from','કયા ફંડમાંથી')+'</label><select name="paid_from"><option value="navratri_contributions">'+t('Navratri contributions','નવરાત્રી ફાળો')+'</option><option value="main_society_fund">'+t('Main society fund','મુખ્ય સોસાયટી ફંડ')+'</option></select></div><button class="btn primary" type="submit">'+t('Add expense','ખર્ચ ઉમેરો')+'</button><span id="expenseMsg" class="msg"></span></form>':'')
   +'<div class="list">'+(expenses.map(x=>'<article class="item"><div class="itemtop"><div><h3>'+escapeHtml(x.description)+'</h3><div class="tiny">'+escapeHtml(day(x.spent_on))+' · '+escapeHtml(x.category)+' · '+t('Paid from','ફંડ')+': '+(x.paid_from==='main_society_fund'?t('Main fund','મુખ્ય ફંડ'):t('Navratri fund','નવરાત્રી ફંડ'))+'</div></div><strong>'+money(x.amount_paise)+'</strong></div></article>').join('')||empty(t('No expenses recorded yet.','હજી કોઈ ખર્ચ નોંધાયો નથી.')))+'</div></div>':'';
 
- c.innerHTML=createForm+hero+kpis+setup+tokenDesk+expensesPanel+modal;
+ const segs=[['houses',t('Houses','ઘર')],['tokens',t('Tokens','ટોકન')]].concat(admin?[['expenses',t('Expenses','ખર્ચ')]]:[]);
+ if(!segs.some(x=>x[0]===navratriSeg))navratriSeg='houses';
+ const segBar='<div class="segmented" role="tablist">'+segs.map(([k,l])=>'<button type="button" role="tab" class="seg-btn" data-seg="'+k+'">'+l+'</button>').join('')+'</div>';
+ const pane=(k,html)=>'<div data-pane="'+k+'">'+html+'</div>';
+ c.innerHTML=createForm+hero+kpis+segBar+pane('houses',setup)+pane('tokens',tokenDesk)+(admin?pane('expenses',expensesPanel):'')+modal;
  bindSeasonForm(c,rerender);
+ const showSeg=k=>{navratriSeg=k;c.querySelectorAll('[data-pane]').forEach(p=>{p.hidden=p.dataset.pane!==k});c.querySelectorAll('[data-seg]').forEach(b=>{const on=b.dataset.seg===k;b.classList.toggle('active',on);b.setAttribute('aria-selected',String(on))})};
+ c.querySelectorAll('[data-seg]').forEach(b=>b.addEventListener('click',()=>showSeg(b.dataset.seg)));
+ showSeg(navratriSeg);
 
  $('tokenDayPicker').addEventListener('change',e=>{if(!e.currentTarget.value)return;navratriSelectedDate=e.currentTarget.value;rerender()});
  if(!admin)return;
@@ -476,6 +620,7 @@ async function renderNavratri(c){
  c.querySelectorAll('[data-house-edit]').forEach(b=>b.addEventListener('click',()=>openSheet(Number(b.dataset.houseEdit),b)));
  sheet.querySelectorAll('[data-modal-close]').forEach(b=>b.addEventListener('click',closeSheet));
  memberInput.addEventListener('input',updateDue);
+ sheet.querySelectorAll('[data-step]').forEach(b=>b.addEventListener('click',()=>{memberInput.value=Math.min(100,Math.max(0,(Number(memberInput.value)||0)+Number(b.dataset.step)));updateDue()}));
  if(!canEdit)return;
 
  $('festivalRateForm').addEventListener('submit',e=>{e.preventDefault();const form=e.currentTarget,rate=Number(form.elements.rate.value);
