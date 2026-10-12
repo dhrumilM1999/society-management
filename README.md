@@ -346,3 +346,30 @@ The public directory is secondary utility, not the main product entry point. Sig
 - [x] Changing the house in the assignment form auto-fills a household label and the saved member count as the token count.
 - [ ] Verify mixed prior individual records reconcile correctly with household-level counts and that a household cannot be over-counted.
 - [ ] Test on browser/phone and confirm Cloudflare deployment. No existing token records were changed by this UI update.
+
+
+## Navratri flow bug-fix pass — 12 Oct 2026
+
+### Fixed in code
+- **Daily expenses panel and token records list never appeared.** A `||` inside the long HTML string concatenation bound looser than `+`, so everything after the waiting list was dropped. The view is now built from separate section strings.
+- **Admins could not record contributions.** The per-house payment list had been hidden with CSS. Payments are now recorded from the house sheet (tap a house), which also shows that house's payment history and pre-fills the outstanding amount.
+- **Double taps recorded twice** (season, payment, token, expense). Submit buttons are disabled while a write is in flight.
+- **Pending contributions was understated** when one house overpaid; it is now summed per house.
+- Houses with 0 members showed **Paid**; they now show **Not participating**. Partial payments show **Partly paid**.
+- **Token day defaulted to today even outside the festival**, so tokens could be saved on non-festival dates. The day is clamped to the season dates.
+- **"Mark all received" could over-count** a household that already had pending token records. It now completes those records and adds only the remainder; manual assignment beyond the member count asks for confirmation.
+- **House selector / Quick token did not update the custom picker label** and pre-filled 1 token. It now dispatches `change`, so the label and the remaining-token count stay in sync.
+- **Changing the rate overwrote member counts** with the values loaded on screen. It now updates only the rate column.
+- **Closed seasons were a dead end.** Admins can now create the next season or reopen the closed one; closed seasons are read-only.
+- **Residents saw ₹0 expenses and a misleading balance** (they cannot read expense rows). Residents now see their own due / paid / pending, and house cards are not tappable for them.
+- Season creation validates end ≥ start and repairs a missing house list on the next load.
+- Contributions and tokens are queried for this season/day only (no silent 300-row truncation); the unused admin phone-number query was removed.
+- Festival dates no longer shift by a day in time zones west of UTC; amounts follow the selected language.
+
+### Verified
+- `tests/navratri/e2e.mjs` drives admin and resident flows in headless Chromium against an in-memory mock (33 checks, 320px and 390px widths). This does **not** replace testing against the Supabase test project.
+
+### Still open
+- "Mark all received" is two writes (update + insert), not one transaction; a database RPC would make it atomic.
+- The per-person rate still lives on every household row instead of on the season.
+- Real sign-in, RLS row isolation and the live Cloudflare deployment are still unverified.

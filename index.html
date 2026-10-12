@@ -226,8 +226,15 @@ input[type=date]{display:block;min-height:48px}
 .house-selector-btn:hover,.house-selector-btn:focus-visible{border-color:#13151b;background:#f3f5f8;outline:2px solid #a9b0c4;outline-offset:1px}
 @media(max-width:760px){.house-selector{grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}.house-selector-btn{min-height:46px;border-radius:12px}}
 
-/* Hide the crossed-out per-house payment-entry list; keep totals and household selector */
-.household-setup-panel>.list{display:none!important}
+/* Navratri: house cards, payment states and household sheet */
+.house-number-card.is-static{cursor:default}
+.house-payment-state.is-over{color:#16804a}
+.house-payment-state.is-paid{color:#16804a}
+.house-payment-state.is-none{color:#777d90}
+.house-payment-state.is-pending{color:#b42318}
+.house-selector-btn:disabled{opacity:.6;cursor:default}
+.modal-section{border-top:1px solid #e1e4eb;margin-top:16px;padding-top:14px}
+.modal-section .payment-history{margin:10px 0 14px}
 .token-day-field{margin:12px 0 16px}.house-token-dots{display:flex;gap:4px;justify-content:center;margin-top:3px}.token-dot{display:inline-block;width:8px;height:8px;border-radius:50%}.token-dot.green{background:#27834a}.token-dot.red{background:#d64545}.token-undo-btn{border-color:#e4b4b4;color:#a52c2c}.house-selector-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}</style>
 </head>
 <body><div class="shell">
@@ -302,53 +309,268 @@ async function saveHouse(e){
 }
 
 
+/* ---------- Navratri festival ----------
+   Written as small builder functions (instead of one long string expression) so
+   operator precedence and closing tags stay easy to check. */
+const NAVRATRI_HOUSES=Array.from({length:19},(_,i)=>31+i);
+const NAVRATRI_DEFAULT_RATE_PAISE=50000;
 let navratriSelectedDate=null;
+function localToday(){return new Date().toLocaleDateString('en-CA')}
+// Date-only strings (YYYY-MM-DD) are parsed as local dates so they never shift by a day.
+function day(v){return v&&String(v).length===10?date(v+'T00:00:00'):date(v)}
+function clampDate(d,min,max){return d<min?min:d>max?max:d}
+function toPaise(v){const p=Math.round(Number(v)*100);return Number.isSafeInteger(p)&&p>0?p:null}
+// Disables the button while an async write runs, so a double tap cannot record twice.
+async function withBusy(btn,fn){if(!btn||btn.disabled)return;btn.disabled=true;try{return await fn()}finally{btn.disabled=false}}
+function navratriPaymentState(due,paid){
+ if(due<=0&&paid<=0)return {key:'none',label:t('Not participating','ભાગ લેતા નથી')};
+ if(paid>due)return {key:'over',label:t('Overpaid','વધુ ચૂકવેલ')};
+ if(paid>=due)return {key:'paid',label:t('Paid','ચૂકવેલ')};
+ return {key:'pending',label:paid>0?t('Partly paid','અંશતઃ ચૂકવેલ'):t('Payment pending','પેમેન્ટ બાકી')};
+}
+function navratriSeasonForm(){
+ return '<div class="panel" style="margin-bottom:16px"><h3>'+t('Create Navratri season','નવરાત્રી સીઝન બનાવો')+'</h3><form id="seasonForm"><div class="field"><label>'+t('Season name','સીઝનનું નામ')+'</label><input name="title" type="text" value="Navratri '+new Date().getFullYear()+'" required maxlength="100"></div><div class="field"><label>'+t('Start date','શરૂઆતની તારીખ')+'</label><input type="date" name="starts_on" required></div><div class="field"><label>'+t('End date','અંતિમ તારીખ')+'</label><input type="date" name="ends_on" required></div><button class="btn primary" type="submit">'+t('Create season','સીઝન બનાવો')+'</button><div class="msg" id="seasonMsg"></div></form></div>';
+}
+// Creates any of the 19 household rows that are missing. ignoreDuplicates keeps
+// existing rows (and their member counts) untouched, so this is safe to retry.
+async function seedNavratriHouseholds(seasonId,ratePaise){
+ const rows=NAVRATRI_HOUSES.map(n=>({season_id:seasonId,house_number:n,participant_count:0,contribution_per_person_paise:ratePaise}));
+ return supabase.from('navratri_households').upsert(rows,{onConflict:'season_id,house_number',ignoreDuplicates:true});
+}
+
 async function renderNavratri(c){
  const admin=profile.role==='admin';
+ setMsg('appMsg','');
  heading(t('Navratri festival','નવરાત્રી ઉત્સવ'),t('Track contributions, daily tokens and festival spending.','ફાળો, દૈનિક ટોકન અને ઉત્સવના ખર્ચનો હિસાબ.'));
+ const rerender=()=>renderNavratri(c).catch(err=>{console.error(err);setMsg('appMsg',t('Could not refresh the festival data. Please tap Refresh data.','ઉત્સવનો ડેટા રિફ્રેશ થયો નથી. ડેટા રિફ્રેશ દબાવો.'))});
+
  const {data:seasons,error:seasonErr}=await supabase.from('navratri_seasons').select('*').order('starts_on',{ascending:false}).limit(20);
  if(seasonErr)throw seasonErr;
- let season=seasons.find(s=>s.status==='active')||seasons[0];
- if(!season){
-   c.innerHTML=(admin?'<div class="panel"><h3>'+t('Create Navratri season','નવરાત્રી સીઝન બનાવો')+'</h3><form id="seasonForm"><div class="field"><label>'+t('Season name','સીઝનનું નામ')+'</label><input name="title" type="text" value="Navratri 2026" required maxlength="100"></div><div class="field"><label>'+t('Start date','શરૂઆતની તારીખ')+'</label><input type="date" name="starts_on" required></div><div class="field"><label>'+t('End date','અંતિમ તારીખ')+'</label><input type="date" name="ends_on" required></div><button class="btn primary">'+t('Create season','સીઝન બનાવો')+'</button><div class="msg" id="seasonMsg"></div></form></div>':'<div class="panel">'+t('No Navratri season has been created yet. Please contact the administrator.','હજી નવરાત્રી સીઝન બનાવવામાં આવી નથી. એડમિનનો સંપર્ક કરો.')+'</div>');
-   if(admin)$('seasonForm').addEventListener('submit',async e=>{e.preventDefault();const fd=new FormData(e.currentTarget);const {data:newSeason,error}=await supabase.from('navratri_seasons').insert({title:fd.get('title'),starts_on:fd.get('starts_on'),ends_on:fd.get('ends_on'),status:'active',created_by:profile.id}).select('id').single();if(error){setMsg('seasonMsg',error.message);return}if(newSeason){const seed=Array.from({length:19},(_,i)=>({season_id:newSeason.id,house_number:31+i,participant_count:0,contribution_per_person_paise:50000}));const {error:seedErr}=await supabase.from('navratri_households').upsert(seed,{onConflict:'season_id,house_number'});if(seedErr){setMsg('seasonMsg','Season created, but house list setup failed: '+seedErr.message);return}}await renderNavratri(c)});return;
- }
- const [householdsRes,contribRes,tokenRes,contactsRes,expenseRes]=await Promise.all([
-   supabase.from('navratri_households').select('*').eq('season_id',season.id).order('house_number'),
-   supabase.from('navratri_contributions').select('id,household_id,amount_paise,paid_on,payment_method,reference_note').order('paid_on',{ascending:false}),
-   supabase.from('navratri_tokens').select('*').eq('season_id',season.id).order('token_date',{ascending:false}).limit(300),
-   admin ? supabase.from('profiles').select('house_number,contact_phone,role').eq('role','resident') : Promise.resolve({data:[],error:null}),
-   admin ? supabase.from('navratri_expenses').select('*').eq('season_id',season.id).order('spent_on',{ascending:false}).limit(100) : Promise.resolve({data:[],error:null})
-  ]);
-  for(const x of [householdsRes,contribRes,tokenRes,contactsRes,expenseRes])if(x.error)throw x.error;
-  const households=householdsRes.data, contributions=contribRes.data.filter(x=>householdsRes.data.some(h=>h.id===x.household_id)), tokens=tokenRes.data, expenses=expenseRes.data, contactPhones=new Map((contactsRes.data||[]).map(p=>{let phone=String(p.contact_phone||'').replace(/\D/g,'');if(phone.length===10)phone='91'+phone;return [Number(p.house_number),phone]}));
- const hhMap=new Map(households.map(h=>[h.id,h]));
- const collected=contributions.reduce((s,x)=>s+Number(x.amount_paise),0), spent=expenses.filter(x=>x.paid_from==='navratri_contributions').reduce((s,x)=>s+Number(x.amount_paise),0), due=households.reduce((s,h)=>s+Number(h.amount_due_paise),0), pending=Math.max(due-collected,0);
- let selectedTokenDate=navratriSelectedDate||new Date().toLocaleDateString('en-CA');
- const rupees=p=>new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:2}).format(Number(p||0)/100);
- const houseOptions=Array.from({length:19},(_,i)=>31+i).map(n=>'<option value="'+n+'">'+n+'</option>').join('');
- const seasonSelect='<div class="navratri-hero"><div><div class="eyebrow">'+t('Festival workspace','ઉત્સવ વ્યવસ્થાપન')+'</div><h3>'+escapeHtml(season.title)+'</h3><div class="tiny">'+escapeHtml(date(season.starts_on))+' — '+escapeHtml(date(season.ends_on))+'</div></div><div class="row"><span class="tag">'+escapeHtml(t(season.status==='active'?'Active season':'Season closed',season.status==='active'?'ચાલુ સીઝન':'સીઝન બંધ'))+'</span>'+(admin&&season.status==='active'?' <button class="btn" id="closeSeasonBtn" type="button">'+t('Close season','સીઝન બંધ કરો')+'</button>':'')+'</div></div>';
- c.innerHTML=seasonSelect+'<div class="grid festival-kpis"><div class="metric"><small>'+t('Collected','એકત્રિત')+'</small><strong>'+rupees(collected)+'</strong><span>'+t('Recorded contributions','નોંધાયેલ ફાળો')+'</span></div><div class="metric"><small>'+t('Pending contributions','બાકી ફાળો')+'</small><strong>'+rupees(pending)+'</strong><span>'+t('Household contribution target','ઘર મુજબનો કુલ લક્ષ્ય')+'</span></div><div class="metric"><small>'+t('Festival expenses','ઉત્સવ ખર્ચ')+'</small><strong>'+rupees(spent)+'</strong><span>'+t('Available festival balance','ઉપલબ્ધ ઉત્સવ બેલેન્સ')+': '+rupees(collected-spent)+'</span></div></div><div class="panel household-setup-panel"><div class="eyebrow">'+t('Step 1 · Setup and collection','પગલું 1 · ગણતરી અને ફાળો')+'</div><h3>'+t('Household setup & money collection','ઘરના સભ્યો અને ફાળો વસૂલાત')+'</h3>'+(admin?'<form id="festivalRateForm" class="festival-rate-form"><div class="field"><label>'+t('Festival contribution per person (₹)','દરેક સભ્ય દીઠ ઉત્સવ ફાળો (₹)')+'</label><input name="rate" type="number" min="0" max="100000" step="1" value="'+(Number(households[0]?.contribution_per_person_paise??50000)/100)+'" required></div><div class="rate-summary">'+t('One shared rate for every house','દરેક ઘર માટે એક જ દર')+'</div><button class="btn primary">'+t('Apply rate to all houses','બધા ઘર માટે દર લાગુ કરો')+'</button><div id="rateMsg" class="msg"></div></form>':'<div class="noticebar">'+t('Festival contribution per person','દરેક સભ્ય દીઠ ઉત્સવ ફાળો')+': '+rupees(Number(households[0]?.contribution_per_person_paise??50000))+'</div>')+'<div class="house-selector" aria-label="'+t('Choose house number','ઘર નંબર પસંદ કરો')+'">'+households.map(h=>{const rows=tokens.filter(x=>x.token_date===selectedTokenDate&&Number(x.house_number)===Number(h.house_number));const received=rows.some(x=>x.status==='received'),pending=rows.some(x=>x.status!=='received');return '<button type="button" class="house-selector-btn" data-house-edit="'+h.house_number+'">'+h.house_number+'<span class="house-token-dots">'+(received?'<i class="token-dot green"></i>':'')+(pending||!received?'<i class="token-dot red"></i>':'')+'</span></button>'}).join('')+'</div><div class="house-number-grid">'+households.map(h=>{const paid=contributions.filter(x=>x.household_id===h.id).reduce((sum,x)=>sum+Number(x.amount_paise),0);return '<div class="house-card-wrap"><button type="button" class="house-number-card" data-house-edit="'+h.house_number+'"><strong>'+h.house_number+'</strong><small>'+h.participant_count+' '+t('members','સભ્યો')+'</small><b>'+rupees(h.amount_due_paise)+'</b><span class="house-payment-state '+(paid>=Number(h.amount_due_paise)?'is-paid':'is-unpaid')+'">● '+(paid>=Number(h.amount_due_paise)?t('Paid','ચૂકવેલ'):t('Payment pending','પેમેન્ટ બાકી'))+'</span></button>'+(admin?'<div class="house-quick-actions"><button type="button" class="btn" data-quick-token="'+h.house_number+'">'+t('Quick token','ઝડપી ટોકન')+'</button></div>':'')+'</div>'}).join('')+'</div><div class="household-modal" id="householdModal" hidden><button type="button" class="household-modal-backdrop" data-modal-close aria-label="Close"></button><section class="household-modal-sheet" role="dialog" aria-modal="true" aria-labelledby="householdModalTitle"><div class="modal-grabber"></div><div class="modal-head"><h3 id="householdModalTitle">'+t('Household details','ઘરની વિગતો')+'</h3><button type="button" class="btn" data-modal-close>'+t('Close','બંધ કરો')+'</button></div><form id="householdForm"><input type="hidden" name="house_number"><div class="field"><label>'+t('How many people?','કેટલા લોકો?')+'</label><input name="participant_count" id="householdMemberCount" type="number" inputmode="numeric" min="0" max="100" step="1" value="1" required></div><div class="calculated-due"><span>'+t('Automatic contribution total','આપમેળે ગણાયેલ ફાળો')+'</span><strong id="householdDuePreview">₹500</strong><small id="householdRateHint"></small></div><div class="row modal-actions"><button type="button" class="btn" data-modal-close>'+t('Cancel','રદ કરો')+'</button><button class="btn primary" type="submit">'+t('Save details','વિગતો સાચવો')+'</button></div><div id="householdMsg" class="msg"></div></form></section></div><div class="list">'+households.map(h=>{const paid=contributions.filter(x=>x.household_id===h.id).reduce((s,x)=>s+Number(x.amount_paise),0);return '<article class="item"><div class="itemtop"><div><h3>'+t('House ','ઘર ')+h.house_number+'</h3><div class="tiny">'+h.participant_count+' '+t('members','સભ્યો')+' · '+t('Due','ચૂકવવાનું')+' '+rupees(h.amount_due_paise)+'</div></div><span class="tag">'+(paid>Number(h.amount_due_paise)?t('Overpaid','વધુ ચૂકવેલ'):paid>=Number(h.amount_due_paise)?t('Paid','ચૂકવેલ'):t('Pending','બાકી'))+'</span></div><div class="tiny">'+t('Paid','ચૂકવેલ')+': '+rupees(paid)+' · '+(paid>Number(h.amount_due_paise)?t('Extra paid','વધારાની રકમ')+': '+rupees(paid-Number(h.amount_due_paise)):t('Pending','બાકી')+': '+rupees(Math.max(Number(h.amount_due_paise)-paid,0)))+'</div>'+(admin?'<form class="contributionForm" data-household="'+h.id+'"><div class="row"><input name="amount" type="number" min="1" step="0.01" placeholder="'+t('Amount ₹','રકમ ₹')+'" required><select name="method"><option value="cash">Cash</option><option value="upi">UPI</option><option value="bank">Bank</option><option value="other">Other</option></select><button class="btn">'+t('Record payment','પેમેન્ટ નોંધો')+'</button></div></form>':'')+'</article>'}).join('')+'</div></div><div class="panel token-workspace" style="margin-top:16px"><div class="eyebrow">'+t('Step 2 · Daily workflow','પગલું 2 · રોજિંદું કામ')+'</div><h3>'+t('Daily token desk','દૈનિક ટોકન વિતરણ')+'</h3><div class="field token-day-field"><label for="tokenDayPicker">'+t('Festival day / date','ઉત્સવનો દિવસ / તારીખ')+'</label><input id="tokenDayPicker" type="date" min="'+escapeHtml(season.starts_on)+'" max="'+escapeHtml(season.ends_on)+'" value="'+selectedTokenDate+'"></div><div class="token-summary-grid"><div class="token-summary"><small>'+t('Total members','કુલ સભ્યો')+'</small><strong>'+households.reduce((n,h)=>n+Number(h.participant_count||0),0)+'</strong></div><div class="token-summary"><small>'+t('Received today','આજે મળ્યા')+'</small><strong>'+tokens.filter(x=>x.token_date===selectedTokenDate&&x.status==='received').reduce((n,x)=>n+Number(x.token_count||0),0)+'</strong></div><div class="token-summary"><small>'+t('Waiting','બાકી')+'</small><strong>'+Math.max(0,households.reduce((n,h)=>n+Number(h.participant_count||0),0)-tokens.filter(x=>x.token_date===selectedTokenDate&&x.status==='received').reduce((n,x)=>n+Number(x.token_count||0),0))+'</strong></div></div>'+(admin?'<form id="tokenForm" class="token-entry-form"><div class="field"><label>'+t('House number','ઘર નંબર')+'</label><select name="house_number">'+houseOptions+'</select></div><div class="field"><label>'+t('Member name / label','સભ્યનું નામ')+'</label><input name="member_label" type="text" autocomplete="off" required maxlength="80" placeholder="'+t('Member name or Member 1','સભ્યનું નામ અથવા સભ્ય 1')+'"></div><div class="field"><label>'+t('Token count','ટોકન સંખ્યા')+'</label><input name="token_count" type="number" inputmode="numeric" min="1" max="20" step="1" value="1" required></div><input type="hidden" name="token_date" value="'+selectedTokenDate+'"><button class="btn primary">'+t('Assign token','ટોકન આપો')+'</button><span id="tokenMsg" class="msg"></span></form>':'')+'<h3 class="subhead">'+t('People still waiting','હજુ રાહ જોઈ રહ્યા છે')+'</h3><div class="list">'+households.map(h=>{const count=Math.max(0,Number(h.participant_count)||0),today=tokens.filter(x=>x.token_date===selectedTokenDate&&Number(x.house_number)===Number(h.house_number)),received=today.filter(x=>x.status==='received').reduce((n,x)=>n+Number(x.token_count||0),0),remaining=Math.max(0,count-received);if(!remaining)return '';return '<article class="token-pending-row"><div><strong>'+t('House ','ઘર ')+h.house_number+'</strong><div class="tiny">'+remaining+' '+t('tokens for all remaining members','બાકી સભ્યો માટેના ટોકન')+'</div></div><span class="token-status is-pending">● '+t('Waiting','બાકી')+'</span>'+(admin?'<button class="btn" data-household-tokens-received="'+h.house_number+'" data-token-count="'+remaining+'">'+t('Mark all received','બધા મળ્યા')+' ('+remaining+')</button>':'')+'</article>'}).join('')||empty(t('Nobody is waiting for tokens today.','આજે કોઈ ટોકન માટે બાકી નથી.'))+'</div><h3 class="subhead">'+t('Today’s token records','આજના ટોકન રેકોર્ડ')+'</h3><div class="list">'+tokens.filter(x=>x.token_date===selectedTokenDate).map(x=>'<article class="token-pending-row"><div><strong>'+t('House ','ઘર ')+x.house_number+' · '+escapeHtml(x.member_label)+'</strong><div class="tiny">'+x.token_count+' '+t('token(s)','ટોકન')+'</div></div><span class="token-status '+(x.status==='received'?'is-done':'is-pending')+'">● '+(x.status==='received'?t('Received','મળી ગયા'):t('Pending','બાકી'))+'</span>'+(admin&&x.status==='pending'?'<button class="btn" data-token-received="'+x.id+'">'+t('Mark received','મળ્યું')+'</button>':'')+(admin?'<button class="btn token-undo-btn" data-token-delete="'+x.id+'">'+t('Undo / remove','ભૂલ સુધારો / દૂર કરો')+'</button>':'')+'</article>').join('')||empty(t('No tokens assigned today.','આજે ટોકન આપ્યા નથી.'))+'</div></div><div class="panel" style="margin-top:16px"><h3>'+t('Daily expenses','દૈનિક ખર્ચ')+'</h3>'+(admin?'<form id="expenseForm"><div class="field"><label>'+t('Date','તારીખ')+'</label><input name="spent_on" type="date" value="'+new Date().toLocaleDateString('en-CA')+'" required></div><div class="field"><label>'+t('Category','કેટેગરી')+'</label><select name="category"><option value="snacks">Snacks</option><option value="drinks">Drinks</option><option value="decorations">Decorations</option><option value="sound">Sound</option><option value="supplies">Supplies</option><option value="other">Other</option></select></div><div class="field"><label>'+t('Description','વિગત')+'</label><input name="description" type="text" required minlength="2" maxlength="240"></div><div class="field"><label>'+t('Amount ₹','રકમ ₹')+'</label><input name="amount" type="number" min="0.01" step="0.01" required></div><div class="field"><label>'+t('Paid from','કયા ફંડમાંથી')+'</label><select name="paid_from"><option value="navratri_contributions">'+t('Navratri contributions','નવરાત્રી ફાળો')+'</option><option value="main_society_fund">'+t('Main society fund','મુખ્ય સોસાયટી ફંડ')+'</option></select></div><button class="btn primary">'+t('Add expense','ખર્ચ ઉમેરો')+'</button><span id="expenseMsg" class="msg"></span></form>':'')+'<div class="list">'+expenses.map(x=>'<article class="item"><div class="itemtop"><div><h3>'+escapeHtml(x.description)+'</h3><div class="tiny">'+escapeHtml(x.spent_on)+' · '+escapeHtml(x.category)+' · '+t('Paid from','ફંડ')+': '+(x.paid_from==='main_society_fund'?t('Main fund','મુખ્ય ફંડ'):t('Navratri fund','નવરાત્રી ફંડ'))+'</div></div><strong>'+rupees(x.amount_paise)+'</strong></div></article>').join('')+'</div></div>';
- $('tokenDayPicker')?.addEventListener('change',e=>{selectedTokenDate=e.currentTarget.value;navratriSelectedDate=selectedTokenDate;renderNavratri(c)});
- if(admin){
-  c.querySelectorAll('[data-token-delete]').forEach(b=>b.addEventListener('click',async()=>{if(!confirm(t('Remove this token record? This cannot be undone.','આ ટોકન રેકોર્ડ દૂર કરવો છે? આ પાછું ફેરવી શકાશે નહીં.')))return;b.disabled=true;const {error}=await supabase.from('navratri_tokens').delete().eq('id',b.dataset.tokenDelete).eq('season_id',season.id);if(error){alert(error.message);b.disabled=false;return}await renderNavratri(c)}));
-  $('closeSeasonBtn')?.addEventListener('click',async()=>{if(!confirm('Close this Navratri season?'))return;const {error}=await supabase.from('navratri_seasons').update({status:'closed'}).eq('id',season.id);if(error)alert(error.message);else await renderNavratri(c)});
-  let festivalRate=Number(households[0]?.contribution_per_person_paise??50000);
-  const modal=$('householdModal'),memberInput=$('householdMemberCount');
-  const updateDue=()=>{const count=Number(memberInput?.value||0);$('householdDuePreview').textContent=rupees(count*festivalRate);$('householdRateHint').textContent=rupees(festivalRate)+' × '+count+' '+t('people','વ્યક્તિ')};
-  $('festivalRateForm')?.addEventListener('submit',async e=>{e.preventDefault();const btn=e.currentTarget.querySelector('button[type=submit]'),rate=Number(e.currentTarget.elements.rate.value);if(!Number.isFinite(rate)||rate<0){setMsg('rateMsg',t('Enter a valid amount.','યોગ્ય રકમ દાખલ કરો.'));return}btn.disabled=true;try{const rows=households.map(h=>({id:h.id,season_id:season.id,house_number:h.house_number,participant_count:h.participant_count,contribution_per_person_paise:Math.round(rate*100),is_participating:Number(h.participant_count)>0,updated_at:new Date().toISOString()}));const {error}=await supabase.from('navratri_households').upsert(rows,{onConflict:'season_id,house_number'});if(error)throw error;await renderNavratri(c)}catch(err){setMsg('rateMsg',err.message||t('Could not update rate.','દર અપડેટ થઈ શક્યો નથી.'))}finally{btn.disabled=false}});
-  c.querySelectorAll('[data-house-edit]').forEach(b=>b.addEventListener('click',()=>{const n=Number(b.dataset.houseEdit),h=households.find(x=>Number(x.house_number)===n);if(!h)return;$('householdForm').elements.house_number.value=n;memberInput.value=h.participant_count;setMsg('householdMsg','');updateDue();modal.hidden=false;document.body.classList.add('modal-open')}));
-  memberInput?.addEventListener('input',updateDue);modal?.querySelectorAll('[data-modal-close]').forEach(b=>b.addEventListener('click',()=>{modal.hidden=true;document.body.classList.remove('modal-open')}));
-  $('householdForm')?.addEventListener('submit',async e=>{e.preventDefault();const fd=new FormData(e.currentTarget),n=Number(fd.get('house_number')),count=Number(fd.get('participant_count')),h=households.find(x=>Number(x.house_number)===n),btn=e.currentTarget.querySelector('button[type=submit]');if(!h)return;btn.disabled=true;try{const {error}=await supabase.from('navratri_households').upsert({id:h.id,season_id:season.id,house_number:n,participant_count:count,contribution_per_person_paise:festivalRate,is_participating:count>0,updated_at:new Date().toISOString()},{onConflict:'season_id,house_number'});if(error)throw error;modal.hidden=true;document.body.classList.remove('modal-open');await renderNavratri(c)}catch(err){setMsg('householdMsg',err.message||t('Could not save household.','ઘરની વિગતો સાચવી શકાઈ નથી.'))}finally{btn.disabled=false}});
+ const activeSeason=seasons.find(s=>s.status==='active');
+ const season=activeSeason||seasons[0];
+ const isOpen=season?.status==='active', canEdit=admin&&isOpen;
+ const createForm=admin&&!activeSeason?navratriSeasonForm():'';
 
-  document.querySelectorAll('.contributionForm').forEach(form=>form.addEventListener('submit',async e=>{e.preventDefault();const fd=new FormData(form);const {error}=await supabase.from('navratri_contributions').insert({household_id:form.dataset.household,amount_paise:Math.round(Number(fd.get('amount'))*100),payment_method:fd.get('method'),received_by:profile.id});if(error){alert(error.message);return}await renderNavratri(c)}));
-  $('tokenForm')?.elements.house_number.addEventListener('change',e=>{const h=households.find(x=>Number(x.house_number)===Number(e.currentTarget.value));if(!h)return;$('tokenForm').elements.member_label.value='Household '+h.house_number+' — all '+h.participant_count+' members';$('tokenForm').elements.token_count.value=Math.max(1,Number(h.participant_count)||1)});
-  $('tokenForm')?.addEventListener('submit',async e=>{e.preventDefault();const fd=new FormData(e.currentTarget);const {error}=await supabase.from('navratri_tokens').insert({season_id:season.id,token_date:fd.get('token_date'),house_number:Number(fd.get('house_number')),member_label:fd.get('member_label'),token_count:Number(fd.get('token_count')),issued_by:profile.id});if(error){setMsg('tokenMsg',error.message);return}await renderNavratri(c)});
-  c.querySelectorAll('[data-household-tokens-received]').forEach(b=>b.addEventListener('click',async()=>{b.disabled=true;const house=Number(b.dataset.householdTokensReceived),count=Number(b.dataset.tokenCount);const {error}=await supabase.from('navratri_tokens').insert({season_id:season.id,token_date:selectedTokenDate,house_number:house,member_label:'Household '+house+' — all members',token_count:count,status:'received',received_at:new Date().toISOString(),issued_by:profile.id});if(error){alert(error.message);b.disabled=false;return}await renderNavratri(c)}));
-  c.querySelectorAll('[data-token-received]').forEach(b=>b.addEventListener('click',async()=>{b.disabled=true;const {error}=await supabase.from('navratri_tokens').update({status:'received',received_at:new Date().toISOString(),issued_by:profile.id}).eq('id',b.dataset.tokenReceived);if(error){alert(error.message);b.disabled=false;return}await renderNavratri(c)}));
-  c.querySelectorAll('[data-quick-token]').forEach(b=>b.addEventListener('click',()=>{const f=$('tokenForm');if(!f)return;f.elements.house_number.value=b.dataset.quickToken;f.elements.member_label.value='Member 1';f.elements.token_count.value='1';f.scrollIntoView({behavior:'smooth',block:'center'});f.elements.member_label.focus({preventScroll:true})}));
-  $('expenseForm')?.addEventListener('submit',async e=>{e.preventDefault();const fd=new FormData(e.currentTarget);const {error}=await supabase.from('navratri_expenses').insert({season_id:season.id,spent_on:fd.get('spent_on'),category:fd.get('category'),description:fd.get('description'),amount_paise:Math.round(Number(fd.get('amount'))*100),paid_from:fd.get('paid_from'),created_by:profile.id});if(error){setMsg('expenseMsg',error.message);return}await renderNavratri(c)});
+ if(!season){
+  if(activeView!=='navratri')return;
+  c.innerHTML=createForm||'<div class="panel">'+t('No Navratri season has been created yet. Please contact the administrator.','હજી નવરાત્રી સીઝન બનાવવામાં આવી નથી. એડમિનનો સંપર્ક કરો.')+'</div>';
+  bindSeasonForm(c,rerender);
+  return;
  }
+
+ const loadHouseholds=()=>supabase.from('navratri_households').select('*').eq('season_id',season.id).order('house_number');
+ let householdsRes=await loadHouseholds();
+ if(householdsRes.error)throw householdsRes.error;
+ let seedWarning='';
+ // Recovers a season whose house list was not fully created (e.g. network drop right after creating the season).
+ if(canEdit&&householdsRes.data.length<NAVRATRI_HOUSES.length){
+  const {error}=await seedNavratriHouseholds(season.id,Number(householdsRes.data[0]?.contribution_per_person_paise??NAVRATRI_DEFAULT_RATE_PAISE));
+  if(error)seedWarning=t('Some houses are missing from this season and could not be added: ','આ સીઝનમાં કેટલાક ઘર ખૂટે છે અને ઉમેરી શકાયા નથી: ')+error.message;
+  else{householdsRes=await loadHouseholds();if(householdsRes.error)throw householdsRes.error}
+ }
+ const households=householdsRes.data;
+ const householdIds=households.map(h=>h.id);
+
+ // The token desk only ever shows one day, so fetch just that day (no row limit to silently truncate).
+ const selectedDate=clampDate(navratriSelectedDate||localToday(),season.starts_on,season.ends_on);
+ navratriSelectedDate=selectedDate;
+ const empty0=Promise.resolve({data:[],error:null});
+ const [contribRes,tokenRes,expenseRes]=await Promise.all([
+  householdIds.length?supabase.from('navratri_contributions').select('id,household_id,amount_paise,paid_on,payment_method,reference_note').in('household_id',householdIds).order('paid_on',{ascending:false}):empty0,
+  supabase.from('navratri_tokens').select('*').eq('season_id',season.id).eq('token_date',selectedDate).order('house_number'),
+  admin?supabase.from('navratri_expenses').select('*').eq('season_id',season.id).order('spent_on',{ascending:false}).limit(200):empty0
+ ]);
+ for(const x of [contribRes,tokenRes,expenseRes])if(x.error)throw x.error;
+ // The person may have switched tabs while we were loading; don't paint over the other view.
+ if(activeView!=='navratri')return;
+
+ const contributions=contribRes.data, tokens=tokenRes.data, expenses=expenseRes.data;
+ const ratePaise=Number(households[0]?.contribution_per_person_paise??NAVRATRI_DEFAULT_RATE_PAISE);
+ const houses=households.map(h=>{
+  const due=Number(h.amount_due_paise)||0, members=Math.max(0,Number(h.participant_count)||0);
+  const payments=contributions.filter(x=>x.household_id===h.id);
+  const paid=payments.reduce((s,x)=>s+Number(x.amount_paise),0);
+  const dayRows=tokens.filter(x=>Number(x.house_number)===Number(h.house_number));
+  const received=dayRows.filter(x=>x.status==='received').reduce((n,x)=>n+Number(x.token_count||0),0);
+  const pendingRows=dayRows.filter(x=>x.status!=='received');
+  const pendingTokens=pendingRows.reduce((n,x)=>n+Number(x.token_count||0),0);
+  return {h,n:Number(h.house_number),due,members,payments,paid,state:navratriPaymentState(due,paid),received,pendingRows,pendingTokens,remaining:Math.max(0,members-received)};
+ });
+ const byHouse=new Map(houses.map(x=>[x.n,x]));
+ const collected=houses.reduce((s,x)=>s+x.paid,0);
+ // Sum per house: one house overpaying must not hide another house's outstanding amount.
+ const outstanding=houses.reduce((s,x)=>s+Math.max(x.due-x.paid,0),0);
+ const spent=expenses.filter(x=>x.paid_from==='navratri_contributions').reduce((s,x)=>s+Number(x.amount_paise),0);
+ const mainFundSpent=expenses.filter(x=>x.paid_from==='main_society_fund').reduce((s,x)=>s+Number(x.amount_paise),0);
+ const totalMembers=houses.reduce((n,x)=>n+x.members,0), receivedDay=houses.reduce((n,x)=>n+x.received,0);
+ const dayLabel=escapeHtml(day(selectedDate));
+
+ const hero='<div class="navratri-hero"><div><div class="eyebrow">'+t('Festival workspace','ઉત્સવ વ્યવસ્થાપન')+'</div><h3>'+escapeHtml(season.title)+'</h3><div class="tiny">'+escapeHtml(day(season.starts_on))+' — '+escapeHtml(day(season.ends_on))+'</div></div><div class="row"><span class="tag">'+(isOpen?t('Active season','ચાલુ સીઝન'):t('Season closed','સીઝન બંધ'))+'</span>'+(canEdit?' <button class="btn" id="closeSeasonBtn" type="button">'+t('Close season','સીઝન બંધ કરો')+'</button>':'')+(admin&&!isOpen&&!activeSeason?' <button class="btn" id="reopenSeasonBtn" type="button">'+t('Reopen season','સીઝન ફરી ખોલો')+'</button>':'')+'</div></div>'
+  +(!isOpen?'<div class="noticebar">'+t('This season is closed, so its records are read-only.','આ સીઝન બંધ છે, તેથી રેકોર્ડ ફક્ત જોવા માટે છે.')+'</div>':'')
+  +(seedWarning?'<div class="noticebar">'+escapeHtml(seedWarning)+'</div>':'');
+
+ const metric=(label,value,sub)=>'<div class="metric"><small>'+label+'</small><strong>'+value+'</strong><span>'+sub+'</span></div>';
+ const kpis=admin
+  ?'<div class="grid festival-kpis">'+metric(t('Collected','એકત્રિત'),money(collected),t('Recorded contributions','નોંધાયેલ ફાળો'))+metric(t('Pending contributions','બાકી ફાળો'),money(outstanding),t('Still to collect from houses','ઘરો પાસેથી હજુ લેવાનું'))+metric(t('Festival expenses','ઉત્સવ ખર્ચ'),money(spent),t('Available festival balance','ઉપલબ્ધ ઉત્સવ બેલેન્સ')+': '+money(collected-spent))+'</div>'
+  // Residents cannot read expense rows (RLS), so show only their own household figures.
+  :(()=>{const own=byHouse.get(Number(profile.house_number));return own?'<div class="grid festival-kpis">'+metric(t('Your contribution','તમારો ફાળો'),money(own.due),own.members+' '+t('members','સભ્યો')+' × '+money(ratePaise))+metric(t('Paid','ચૂકવેલ'),money(own.paid),own.state.label)+metric(t('Pending','બાકી'),money(Math.max(own.due-own.paid,0)),t('Remaining to pay','ચૂકવવાનું બાકી'))+'</div>':''})();
+
+ const houseCard=x=>{
+  const inner='<strong>'+x.n+'</strong><small>'+x.members+' '+t('members','સભ્યો')+'</small><b>'+money(x.due)+'</b><span class="house-payment-state is-'+x.state.key+'">● '+x.state.label+'</span>';
+  return '<div class="house-card-wrap">'+(admin?'<button type="button" class="house-number-card" data-house-edit="'+x.n+'" aria-label="'+t('House ','ઘર ')+x.n+'">'+inner+'</button>':'<div class="house-number-card is-static">'+inner+'</div>')+'</div>';
+ };
+ const setup='<div class="panel household-setup-panel"><div class="eyebrow">'+t('Step 1 · Setup and collection','પગલું 1 · ગણતરી અને ફાળો')+'</div><h3>'+t('Household setup & money collection','ઘરના સભ્યો અને ફાળો વસૂલાત')+'</h3>'
+  +(canEdit
+   ?'<form id="festivalRateForm" class="festival-rate-form"><div class="field"><label>'+t('Festival contribution per person (₹)','દરેક સભ્ય દીઠ ઉત્સવ ફાળો (₹)')+'</label><input name="rate" type="number" inputmode="numeric" min="0" max="100000" step="1" value="'+ratePaise/100+'" required></div><div class="rate-summary">'+t('One shared rate for every house','દરેક ઘર માટે એક જ દર')+'</div><button class="btn primary" type="submit">'+t('Apply rate to all houses','બધા ઘર માટે દર લાગુ કરો')+'</button><div id="rateMsg" class="msg"></div></form>'
+   :'<div class="noticebar">'+t('Festival contribution per person','દરેક સભ્ય દીઠ ઉત્સવ ફાળો')+': '+money(ratePaise)+'</div>')
+  +(admin?'<p class="tiny">'+t('Tap a house to set its members and record payments.','સભ્યો અને પેમેન્ટ નોંધવા ઘર પર ટેપ કરો.')+'</p>':'')
+  +'<div class="house-number-grid">'+(houses.map(houseCard).join('')||empty(t('No household record for your house in this season yet.','આ સીઝનમાં તમારા ઘરનો રેકોર્ડ હજી નથી.')))+'</div></div>';
+
+ const modal=admin?'<div class="household-modal" id="householdModal" hidden><button type="button" class="household-modal-backdrop" data-modal-close aria-label="'+t('Close','બંધ કરો')+'"></button><section class="household-modal-sheet" role="dialog" aria-modal="true" aria-labelledby="householdModalTitle"><div class="modal-grabber"></div><div class="modal-head"><h3 id="householdModalTitle">'+t('Household details','ઘરની વિગતો')+'</h3><button type="button" class="btn" data-modal-close>'+t('Close','બંધ કરો')+'</button></div>'
+  +'<form id="householdForm"><input type="hidden" name="house_number"><div class="field"><label for="householdMemberCount">'+t('How many people?','કેટલા લોકો?')+'</label><input name="participant_count" id="householdMemberCount" type="number" inputmode="numeric" min="0" max="100" step="1" required'+(canEdit?'':' disabled')+'></div><div class="calculated-due"><span>'+t('Automatic contribution total','આપમેળે ગણાયેલ ફાળો')+'</span><strong id="householdDuePreview"></strong><small id="householdRateHint"></small></div>'+(canEdit?'<div class="row modal-actions"><button class="btn primary" type="submit">'+t('Save members','સભ્યો સાચવો')+'</button></div>':'')+'<div id="householdMsg" class="msg"></div></form>'
+  +'<div class="modal-section"><h3>'+t('Payments','પેમેન્ટ')+'</h3><div class="tiny" id="householdPaidSummary"></div><div class="list payment-history" id="householdPayments"></div>'
+  +(canEdit?'<form id="contributionForm"><div class="field"><label for="contributionAmount">'+t('Amount received (₹)','મળેલી રકમ (₹)')+'</label><input id="contributionAmount" name="amount" type="number" inputmode="decimal" min="0.01" step="0.01" required></div><div class="field"><label>'+t('Payment method','પેમેન્ટ રીત')+'</label><select name="method"><option value="cash">'+t('Cash','રોકડ')+'</option><option value="upi">UPI</option><option value="bank">'+t('Bank','બેંક')+'</option><option value="other">'+t('Other','અન્ય')+'</option></select></div><button class="btn primary" type="submit">'+t('Record payment','પેમેન્ટ નોંધો')+'</button><div id="contributionMsg" class="msg"></div></form>':'')
+  +'</div></section></div>':'';
+
+ const firstWaiting=houses.find(x=>x.remaining>0);
+ const dot=x=>x.members===0?'':x.remaining===0?'<i class="token-dot green"></i>':'<i class="token-dot red"></i>';
+ const waitingRows=houses.filter(x=>x.remaining>0).map(x=>'<article class="token-pending-row"><div><strong>'+t('House ','ઘર ')+x.n+'</strong><div class="tiny">'+x.remaining+' '+t('of','માંથી')+' '+x.members+' '+t('still to collect','હજુ લેવાના બાકી')+(x.pendingTokens?' · '+x.pendingTokens+' '+t('assigned, not yet received','આપેલા, હજુ મળ્યા નથી'):'')+'</div></div><span class="token-status is-pending">● '+t('Waiting','બાકી')+'</span>'+(canEdit?'<button class="btn" type="button" data-household-tokens-received="'+x.n+'">'+t('Mark all received','બધા મળ્યા')+' ('+x.remaining+')</button>':'')+'</article>').join('');
+ const recordRows=tokens.map(x=>'<article class="token-pending-row"><div><strong>'+t('House ','ઘર ')+escapeHtml(x.house_number)+' · '+escapeHtml(x.member_label)+'</strong><div class="tiny">'+escapeHtml(x.token_count)+' '+t('token(s)','ટોકન')+'</div></div><span class="token-status '+(x.status==='received'?'is-done':'is-pending')+'">● '+(x.status==='received'?t('Received','મળી ગયા'):t('Pending','બાકી'))+'</span>'+(canEdit&&x.status!=='received'?'<button class="btn" type="button" data-token-received="'+escapeHtml(x.id)+'">'+t('Mark received','મળ્યું')+'</button>':'')+(canEdit?'<button class="btn token-undo-btn" type="button" data-token-delete="'+escapeHtml(x.id)+'">'+t('Undo / remove','ભૂલ સુધારો / દૂર કરો')+'</button>':'')+'</article>').join('');
+ const tokenDesk='<div class="panel token-workspace" style="margin-top:16px"><div class="eyebrow">'+t('Step 2 · Daily workflow','પગલું 2 · રોજિંદું કામ')+'</div><h3>'+t('Daily token desk','દૈનિક ટોકન વિતરણ')+'</h3>'
+  +'<div class="field token-day-field"><label for="tokenDayPicker">'+t('Festival day / date','ઉત્સવનો દિવસ / તારીખ')+'</label><input id="tokenDayPicker" type="date" min="'+escapeHtml(season.starts_on)+'" max="'+escapeHtml(season.ends_on)+'" value="'+escapeHtml(selectedDate)+'"></div>'
+  +'<div class="token-summary-grid"><div class="token-summary"><small>'+t('Total members','કુલ સભ્યો')+'</small><strong>'+totalMembers+'</strong></div><div class="token-summary"><small>'+t('Received this day','આ દિવસે મળ્યા')+'</small><strong>'+receivedDay+'</strong></div><div class="token-summary"><small>'+t('Waiting','બાકી')+'</small><strong>'+Math.max(0,totalMembers-receivedDay)+'</strong></div></div>'
+  +(admin?'<div class="house-selector" role="group" aria-label="'+t('Choose house number','ઘર નંબર પસંદ કરો')+'">'+houses.map(x=>'<button type="button" class="house-selector-btn" data-quick-token="'+x.n+'"'+(canEdit?'':' disabled')+'>'+x.n+'<span class="house-token-dots">'+dot(x)+'</span></button>').join('')+'</div>':'')
+  +(canEdit?'<form id="tokenForm" class="token-entry-form"><div class="field"><label>'+t('House number','ઘર નંબર')+'</label><select name="house_number">'+houses.map(x=>'<option value="'+x.n+'"'+(x===firstWaiting?' selected':'')+'>'+x.n+'</option>').join('')+'</select></div><div class="field"><label>'+t('Member name / label','સભ્યનું નામ')+'</label><input name="member_label" type="text" autocomplete="off" required maxlength="80" placeholder="'+t('Member name or Member 1','સભ્યનું નામ અથવા સભ્ય 1')+'"></div><div class="field"><label>'+t('Token count','ટોકન સંખ્યા')+'</label><input name="token_count" type="number" inputmode="numeric" min="1" max="100" step="1" value="1" required></div><button class="btn primary" type="submit">'+t('Assign token','ટોકન આપો')+'</button><span id="tokenMsg" class="msg"></span></form>':'')
+  +'<h3 class="subhead">'+t('People still waiting','હજુ રાહ જોઈ રહ્યા છે')+'</h3><div class="list">'+(waitingRows||empty(t('Nobody is waiting for tokens on this day.','આ દિવસે કોઈ ટોકન માટે બાકી નથી.')))+'</div>'
+  +'<h3 class="subhead">'+t('Token records for ','ટોકન રેકોર્ડ: ')+dayLabel+'</h3><div class="list">'+(recordRows||empty(t('No tokens recorded on this day.','આ દિવસે ટોકન નોંધાયા નથી.')))+'</div></div>';
+
+ const expensesPanel=admin?'<div class="panel" style="margin-top:16px"><h3>'+t('Daily expenses','દૈનિક ખર્ચ')+'</h3><div class="tiny">'+t('From Navratri fund','નવરાત્રી ફંડમાંથી')+': '+money(spent)+' · '+t('From main society fund','મુખ્ય સોસાયટી ફંડમાંથી')+': '+money(mainFundSpent)+'</div>'
+  +(canEdit?'<form id="expenseForm"><div class="field"><label>'+t('Date','તારીખ')+'</label><input name="spent_on" type="date" value="'+localToday()+'" required></div><div class="field"><label>'+t('Category','કેટેગરી')+'</label><select name="category"><option value="snacks">'+t('Snacks','નાસ્તો')+'</option><option value="drinks">'+t('Drinks','પીણાં')+'</option><option value="decorations">'+t('Decorations','સજાવટ')+'</option><option value="sound">'+t('Sound','સાઉન્ડ')+'</option><option value="supplies">'+t('Supplies','સામગ્રી')+'</option><option value="other">'+t('Other','અન્ય')+'</option></select></div><div class="field"><label>'+t('Description','વિગત')+'</label><input name="description" type="text" required minlength="2" maxlength="240"></div><div class="field"><label>'+t('Amount ₹','રકમ ₹')+'</label><input name="amount" type="number" inputmode="decimal" min="0.01" step="0.01" required></div><div class="field"><label>'+t('Paid from','કયા ફંડમાંથી')+'</label><select name="paid_from"><option value="navratri_contributions">'+t('Navratri contributions','નવરાત્રી ફાળો')+'</option><option value="main_society_fund">'+t('Main society fund','મુખ્ય સોસાયટી ફંડ')+'</option></select></div><button class="btn primary" type="submit">'+t('Add expense','ખર્ચ ઉમેરો')+'</button><span id="expenseMsg" class="msg"></span></form>':'')
+  +'<div class="list">'+(expenses.map(x=>'<article class="item"><div class="itemtop"><div><h3>'+escapeHtml(x.description)+'</h3><div class="tiny">'+escapeHtml(day(x.spent_on))+' · '+escapeHtml(x.category)+' · '+t('Paid from','ફંડ')+': '+(x.paid_from==='main_society_fund'?t('Main fund','મુખ્ય ફંડ'):t('Navratri fund','નવરાત્રી ફંડ'))+'</div></div><strong>'+money(x.amount_paise)+'</strong></div></article>').join('')||empty(t('No expenses recorded yet.','હજી કોઈ ખર્ચ નોંધાયો નથી.')))+'</div></div>':'';
+
+ c.innerHTML=createForm+hero+kpis+setup+tokenDesk+expensesPanel+modal;
+ bindSeasonForm(c,rerender);
+
+ $('tokenDayPicker').addEventListener('change',e=>{if(!e.currentTarget.value)return;navratriSelectedDate=e.currentTarget.value;rerender()});
+ if(!admin)return;
+
+ $('closeSeasonBtn')?.addEventListener('click',e=>{if(!confirm(t('Close this Navratri season? Its records become read-only.','આ નવરાત્રી સીઝન બંધ કરવી છે? રેકોર્ડ ફક્ત જોવા માટે રહેશે.')))return;withBusy(e.currentTarget,async()=>{const {error}=await supabase.from('navratri_seasons').update({status:'closed'}).eq('id',season.id);if(error)alert(error.message);else await rerender()})});
+ $('reopenSeasonBtn')?.addEventListener('click',e=>withBusy(e.currentTarget,async()=>{const {error}=await supabase.from('navratri_seasons').update({status:'active'}).eq('id',season.id);if(error)alert(error.message);else await rerender()}));
+
+ // Household sheet: member count + payments for one house.
+ const sheet=$('householdModal'), memberInput=$('householdMemberCount');
+ let sheetHouse=null, lastFocus=null;
+ const updateDue=()=>{const count=Math.max(0,Number(memberInput.value)||0);$('householdDuePreview').textContent=money(count*ratePaise);$('householdRateHint').textContent=money(ratePaise)+' × '+count+' '+t('people','વ્યક્તિ')};
+ const closeSheet=()=>{sheet.hidden=true;document.body.classList.remove('modal-open');document.removeEventListener('keydown',onKey);lastFocus?.focus?.()};
+ const onKey=e=>{if(e.key==='Escape')closeSheet()};
+ const openSheet=(n,opener)=>{
+  const x=byHouse.get(n);if(!x)return;sheetHouse=x;lastFocus=opener;
+  $('householdModalTitle').textContent=t('House ','ઘર ')+n;
+  $('householdForm').elements.house_number.value=n;memberInput.value=x.members;setMsg('householdMsg','');updateDue();
+  $('householdPaidSummary').textContent=t('Due','ચૂકવવાનું')+' '+money(x.due)+' · '+t('Paid','ચૂકવેલ')+' '+money(x.paid)+' · '+(x.paid>x.due?t('Extra paid','વધારાની રકમ')+' '+money(x.paid-x.due):t('Pending','બાકી')+' '+money(Math.max(x.due-x.paid,0)));
+  $('householdPayments').innerHTML=x.payments.map(p=>'<article class="item"><div class="itemtop"><div><h3>'+money(p.amount_paise)+'</h3><div class="tiny">'+escapeHtml(day(p.paid_on))+' · '+escapeHtml(p.payment_method)+'</div></div></div></article>').join('')||empty(t('No payments recorded yet.','હજી કોઈ પેમેન્ટ નોંધાયું નથી.'));
+  const amount=$('contributionAmount');if(amount)amount.value=x.due>x.paid?(x.due-x.paid)/100:'';setMsg('contributionMsg','');
+  sheet.hidden=false;document.body.classList.add('modal-open');document.addEventListener('keydown',onKey);
+  (canEdit?memberInput:sheet.querySelector('[data-modal-close].btn'))?.focus({preventScroll:true});
+ };
+ c.querySelectorAll('[data-house-edit]').forEach(b=>b.addEventListener('click',()=>openSheet(Number(b.dataset.houseEdit),b)));
+ sheet.querySelectorAll('[data-modal-close]').forEach(b=>b.addEventListener('click',closeSheet));
+ memberInput.addEventListener('input',updateDue);
+ if(!canEdit)return;
+
+ $('festivalRateForm').addEventListener('submit',e=>{e.preventDefault();const form=e.currentTarget,rate=Number(form.elements.rate.value);
+  if(!Number.isInteger(rate)||rate<0){setMsg('rateMsg',t('Enter a whole rupee amount.','પૂરા રૂપિયાની રકમ દાખલ કરો.'));return}
+  withBusy(form.querySelector('button[type=submit]'),async()=>{
+   // Update only the rate column. Writing back the whole row would overwrite member counts another admin saved meanwhile.
+   const {error}=await supabase.from('navratri_households').update({contribution_per_person_paise:rate*100,updated_at:new Date().toISOString()}).eq('season_id',season.id);
+   if(error){setMsg('rateMsg',error.message||t('Could not update rate.','દર અપડેટ થઈ શક્યો નથી.'));return}
+   await rerender();
+  });
+ });
+ $('householdForm').addEventListener('submit',e=>{e.preventDefault();const form=e.currentTarget,count=Number(form.elements.participant_count.value);
+  if(!sheetHouse||!Number.isInteger(count)||count<0||count>100){setMsg('householdMsg',t('Enter a whole number from 0 to 100.','0 થી 100 વચ્ચેની પૂર્ણ સંખ્યા દાખલ કરો.'));return}
+  withBusy(form.querySelector('button[type=submit]'),async()=>{
+   const {error}=await supabase.from('navratri_households').update({participant_count:count,contribution_per_person_paise:ratePaise,is_participating:count>0,updated_at:new Date().toISOString()}).eq('id',sheetHouse.h.id);
+   if(error){setMsg('householdMsg',error.message||t('Could not save household.','ઘરની વિગતો સાચવી શકાઈ નથી.'));return}
+   closeSheet();await rerender();
+  });
+ });
+ $('contributionForm').addEventListener('submit',e=>{e.preventDefault();const form=e.currentTarget,fd=new FormData(form),amount=toPaise(fd.get('amount'));
+  if(!sheetHouse||!amount){setMsg('contributionMsg',t('Enter a valid amount.','યોગ્ય રકમ દાખલ કરો.'));return}
+  withBusy(form.querySelector('button[type=submit]'),async()=>{
+   const {error}=await supabase.from('navratri_contributions').insert({household_id:sheetHouse.h.id,amount_paise:amount,payment_method:fd.get('method'),received_by:profile.id});
+   if(error){setMsg('contributionMsg',error.message);return}
+   closeSheet();await rerender();setMsg('appMsg',t('Payment recorded for house ','પેમેન્ટ નોંધાયું, ઘર ')+sheetHouse.n+': '+money(amount));
+  });
+ });
+
+ // Token desk
+ const tokenForm=$('tokenForm');
+ const prefillToken=n=>{const x=byHouse.get(n);if(!x)return;
+  tokenForm.elements.member_label.value='Household '+n+' — '+(x.remaining||x.members)+' members';
+  tokenForm.elements.token_count.value=Math.max(1,x.remaining-x.pendingTokens);
+  setMsg('tokenMsg',x.remaining===0&&x.members>0?t('This house has already collected all tokens for this day.','આ ઘરે આ દિવસના બધા ટોકન લઈ લીધા છે.'):'');
+ };
+ tokenForm.elements.house_number.addEventListener('change',e=>prefillToken(Number(e.currentTarget.value)));
+ c.querySelectorAll('[data-quick-token]').forEach(b=>b.addEventListener('click',()=>{
+  const select=tokenForm.elements.house_number;select.value=b.dataset.quickToken;
+  // Dispatching change keeps the custom picker label in sync and runs the prefill above.
+  select.dispatchEvent(new Event('change',{bubbles:true}));
+  tokenForm.scrollIntoView({behavior:'smooth',block:'center'});tokenForm.elements.member_label.focus({preventScroll:true});
+ }));
+ prefillToken(Number(tokenForm.elements.house_number.value));
+ const overCount=(x,adding)=>x.members>0&&x.received+x.pendingTokens+adding>x.members;
+ tokenForm.addEventListener('submit',e=>{e.preventDefault();const form=e.currentTarget,fd=new FormData(form),n=Number(fd.get('house_number')),count=Number(fd.get('token_count')),x=byHouse.get(n);
+  if(!x||!Number.isInteger(count)||count<1){setMsg('tokenMsg',t('Enter a whole token count.','ટોકનની પૂર્ણ સંખ્યા દાખલ કરો.'));return}
+  if(overCount(x,count)&&!confirm(t('House ','ઘર ')+n+t(' has ',' માં ')+x.members+t(' members and already has ',' સભ્યો છે અને પહેલેથી ')+(x.received+x.pendingTokens)+t(' tokens for this day. Add anyway?',' ટોકન છે. છતાં ઉમેરવા છે?')))return;
+  withBusy(form.querySelector('button[type=submit]'),async()=>{
+   const {error}=await supabase.from('navratri_tokens').insert({season_id:season.id,token_date:selectedDate,house_number:n,member_label:String(fd.get('member_label')).trim(),token_count:count,issued_by:profile.id});
+   if(error){setMsg('tokenMsg',error.message);return}
+   await rerender();
+  });
+ });
+ c.querySelectorAll('[data-household-tokens-received]').forEach(b=>b.addEventListener('click',()=>withBusy(b,async()=>{
+  const x=byHouse.get(Number(b.dataset.householdTokensReceived));if(!x)return;const now=new Date().toISOString();
+  // Complete this house's pending records first, then add a received row for whoever is still left,
+  // so the household is never counted beyond its member count.
+  if(x.pendingRows.length){const {error}=await supabase.from('navratri_tokens').update({status:'received',received_at:now}).in('id',x.pendingRows.map(r=>r.id));if(error){alert(error.message);return}}
+  const rest=x.remaining-x.pendingTokens;
+  if(rest>0){const {error}=await supabase.from('navratri_tokens').insert({season_id:season.id,token_date:selectedDate,house_number:x.n,member_label:'Household '+x.n+' — all members',token_count:rest,status:'received',received_at:now,issued_by:profile.id});if(error){alert(error.message);await rerender();return}}
+  await rerender();
+ })));
+ c.querySelectorAll('[data-token-received]').forEach(b=>b.addEventListener('click',()=>{
+  const row=tokens.find(r=>String(r.id)===b.dataset.tokenReceived),x=row&&byHouse.get(Number(row.house_number));
+  if(x&&x.members>0&&x.received+Number(row.token_count)>x.members&&!confirm(t('This would count more tokens than the house has members. Continue?','આથી ઘરના સભ્યો કરતાં વધુ ટોકન ગણાશે. આગળ વધવું છે?')))return;
+  withBusy(b,async()=>{const {error}=await supabase.from('navratri_tokens').update({status:'received',received_at:new Date().toISOString()}).eq('id',b.dataset.tokenReceived).eq('season_id',season.id);if(error){alert(error.message);return}await rerender()});
+ }));
+ c.querySelectorAll('[data-token-delete]').forEach(b=>b.addEventListener('click',()=>{
+  if(!confirm(t('Remove this token record? This cannot be undone.','આ ટોકન રેકોર્ડ દૂર કરવો છે? આ પાછું ફેરવી શકાશે નહીં.')))return;
+  withBusy(b,async()=>{const {error}=await supabase.from('navratri_tokens').delete().eq('id',b.dataset.tokenDelete).eq('season_id',season.id);if(error){alert(error.message);return}await rerender()});
+ }));
+
+ $('expenseForm').addEventListener('submit',e=>{e.preventDefault();const form=e.currentTarget,fd=new FormData(form),amount=toPaise(fd.get('amount'));
+  if(!amount){setMsg('expenseMsg',t('Enter a valid amount.','યોગ્ય રકમ દાખલ કરો.'));return}
+  withBusy(form.querySelector('button[type=submit]'),async()=>{
+   const {error}=await supabase.from('navratri_expenses').insert({season_id:season.id,spent_on:fd.get('spent_on'),category:fd.get('category'),description:String(fd.get('description')).trim(),amount_paise:amount,paid_from:fd.get('paid_from'),created_by:profile.id});
+   if(error){setMsg('expenseMsg',error.message);return}
+   await rerender();
+  });
+ });
+}
+function bindSeasonForm(c,rerender){
+ const form=$('seasonForm');if(!form)return;
+ form.addEventListener('submit',e=>{e.preventDefault();const fd=new FormData(form),starts=fd.get('starts_on'),ends=fd.get('ends_on');
+  if(ends<starts){setMsg('seasonMsg',t('End date must be on or after the start date.','અંતિમ તારીખ શરૂઆતની તારીખ પછી હોવી જોઈએ.'));return}
+  withBusy(form.querySelector('button[type=submit]'),async()=>{
+   const {data:newSeason,error}=await supabase.from('navratri_seasons').insert({title:String(fd.get('title')).trim(),starts_on:starts,ends_on:ends,status:'active',created_by:profile.id}).select('id').single();
+   if(error){setMsg('seasonMsg',error.message);return}
+   // If this fails, the next render retries it automatically (see seedNavratriHouseholds).
+   const {error:seedErr}=await seedNavratriHouseholds(newSeason.id,NAVRATRI_DEFAULT_RATE_PAISE);
+   if(seedErr)console.error(seedErr);
+   navratriSelectedDate=null;
+   await rerender();
+  });
+ });
 }
 
 async function submitPayment(e){e.preventDefault();const f=e.currentTarget,fd=new FormData(f),amount=Math.round(Number(fd.get('amount'))*100);const btn=f.querySelector('button[type=submit]');btn.disabled=true;try{if(!Number.isSafeInteger(amount)||amount<=0)throw new Error('amount');const {error}=await supabase.from('payment_submissions').insert({house_number:profile.house_number,submitted_by:profile.id,fund:fd.get('fund'),amount_paise:amount,payment_date:fd.get('date'),reference_note:fd.get('note')||null});if(error)throw error;f.reset();setMsg('paymentMsg',t('Submitted. It will count after admin confirmation.','સબમિટ થયું. એડમિન પુષ્ટિ પછી ગણાશે.'));await loadView()}catch(err){setMsg('paymentMsg',t('Could not submit payment. Please retry or contact admin.','પેમેન્ટ મોકલી શકાયું નથી. ફરી પ્રયાસ કરો અથવા એડમિનનો સંપર્ક કરો.'))}finally{btn.disabled=false}}
