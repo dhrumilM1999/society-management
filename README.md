@@ -313,3 +313,11 @@ The public directory is secondary utility, not the main product entry point. Sig
 - Test every house number and confirm the matching household opens, especially on phone-sized screens.
 - Verify the latest GitHub commit has deployed to Cloudflare; live deployment and browser testing are not yet confirmed.
 - No database or financial records were changed.
+
+
+## Hide per-house payment-entry list — 12 Oct 2026
+
+- [x] Hid the repeated per-house amount/payment-method entry cards marked for removal in the screenshot.
+- [x] Kept the household member selector, calculated dues, payment summary totals, and daily token workflow visible.
+- [x] This is a presentation-only change; existing contribution history and database records are preserved.
+- [ ] Verify the live deployment and festival screen in a browser/phone; not yet confirmed.
