@@ -297,6 +297,43 @@ body.modal-open{overflow:hidden}
 .switch-row input:checked{background:var(--ok)}
 .switch-row input:checked:after{transform:translateX(22px)}
 @media(min-width:900px){.hd-list{grid-template-columns:1fr 1fr}}
+/* token actions: big icon buttons */
+.act{flex:1 1 0;min-width:0;min-height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:6px 4px;border:1px solid var(--line);border-radius:14px;background:#fff;color:var(--ink);font-size:11px;font-weight:700;line-height:1.1;text-decoration:none;text-align:center}
+.act .ic{width:22px;height:22px}
+.act:active{transform:scale(.97)}
+.act:disabled{opacity:.4}
+.act-yes{background:var(--ok);border-color:var(--ok);color:#fff}
+.act-no{background:#fff7f7;border-color:#f3c4c4;color:var(--bad)}
+.act-del{color:var(--bad)}
+.act-call{background:#eff5ff;border-color:#c9dafc;color:#1d4ed8}
+.act-wa{background:#ecf8f1;border-color:#c5e8d3;color:#0f7a43}
+.act-sms{background:#f1f5f9;border-color:#dbe3ee;color:#475569}
+.act-wide{flex:1.4 1 0}
+.act-row{display:flex;gap:8px;align-items:stretch}
+.act-row.big .act{min-height:68px;font-size:13px}
+.contact-actions{display:contents}
+.act-row .contact-none{flex:1 1 100%}
+.wait-row,.rec-row{display:grid;gap:10px;padding:12px;border:1px solid var(--line);border-radius:var(--r);background:#fff}
+.wait-open{display:flex;align-items:center;gap:12px;width:100%;padding:0;border:0;background:transparent;text-align:left;min-width:0}
+.wait-info{flex:1;min-width:0;display:grid;gap:2px}
+.wait-info strong{color:var(--ink);font-size:15px;overflow-wrap:anywhere}
+.hd-num.sm{flex:0 0 44px;height:44px;font-size:18px;border-radius:12px}
+.rec-row{grid-template-columns:minmax(0,1fr) auto}
+.rec-row .act-row{grid-column:1/-1}
+.rec-row .act{min-height:48px}
+.rec-info{display:grid;gap:2px;min-width:0;overflow-wrap:anywhere}
+.ts-progress{display:flex;align-items:center;gap:12px;margin:10px 0 14px;font-size:13px;color:var(--muted)}
+.ts-bar{flex:1;height:10px;border-radius:99px;background:#e6ebf2;overflow:hidden}
+.ts-bar i{display:block;height:100%;background:var(--ok);border-radius:99px;transition:width .2s}
+.ts-section{margin:14px 0 4px;display:grid;gap:6px}
+.ts-done{color:var(--ok);font-weight:650;margin:12px 0}
+.house-selector-btn b{font-size:16px;color:var(--ink)}
+.house-selector-btn small{font-size:10px;color:var(--muted);font-weight:650}
+.house-selector-btn{min-height:58px}
+.records-details{margin-top:18px;border:1px solid var(--line);border-radius:var(--r);background:#f8fafc;padding:0 14px}
+.records-details summary{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:52px;cursor:pointer;font-weight:700;color:var(--ink);font-size:14px;list-style:none}
+.records-details summary::-webkit-details-marker{display:none}
+.records-details[open]{padding-bottom:14px}
 /* ---------- Custom select (bottom sheet on phones) ---------- */
 .mobile-select{position:relative;width:100%;min-width:0}
 .mobile-select .native-select-source{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important;clip-path:inset(50%)!important;overflow:hidden!important}
@@ -378,6 +415,13 @@ body.modal-open{overflow:hidden}
 <symbol id="i-houses" viewBox="0 0 24 24"><path d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-6h6v6"/></symbol>
 <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3zM9 12l2 2 4-4"/></symbol>
 <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 10-2.3 5.7M20 4v7h-7"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+<symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a1 1 0 01-1 1A15 15 0 014 5a1 1 0 011-1z"/></symbol>
+<symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4V5zM8 9.5h8M8 12.5h5"/></symbol>
+<symbol id="i-sms" viewBox="0 0 24 24"><path d="M3 6h18v12H3zM3 7l9 7 9-7"/></symbol>
+<symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4zM13.5 6.5l4 4"/></symbol>
+<symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></symbol>
 <symbol id="i-logout" viewBox="0 0 24 24"><path d="M15 4h4a1 1 0 011 1v14a1 1 0 01-1 1h-4M10 8l-4 4 4 4M6 12h11"/></symbol>
 </defs></svg>
 
@@ -554,7 +598,7 @@ async function saveHouse(e){
    operator precedence and closing tags stay easy to check. */
 const NAVRATRI_HOUSES=Array.from({length:19},(_,i)=>31+i);
 const NAVRATRI_DEFAULT_RATE_PAISE=50000;
-let navratriSelectedDate=null, navratriSeg='houses';
+let navratriSelectedDate=null, navratriSeg='houses', navratriSheetHouse=null;
 function localToday(){return new Date().toLocaleDateString('en-CA')}
 // Date-only strings (YYYY-MM-DD) are parsed as local dates so they never shift by a day.
 function day(v){return v&&String(v).length===10?date(v+'T00:00:00'):date(v)}
@@ -643,12 +687,14 @@ async function renderNavratri(c){
  // Call / WhatsApp / SMS links so the admin can chase a payment or a token. Message language follows the resident's preference.
  const phoneOf=n=>{const d=String(people.get(n)?.contact_phone||'').replace(/\D/g,'');return d.length===10?'91'+d:d.length>=11?d:''};
  const pick=(n,en,gu)=>(people.get(n)?.preferred_language||lang)==='gu'?gu:en;
+ const actBtn=(cls,icon,label,attrs)=>'<button type="button" class="act '+cls+'" '+(attrs||'')+' aria-label="'+escapeHtml(label)+'"><svg class="ic"><use href="#i-'+icon+'"/></svg><span>'+label+'</span></button>';
+ const actLink=(cls,icon,label,href,ext)=>'<a class="act '+cls+'" href="'+href+'"'+(ext?' target="_blank" rel="noopener"':'')+' aria-label="'+escapeHtml(label)+'"><svg class="ic"><use href="#i-'+icon+'"/></svg><span>'+label+'</span></a>';
  const contactBtns=(n,text)=>{
   if(!admin)return '';
   const ph=phoneOf(n);
   if(!ph)return '<div class="tiny contact-none">'+t('No phone saved — add it in Manage houses.','ફોન નંબર નથી — ઘર વ્યવસ્થાપનમાં ઉમેરો.')+'</div>';
   const q=encodeURIComponent(text);
-  return '<div class="contact-actions"><a class="btn sm" href="tel:+'+ph+'">'+t('Call','કૉલ')+'</a><a class="btn sm" href="https://wa.me/'+ph+'?text='+q+'" target="_blank" rel="noopener">WhatsApp</a><a class="btn sm" href="sms:+'+ph+'?&body='+q+'">SMS</a></div>';
+  return '<span class="contact-actions">'+actLink('act-call','phone',t('Call','કૉલ'),'tel:+'+ph)+actLink('act-wa','chat','WhatsApp','https://wa.me/'+ph+'?text='+q,true)+actLink('act-sms','sms','SMS','sms:+'+ph+'?&body='+q)+'</span>';
  };
  const paymentMsg=x=>{const nm=people.get(x.n)?.display_name||('House '+x.n),pend=money(x.due-x.paid);return pick(x.n,
   'Hello '+nm+', Navratri contribution for house '+x.n+': '+x.members+' members × '+money(ratePaise)+' = '+money(x.due)+'. Pending: '+pend+'. Please pay at your earliest. – Sonalpark Society Gate-2',
@@ -688,7 +734,7 @@ async function renderNavratri(c){
  const unpaid=houses.filter(x=>x.members>0&&x.paid<x.due);
  const payDue=admin?'<div class="panel pay-due-panel"><h3>'+t('Payments to collect','ફાળો લેવાનો બાકી')+' <span class="tag">'+unpaid.length+'</span></h3><div class="tiny">'+(unpaid.length?t('Total pending','કુલ બાકી')+': '+money(unpaid.reduce((n,x)=>n+x.due-x.paid,0))+' · '+t('Tokens start after a house pays in full.','ઘર સંપૂર્ણ ચૂકવે પછી જ ટોકન મળે.'):t('Nothing pending.','કંઈ બાકી નથી.'))+'</div><div class="list" style="margin-top:12px">'
   +(unpaid.map(x=>'<article class="token-pending-row pay-row"><div><strong>'+t('House ','ઘર ')+x.n+(people.get(x.n)?.display_name?' · '+escapeHtml(people.get(x.n).display_name):'')+'</strong><div class="tiny">'+memLabel(x.members)+' × '+money(ratePaise)+' = '+money(x.due)+' · '+t('Paid','ચૂકવેલ')+' '+money(x.paid)+'</div></div><b class="pay-pending-amt">'+money(x.due-x.paid)+'</b>'
-   +(canEdit?'<button class="btn primary sm" type="button" data-mark-paid="'+x.n+'">'+t('Mark paid','ચૂકવ્યા')+' ('+money(x.due-x.paid)+')</button>':'')+'<div class="contact-row">'+contactBtns(x.n,paymentMsg(x))+'</div></article>').join('')||(totalMembers?empty(t('All households have paid in full.','બધા ઘરોએ સંપૂર્ણ ચૂકવ્યું છે.')):empty(t('Add members to houses to see who owes.','કોણે ચૂકવવાનું છે તે જોવા ઘરમાં સભ્યો ઉમેરો.'))))+'</div></div>':'';
+   +(canEdit?'<button class="btn primary sm" type="button" data-mark-paid="'+x.n+'">'+t('Mark paid','ચૂકવ્યા')+' ('+money(x.due-x.paid)+')</button>':'')+'<div class="contact-row act-row">'+contactBtns(x.n,paymentMsg(x))+'</div></article>').join('')||(totalMembers?empty(t('All households have paid in full.','બધા ઘરોએ સંપૂર્ણ ચૂકવ્યું છે.')):empty(t('Add members to houses to see who owes.','કોણે ચૂકવવાનું છે તે જોવા ઘરમાં સભ્યો ઉમેરો.'))))+'</div></div>':'';
  const modal=admin?'<div class="household-modal" id="householdModal" hidden><button type="button" class="household-modal-backdrop" data-modal-close aria-label="'+t('Close','બંધ કરો')+'"></button><section class="household-modal-sheet" role="dialog" aria-modal="true" aria-labelledby="householdModalTitle"><div class="modal-grabber"></div><div class="modal-head"><h3 id="householdModalTitle">'+t('Household details','ઘરની વિગતો')+'</h3><button type="button" class="btn" data-modal-close>'+t('Close','બંધ કરો')+'</button></div>'
   +'<form id="householdForm"><input type="hidden" name="house_number"><div class="field"><label for="householdMemberCount">'+t('How many people?','કેટલા લોકો?')+'</label><div class="stepper"><button type="button" class="step-btn" data-step="-1" aria-label="'+t('One less','એક ઓછું')+'"'+(canEdit?'':' disabled')+'>−</button><input name="participant_count" id="householdMemberCount" type="number" inputmode="numeric" min="0" max="100" step="1" required'+(canEdit?'':' disabled')+'><button type="button" class="step-btn" data-step="1" aria-label="'+t('One more','એક વધુ')+'"'+(canEdit?'':' disabled')+'>+</button></div></div><div class="calculated-due"><span>'+t('Automatic contribution total','આપમેળે ગણાયેલ ફાળો')+'</span><strong id="householdDuePreview"></strong><small id="householdRateHint"></small></div>'+(canEdit?'<div class="row modal-actions"><button class="btn primary" type="submit">'+t('Save members','સભ્યો સાચવો')+'</button></div>':'')+'<div id="householdMsg" class="msg"></div></form>'
   +'<div class="modal-section"><h3>'+t('Payments','પેમેન્ટ')+'</h3><div class="tiny" id="householdPaidSummary"></div><div class="list payment-history" id="householdPayments"></div>'
@@ -703,9 +749,15 @@ async function renderNavratri(c){
  };
  const firstWaiting=houses.find(x=>x.remaining>0&&!tokenBlock(x))||houses.find(x=>x.remaining>0);
  const dot=x=>x.members===0?'':tokenBlock(x)?'<i class="token-dot amber"></i>':x.remaining===0?'<i class="token-dot green"></i>':'<i class="token-dot red"></i>';
- const waitingRows=houses.filter(x=>x.remaining>0).map(x=>'<article class="token-pending-row"><div><strong>'+t('House ','ઘર ')+x.n+'</strong><div class="tiny">'+x.remaining+' '+t('of','માંથી')+' '+x.members+' '+t('still to collect','હજુ લેવાના બાકી')+(x.pendingTokens?' · '+x.pendingTokens+' '+t('assigned, not yet received','આપેલા, હજુ મળ્યા નથી'):'')+'</div>'+(tokenBlock(x)?'<div class="tiny token-blocked-note">'+escapeHtml(tokenBlock(x))+'</div>':'')+'</div><span class="token-status '+(tokenBlock(x)?'is-hold':'is-pending')+'">● '+(tokenBlock(x)?t('On hold','રોકાયેલ'):t('Waiting','બાકી'))+'</span>'+(canEdit&&!tokenBlock(x)?'<button class="btn" type="button" data-household-tokens-received="'+x.n+'">'+t('Mark all received','બધા મળ્યા')+' ('+x.remaining+')</button>':'')+'<div class="contact-row">'+contactBtns(x.n,tokenBlock(x)&&x.members>0?paymentMsg(x):tokenMsg(x))+'</div></article>').join('');
- const recordRows=tokens.map(x=>'<article class="token-pending-row"><div><strong>'+t('House ','ઘર ')+escapeHtml(x.house_number)+' · '+escapeHtml(x.member_label)+'</strong><div class="tiny">'+escapeHtml(x.token_count)+' '+t('token(s)','ટોકન')+'</div></div><span class="token-status '+(x.status==='received'?'is-done':'is-pending')+'">● '+(x.status==='received'?t('Received','મળી ગયા'):t('Pending','બાકી'))+'</span>'
-  +(canEdit?'<div class="token-actions">'+(x.status!=='received'?'<button class="btn sm primary" type="button" data-token-received="'+escapeHtml(x.id)+'">'+t('Mark received','મળ્યું')+'</button>':'<button class="btn sm" type="button" data-token-unreceive="'+escapeHtml(x.id)+'">'+t('Mark not received','મળ્યું નથી')+'</button>')+'<button class="btn sm" type="button" data-token-edit="'+escapeHtml(x.id)+'">'+t('Edit','ફેરફાર')+'</button><button class="btn sm token-undo-btn" type="button" data-token-delete="'+escapeHtml(x.id)+'">'+t('Remove','દૂર કરો')+'</button></div>':'')+'</article>').join('');
+ const waitingRows=houses.filter(x=>x.remaining>0).map(x=>{
+  const blk=tokenBlock(x),nm=people.get(x.n)?.display_name;
+  const head='<span class="hd-num sm">'+x.n+'</span><span class="wait-info"><strong>'+escapeHtml(nm||(t('House ','ઘર ')+x.n))+'</strong><span class="tiny">'+x.remaining+' '+t('of','માંથી')+' '+x.members+' '+t('still to collect','હજુ લેવાના બાકી')+(x.pendingTokens?' · '+x.pendingTokens+' '+t('assigned, not yet received','આપેલા, હજુ મળ્યા નથી'):'')+'</span>'+(blk?'<span class="tiny token-blocked-note">'+escapeHtml(blk)+'</span>':'')+'</span><span class="token-status '+(blk?'is-hold':'is-pending')+'">● '+(blk?t('On hold','રોકાયેલ'):t('Waiting','બાકી'))+'</span>';
+  return '<article class="wait-row">'+(admin?'<button type="button" class="wait-open" data-open-house="'+x.n+'">'+head+'</button>':'<div class="wait-open">'+head+'</div>')
+   +(admin?'<div class="act-row">'+(canEdit&&!blk?actBtn('act-yes act-wide','check',t('Received','મળ્યા')+' ('+x.remaining+')','data-household-tokens-received="'+x.n+'"'):'')+contactBtns(x.n,blk&&x.members>0?paymentMsg(x):tokenMsg(x))+'</div>':'')+'</article>';
+ }).join('');
+ const recRow=x=>'<article class="rec-row"><div class="rec-info"><strong>'+t('House ','ઘર ')+escapeHtml(x.house_number)+' · '+escapeHtml(x.member_label)+'</strong><span class="tiny">'+escapeHtml(x.token_count)+' '+t('token(s)','ટોકન')+'</span></div><span class="token-status '+(x.status==='received'?'is-done':'is-pending')+'">● '+(x.status==='received'?t('Received','મળી ગયા'):t('Pending','બાકી'))+'</span>'
+  +(canEdit?'<div class="act-row">'+(x.status!=='received'?actBtn('act-yes','check',t('Yes','હા'),'data-token-received="'+escapeHtml(x.id)+'"'):actBtn('act-no','x',t('No','ના'),'data-token-unreceive="'+escapeHtml(x.id)+'"'))+actBtn('','edit',t('Edit','ફેરફાર'),'data-token-edit="'+escapeHtml(x.id)+'"')+actBtn('act-del','trash',t('Remove','દૂર'),'data-token-delete="'+escapeHtml(x.id)+'"')+'</div>':'')+'</article>';
+ const recordRows=tokens.map(recRow).join('');
  // Festival days as tappable chips, so any day's list is one tap away.
  const dayChips=(()=>{const out=[];const [y,m,d]=season.starts_on.split('-').map(Number);for(let i=0;i<31;i++){const iso=new Date(Date.UTC(y,m-1,d+i)).toISOString().slice(0,10);if(iso>season.ends_on)break;out.push(iso)}
   return '<div class="day-chips" role="group" aria-label="'+t('Festival days','ઉત્સવના દિવસો')+'">'+out.map((iso,i)=>'<button type="button" class="day-chip'+(iso===selectedDate?' active':'')+'" data-day="'+iso+'" aria-pressed="'+(iso===selectedDate)+'"><small>'+t('Day ','દિવસ ')+(i+1)+(iso===localToday()?' · '+t('Today','આજે'):'')+'</small><b>'+escapeHtml(day(iso).replace(/,?\s*\d{4}$/,''))+'</b></button>').join('')+'</div>'})();
@@ -713,10 +765,10 @@ async function renderNavratri(c){
  const tokenDesk='<div class="panel token-workspace"><div class="eyebrow">'+t('Step 2 · Daily workflow','પગલું 2 · રોજિંદું કામ')+'</div><h3>'+t('Daily token desk','દૈનિક ટોકન વિતરણ')+'</h3>'
   +dayChips+'<div class="field token-day-field"><label for="tokenDayPicker">'+t('Token date','ટોકન તારીખ')+'</label><input id="tokenDayPicker" type="date" min="'+escapeHtml(season.starts_on)+'" max="'+escapeHtml(season.ends_on)+'" value="'+escapeHtml(selectedDate)+'"></div>'
   +'<div class="token-summary-grid"><div class="token-summary"><small>'+t('Total members','કુલ સભ્યો')+'</small><strong>'+totalMembers+'</strong></div><div class="token-summary"><small>'+t('Received this day','આ દિવસે મળ્યા')+'</small><strong>'+receivedDay+'</strong></div><div class="token-summary"><small>'+t('Waiting','બાકી')+'</small><strong>'+Math.max(0,totalMembers-receivedDay)+'</strong></div></div>'
-  +(admin?'<div class="house-selector" role="group" aria-label="'+t('Choose house number','ઘર નંબર પસંદ કરો')+'">'+houses.map(x=>'<button type="button" class="house-selector-btn" data-quick-token="'+x.n+'"'+(canEdit?'':' disabled')+'>'+x.n+'<span class="house-token-dots">'+dot(x)+'</span></button>').join('')+'</div>':'')
-  +(admin?'<div class="tiny token-legend"><i class="token-dot green"></i> '+t('collected','લઈ લીધા')+' · <i class="token-dot red"></i> '+t('waiting','બાકી')+' · <i class="token-dot amber"></i> '+t('payment pending / no members','પેમેન્ટ બાકી / સભ્યો નથી')+'</div>':'')+(canEdit?'<form id="tokenForm" class="token-entry-form"><div id="tokenStatus" class="token-status-box" hidden></div><div class="field"><label>'+t('House number','ઘર નંબર')+'</label><select name="house_number">'+houses.map(x=>'<option value="'+x.n+'"'+(x===firstWaiting?' selected':'')+'>'+x.n+'</option>').join('')+'</select></div><div class="field"><label>'+t('Member name / label','સભ્યનું નામ')+'</label><input name="member_label" type="text" autocomplete="off" required maxlength="80" placeholder="'+t('Member name or Member 1','સભ્યનું નામ અથવા સભ્ય 1')+'"></div><div class="field"><label>'+t('Token count','ટોકન સંખ્યા')+'</label><input name="token_count" type="number" inputmode="numeric" min="1" max="100" step="1" value="1" required></div><button class="btn primary" type="submit">'+t('Assign token','ટોકન આપો')+'</button><span id="tokenMsg" class="msg"></span></form>':'')
-  +'<h3 class="subhead">'+t('People still waiting','હજુ રાહ જોઈ રહ્યા છે')+'</h3><div class="list">'+(waitingRows||empty(t('Nobody is waiting for tokens on this day.','આ દિવસે કોઈ ટોકન માટે બાકી નથી.')))+'</div>'
-  +'<h3 class="subhead">'+t('Token records for ','ટોકન રેકોર્ડ: ')+dayLabel+' <span class="tag">'+tokens.length+'</span></h3><div class="list">'+(recordRows||empty(t('No tokens recorded on this day.','આ દિવસે ટોકન નોંધાયા નથી.')))+'</div></div>';
+  +(admin?'<div class="house-selector" role="group" aria-label="'+t('Choose house number','ઘર નંબર પસંદ કરો')+'">'+houses.map(x=>'<button type="button" class="house-selector-btn" data-quick-token="'+x.n+'"'+(canEdit?'':' disabled')+'><b>'+x.n+'</b><small>'+(x.members?x.received+'/'+x.members:'–')+'</small><span class="house-token-dots">'+dot(x)+'</span></button>').join('')+'</div>':'')
+  +(admin?'<div class="tiny token-legend"><i class="token-dot green"></i> '+t('collected','લઈ લીધા')+' · <i class="token-dot red"></i> '+t('waiting','બાકી')+' · <i class="token-dot amber"></i> '+t('payment pending / no members','પેમેન્ટ બાકી / સભ્યો નથી')+' · '+t('Tap a house to open it','ઘર ખોલવા ટેપ કરો')+'</div>':'')
+  +'<h3 class="subhead">'+t('People still waiting','હજુ રાહ જોઈ રહ્યા છે')+' <span class="tag">'+houses.filter(x=>x.remaining>0).length+'</span></h3><div class="list">'+(waitingRows||empty(t('Nobody is waiting for tokens on this day.','આ દિવસે કોઈ ટોકન માટે બાકી નથી.')))+'</div>'
+  +'<details class="records-details"><summary>'+t('All token records for ','બધા ટોકન રેકોર્ડ: ')+dayLabel+' <span class="tag">'+tokens.length+'</span></summary><div class="list" style="margin-top:10px">'+(recordRows||empty(t('No tokens recorded on this day.','આ દિવસે ટોકન નોંધાયા નથી.')))+'</div></details></div>';
 
  const EXPENSE_CATS=[['snacks',t('Snacks','નાસ્તો')],['drinks',t('Drinks','પીણાં')],['decorations',t('Decorations','સજાવટ')],['sound',t('Sound','સાઉન્ડ')],['supplies',t('Supplies','સામગ્રી')],['other',t('Other','અન્ય')]];
  const catLabel=k=>(EXPENSE_CATS.find(c0=>c0[0]===k)||[k,k])[1];
@@ -739,7 +791,7 @@ async function renderNavratri(c){
  if(!segs.some(x=>x[0]===navratriSeg))navratriSeg='houses';
  const segBar='<div class="segmented" role="tablist">'+segs.map(([k,l])=>'<button type="button" role="tab" class="seg-btn" data-seg="'+k+'">'+l+'</button>').join('')+'</div>';
  const pane=(k,html)=>'<div data-pane="'+k+'">'+html+'</div>';
- c.innerHTML=createForm+hero+kpis+segBar+pane('houses',setup+payDue)+pane('tokens',tokenDesk)+(admin?pane('expenses',expensesPanel):'')+modal+tokenEditModal;
+ c.innerHTML=createForm+hero+kpis+segBar+pane('houses',setup+payDue)+pane('tokens',tokenDesk)+(admin?pane('expenses',expensesPanel):'')+modal+(canEdit?'<div class="household-modal" id="tokenSheet" hidden><button type="button" class="household-modal-backdrop" data-ts-close aria-label="'+t('Close','બંધ કરો')+'"></button><section class="household-modal-sheet" role="dialog" aria-modal="true"><div class="modal-grabber"></div><div id="tokenSheetBody"></div></section></div>':'')+tokenEditModal;
  bindSeasonForm(c,rerender);
  const showSeg=k=>{navratriSeg=k;c.querySelectorAll('[data-pane]').forEach(p=>{p.hidden=p.dataset.pane!==k});c.querySelectorAll('[data-seg]').forEach(b=>{const on=b.dataset.seg===k;b.classList.toggle('active',on);b.setAttribute('aria-selected',String(on))})};
  c.querySelectorAll('[data-seg]').forEach(b=>b.addEventListener('click',()=>showSeg(b.dataset.seg)));
@@ -827,72 +879,94 @@ async function renderNavratri(c){
  }));
 
  // Token desk
- const tokenForm=$('tokenForm');
- const prefillToken=n=>{const x=byHouse.get(n);if(!x)return;
-  tokenForm.elements.member_label.value='Household '+n+' — '+(x.remaining||x.members)+' members';
-  tokenForm.elements.token_count.value=Math.max(1,x.remaining-x.pendingTokens);
-  const blk=tokenBlock(x),box=$('tokenStatus'),submit=tokenForm.querySelector('button[type=submit]');
-  box.hidden=!blk;box.textContent=blk?t('House ','ઘર ')+n+': '+blk:'';
-  submit.disabled=!!blk;
-  setMsg('tokenMsg',!blk&&x.remaining===0&&x.members>0?t('This house has already collected all tokens for this day.','આ ઘરે આ દિવસના બધા ટોકન લઈ લીધા છે.'):'');
- };
- tokenForm.elements.house_number.addEventListener('change',e=>prefillToken(Number(e.currentTarget.value)));
- c.querySelectorAll('[data-quick-token]').forEach(b=>b.addEventListener('click',()=>{
-  const select=tokenForm.elements.house_number;select.value=b.dataset.quickToken;
-  // Dispatching change keeps the custom picker label in sync and runs the prefill above.
-  select.dispatchEvent(new Event('change',{bubbles:true}));
-  tokenForm.scrollIntoView({behavior:'smooth',block:'center'});tokenForm.elements.member_label.focus({preventScroll:true});
- }));
- prefillToken(Number(tokenForm.elements.house_number.value));
- const overCount=(x,adding)=>x.members>0&&x.received+x.pendingTokens+adding>x.members;
- tokenForm.addEventListener('submit',e=>{e.preventDefault();const form=e.currentTarget,fd=new FormData(form),n=Number(fd.get('house_number')),count=Number(fd.get('token_count')),x=byHouse.get(n);
-  if(!x||!Number.isInteger(count)||count<1){setMsg('tokenMsg',t('Enter a whole token count.','ટોકનની પૂર્ણ સંખ્યા દાખલ કરો.'));return}
-  if(tokenBlock(x)){setMsg('tokenMsg',tokenBlock(x));return}
-  if(overCount(x,count)&&!confirm(t('House ','ઘર ')+n+t(' has ',' માં ')+x.members+t(' members and already has ',' સભ્યો છે અને પહેલેથી ')+(x.received+x.pendingTokens)+t(' tokens for this day. Add anyway?',' ટોકન છે. છતાં ઉમેરવા છે?')))return;
-  withBusy(form.querySelector('button[type=submit]'),async()=>{
-   const {error}=await supabase.from('navratri_tokens').insert({season_id:season.id,token_date:selectedDate,house_number:n,member_label:String(fd.get('member_label')).trim(),token_count:count,issued_by:profile.id});
-   if(error){setMsg('tokenMsg',error.message);return}
-   await rerender();
-  });
- });
- c.querySelectorAll('[data-household-tokens-received]').forEach(b=>b.addEventListener('click',()=>withBusy(b,async()=>{
-  const x=byHouse.get(Number(b.dataset.householdTokensReceived));if(!x)return;const now=new Date().toISOString();
-  // Complete this house's pending records first, then add a received row for whoever is still left,
-  // so the household is never counted beyond its member count.
-  if(x.pendingRows.length){const {error}=await supabase.from('navratri_tokens').update({status:'received',received_at:now}).in('id',x.pendingRows.map(r=>r.id));if(error){alert(error.message);return}}
-  const rest=x.remaining-x.pendingTokens;
-  if(rest>0){const {error}=await supabase.from('navratri_tokens').insert({season_id:season.id,token_date:selectedDate,house_number:x.n,member_label:'Household '+x.n+' — all members',token_count:rest,status:'received',received_at:now,issued_by:profile.id});if(error){alert(error.message);await rerender();return}}
-  await rerender();
- })));
- c.querySelectorAll('[data-token-received]').forEach(b=>b.addEventListener('click',()=>{
-  const row=tokens.find(r=>String(r.id)===b.dataset.tokenReceived),x=row&&byHouse.get(Number(row.house_number));
-  if(x&&x.members>0&&x.received+Number(row.token_count)>x.members&&!confirm(t('This would count more tokens than the house has members. Continue?','આથી ઘરના સભ્યો કરતાં વધુ ટોકન ગણાશે. આગળ વધવું છે?')))return;
-  withBusy(b,async()=>{const {error}=await supabase.from('navratri_tokens').update({status:'received',received_at:new Date().toISOString()}).eq('id',b.dataset.tokenReceived).eq('season_id',season.id);if(error){alert(error.message);return}await rerender()});
- }));
- c.querySelectorAll('[data-token-unreceive]').forEach(b=>b.addEventListener('click',()=>{
-  if(!confirm(t('Mark this token as NOT received?','આ ટોકન "મળ્યું નથી" તરીકે નોંધવું છે?')))return;
-  withBusy(b,async()=>{const {error}=await supabase.from('navratri_tokens').update({status:'pending',received_at:null}).eq('id',b.dataset.tokenUnreceive).eq('season_id',season.id);if(error){alert(error.message);return}await rerender()});
- }));
- // Fix a token given by mistake: change house, name or count.
  const tSheet=$('tokenEditModal'),tForm=$('tokenEditForm');
- const closeTEdit=()=>{tSheet.hidden=true;document.body.classList.remove('modal-open')};
+ const closeTEdit=()=>{tSheet.hidden=true;document.body.classList.toggle('modal-open',!$('tokenSheet').hidden)};
  tSheet.querySelectorAll('[data-tedit-close]').forEach(b=>b.addEventListener('click',closeTEdit));
- c.querySelectorAll('[data-token-edit]').forEach(b=>b.addEventListener('click',()=>{
-  const row=tokens.find(r=>String(r.id)===b.dataset.tokenEdit);if(!row)return;
-  tForm.elements.id.value=row.id;tForm.elements.member_label.value=row.member_label;tForm.elements.token_count.value=row.token_count;
-  tForm.elements.house_number.value=row.house_number;tForm.elements.house_number.dispatchEvent(new Event('change',{bubbles:true}));
-  setMsg('tokenEditMsg','');tSheet.hidden=false;document.body.classList.add('modal-open');
- }));
  tForm.addEventListener('submit',e=>{e.preventDefault();const fd=new FormData(tForm),n=Number(fd.get('house_number')),count=Number(fd.get('token_count')),row=tokens.find(r=>String(r.id)===String(fd.get('id'))),target=byHouse.get(n);
   if(!row||!target||!Number.isInteger(count)||count<1){setMsg('tokenEditMsg',t('Enter a whole token count.','ટોકનની પૂર્ણ સંખ્યા દાખલ કરો.'));return}
   if(n!==Number(row.house_number)&&tokenBlock(target)){setMsg('tokenEditMsg',t('House ','ઘર ')+n+': '+tokenBlock(target));return}
   withBusy(tForm.querySelector('button[type=submit]'),async()=>{const {error}=await supabase.from('navratri_tokens').update({house_number:n,token_count:count,member_label:String(fd.get('member_label')).trim()}).eq('id',row.id).eq('season_id',season.id);
    if(error){setMsg('tokenEditMsg',error.message);return}closeTEdit();await rerender();setMsg('appMsg',t('Token updated.','ટોકન સુધાર્યું.'))});
  });
- c.querySelectorAll('[data-token-delete]').forEach(b=>b.addEventListener('click',()=>{
-  if(!confirm(t('Remove this token record? This cannot be undone.','આ ટોકન રેકોર્ડ દૂર કરવો છે? આ પાછું ફેરવી શકાશે નહીં.')))return;
-  withBusy(b,async()=>{const {error}=await supabase.from('navratri_tokens').delete().eq('id',b.dataset.tokenDelete).eq('season_id',season.id);if(error){alert(error.message);return}await rerender()});
- }));
+ // Complete this house's pending records first, then add a received row for whoever is still left,
+ // so the household is never counted beyond its member count.
+ const receiveAll=async x=>{const now=new Date().toISOString();
+  if(x.pendingRows.length){const {error}=await supabase.from('navratri_tokens').update({status:'received',received_at:now}).in('id',x.pendingRows.map(r=>r.id));if(error){alert(error.message);return}}
+  const rest=x.remaining-x.pendingTokens;
+  if(rest>0){const {error}=await supabase.from('navratri_tokens').insert({season_id:season.id,token_date:selectedDate,house_number:x.n,member_label:'Household '+x.n+' — all members',token_count:rest,status:'received',received_at:now,issued_by:profile.id});if(error){alert(error.message);await rerender();return}}
+  await rerender();
+ };
+ // Row actions (yes / no / edit / remove) are bound for both the page lists and the house sheet.
+ const bindTokenActions=root=>{
+  root.querySelectorAll('[data-household-tokens-received]').forEach(b=>b.addEventListener('click',()=>withBusy(b,()=>{const x=byHouse.get(Number(b.dataset.householdTokensReceived));return x&&receiveAll(x)})));
+  root.querySelectorAll('[data-token-received]').forEach(b=>b.addEventListener('click',()=>{
+   const row=tokens.find(r=>String(r.id)===b.dataset.tokenReceived),x=row&&byHouse.get(Number(row.house_number));
+   if(x&&x.members>0&&x.received+Number(row.token_count)>x.members&&!confirm(t('This would count more tokens than the house has members. Continue?','આથી ઘરના સભ્યો કરતાં વધુ ટોકન ગણાશે. આગળ વધવું છે?')))return;
+   withBusy(b,async()=>{const {error}=await supabase.from('navratri_tokens').update({status:'received',received_at:new Date().toISOString()}).eq('id',b.dataset.tokenReceived).eq('season_id',season.id);if(error){alert(error.message);return}await rerender()});
+  }));
+  root.querySelectorAll('[data-token-unreceive]').forEach(b=>b.addEventListener('click',()=>{
+   if(!confirm(t('Mark this token as NOT received?','આ ટોકન "મળ્યું નથી" તરીકે નોંધવું છે?')))return;
+   withBusy(b,async()=>{const {error}=await supabase.from('navratri_tokens').update({status:'pending',received_at:null}).eq('id',b.dataset.tokenUnreceive).eq('season_id',season.id);if(error){alert(error.message);return}await rerender()});
+  }));
+  root.querySelectorAll('[data-token-edit]').forEach(b=>b.addEventListener('click',()=>{
+   const row=tokens.find(r=>String(r.id)===b.dataset.tokenEdit);if(!row)return;
+   tForm.elements.id.value=row.id;tForm.elements.member_label.value=row.member_label;tForm.elements.token_count.value=row.token_count;
+   tForm.elements.house_number.value=row.house_number;tForm.elements.house_number.dispatchEvent(new Event('change',{bubbles:true}));
+   setMsg('tokenEditMsg','');tSheet.hidden=false;document.body.classList.add('modal-open');
+  }));
+  root.querySelectorAll('[data-token-delete]').forEach(b=>b.addEventListener('click',()=>{
+   if(!confirm(t('Remove this token record? This cannot be undone.','આ ટોકન રેકોર્ડ દૂર કરવો છે? આ પાછું ફેરવી શકાશે નહીં.')))return;
+   withBusy(b,async()=>{const {error}=await supabase.from('navratri_tokens').delete().eq('id',b.dataset.tokenDelete).eq('season_id',season.id);if(error){alert(error.message);return}await rerender()});
+  }));
+ };
+ bindTokenActions(c);
+
+ // House sheet: everything for one house on the selected day.
+ const tsSheet=$('tokenSheet'),tsBody=$('tokenSheetBody');
+ const closeTs=()=>{tsSheet.hidden=true;document.body.classList.remove('modal-open');navratriSheetHouse=null};
+ tsSheet.querySelectorAll('[data-ts-close]').forEach(b=>b.addEventListener('click',closeTs));
+ const overCount=(x,adding)=>x.members>0&&x.received+x.pendingTokens+adding>x.members;
+ const openTs=n=>{
+  const x=byHouse.get(n);if(!x)return;navratriSheetHouse=n;
+  const nm=people.get(n)?.display_name||'',blk=tokenBlock(x),rows=tokens.filter(r=>Number(r.house_number)===n);
+  const pct=x.members?Math.min(100,Math.round(x.received/x.members*100)):0;
+  const label='Household '+n+' — '+(x.members===1?'1 member':x.members+' members');
+  let h='<div class="modal-head"><div><h3>'+t('House ','ઘર ')+n+(nm?' · '+escapeHtml(nm):'')+'</h3><div class="tiny">'+memLabel(x.members)+' · '+escapeHtml(day(selectedDate))+'</div></div><button type="button" class="btn" data-ts-close>'+t('Close','બંધ કરો')+'</button></div>'
+   +'<div class="ts-progress"><div class="ts-bar"><i style="width:'+pct+'%"></i></div><span><b>'+x.received+'</b> / '+x.members+' '+t('received','મળ્યા')+'</span></div>';
+  if(blk){
+   h+='<div id="tsBlock" class="token-status-box">'+t('House ','ઘર ')+n+': '+escapeHtml(blk)+'</div>'
+    +(x.members>0?'<div class="ts-section"><div class="tiny">'+t('Remind about payment','ચુકવણી માટે યાદ અપાવો')+'</div><div class="act-row">'+contactBtns(n,paymentMsg(x))+'</div></div>':'')
+    +'<p class="tiny">'+t('Record the payment in the Houses tab to unlock tokens.','ટોકન ખોલવા ઘર ટેબમાં ચુકવણી નોંધો.')+'</p>';
+  }else{
+   h+='<div class="act-row big">'+actBtn('act-yes','check',t('Yes, received','હા, મળ્યા')+(x.remaining?' ('+x.remaining+')':''),'data-ts-yes'+(x.remaining?'':' disabled'))+actBtn('act-no','x',t('Not received','મળ્યા નથી'),'data-ts-no'+(x.received?'':' disabled'))+'</div>'
+    +(x.remaining>0?'<div class="ts-section"><div class="tiny">'+t('Remind about tokens','ટોકન માટે યાદ અપાવો')+'</div><div class="act-row">'+contactBtns(n,tokenMsg(x))+'</div></div>':'<p class="tiny ts-done">'+t('All tokens collected for this day.','આ દિવસના બધા ટોકન લઈ લીધા છે.')+'</p>')
+    +'<form id="tokenForm" class="token-entry-form"><h3>'+t('Give a token','ટોકન આપો')+'</h3><input type="hidden" name="house_number" value="'+n+'"><div class="field"><label>'+t('Member name / label','સભ્યનું નામ')+'</label><input name="member_label" type="text" autocomplete="off" required maxlength="80" value="'+escapeHtml(label)+'"></div><div class="field"><label>'+t('Token count','ટોકન સંખ્યા')+'</label><div class="stepper"><button type="button" class="step-btn" data-tstep="-1" aria-label="'+t('One less','એક ઓછું')+'">−</button><input name="token_count" type="number" inputmode="numeric" min="1" max="100" step="1" value="'+Math.max(1,x.remaining-x.pendingTokens)+'" required><button type="button" class="step-btn" data-tstep="1" aria-label="'+t('One more','એક વધુ')+'">+</button></div></div><button class="btn primary" type="submit">'+t('Assign token','ટોકન આપો')+'</button><div id="tokenMsg" class="msg"></div></form>';
+  }
+  if(rows.length)h+='<h3 class="subhead">'+t('Tokens on ','ટોકન: ')+escapeHtml(day(selectedDate))+' <span class="tag">'+rows.length+'</span></h3><div class="list">'+rows.map(recRow).join('')+'</div>';
+  tsBody.innerHTML=h;
+  tsBody.querySelectorAll('[data-ts-close]').forEach(b=>b.addEventListener('click',closeTs));
+  bindTokenActions(tsBody);
+  tsBody.querySelector('[data-ts-yes]')?.addEventListener('click',e=>withBusy(e.currentTarget,()=>receiveAll(x)));
+  tsBody.querySelector('[data-ts-no]')?.addEventListener('click',e=>{const ids=rows.filter(r=>r.status==='received').map(r=>r.id);if(!ids.length)return;
+   if(!confirm(t('Mark all of house ','ઘર ')+n+t(' as NOT received?',' ના બધા ટોકન "મળ્યા નથી" કરવા છે?')))return;
+   withBusy(e.currentTarget,async()=>{const {error}=await supabase.from('navratri_tokens').update({status:'pending',received_at:null}).in('id',ids).eq('season_id',season.id);if(error){alert(error.message);return}await rerender()})});
+  const tokenForm=$('tokenForm');
+  if(tokenForm){
+   tokenForm.querySelectorAll('[data-tstep]').forEach(b=>b.addEventListener('click',()=>{const f=tokenForm.elements.token_count;f.value=Math.min(100,Math.max(1,(Number(f.value)||1)+Number(b.dataset.tstep)))}));
+   tokenForm.addEventListener('submit',e=>{e.preventDefault();const form=e.currentTarget,fd=new FormData(form),count=Number(fd.get('token_count'));
+    if(!Number.isInteger(count)||count<1){setMsg('tokenMsg',t('Enter a whole token count.','ટોકનની પૂર્ણ સંખ્યા દાખલ કરો.'));return}
+    if(overCount(x,count)&&!confirm(t('House ','ઘર ')+n+t(' has ',' માં ')+x.members+t(' members and already has ',' સભ્યો છે અને પહેલેથી ')+(x.received+x.pendingTokens)+t(' tokens for this day. Add anyway?',' ટોકન છે. છતાં ઉમેરવા છે?')))return;
+    withBusy(form.querySelector('button[type=submit]'),async()=>{
+     const {error}=await supabase.from('navratri_tokens').insert({season_id:season.id,token_date:selectedDate,house_number:n,member_label:String(fd.get('member_label')).trim(),token_count:count,issued_by:profile.id});
+     if(error){setMsg('tokenMsg',error.message);return}
+     await rerender();
+    });
+   });
+  }
+  tsSheet.hidden=false;document.body.classList.add('modal-open');
+ };
+ c.querySelectorAll('[data-quick-token],[data-open-house]').forEach(b=>b.addEventListener('click',()=>openTs(Number(b.dataset.quickToken||b.dataset.openHouse))));
+ if(navratriSheetHouse)openTs(navratriSheetHouse);
 
  const expForm=$('expenseForm');
  expForm.querySelectorAll('[data-group]').forEach(g=>g.addEventListener('click',e=>{const b=e.target.closest('[data-val]');if(!b)return;g.querySelectorAll('[data-val]').forEach(x=>{x.classList.toggle('active',x===b);x.setAttribute('aria-pressed',String(x===b))});expForm.elements[g.dataset.group].value=b.dataset.val}));

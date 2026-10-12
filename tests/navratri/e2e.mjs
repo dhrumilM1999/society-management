@@ -38,7 +38,7 @@ ok((await db(a, 'navratri_seasons')).length === 1, 'double-tap creates exactly o
 ok((await db(a, 'navratri_households')).length === 19, '19 households seeded');
 ok(await a.inputValue('#tokenDayPicker') === '2026-10-17', 'token day clamps to season start when today is before the festival');
 ok(await a.locator('#expenseForm').count() === 1, 'expense form is rendered');
-ok((await a.locator('h3.subhead').allInnerTexts()).some(x => x.startsWith('Token records for')), 'token records section is rendered');
+ok((await a.locator('.records-details summary').innerText()).startsWith('All token records for'), 'token records section is rendered');
 
 await a.click('[data-house-edit="35"]'); await a.waitForTimeout(150);
 ok(await a.locator('#householdModal').isVisible(), 'tapping house 35 opens the sheet');
@@ -74,20 +74,25 @@ await a.click('[data-house-edit="36"]'); await a.waitForTimeout(150);
 ok(!(await a.locator('#refundBox').isVisible()), 'refund box hidden once nothing is overpaid');
 await a.keyboard.press('Escape');
 
-await seg(a, 'tokens'); await a.click('[data-quick-token="35"]');
+await seg(a, 'tokens');
 // Payment gate: house 37 owes money, so no tokens until it pays.
 await a.click('[data-quick-token="37"]'); await a.waitForTimeout(200);
-ok(await a.locator('#tokenStatus').isVisible() && (await text(a, '#tokenStatus')).includes('37'), 'unpaid house shows its payment status in the token form');
-ok(await a.locator('#tokenForm button[type=submit]').isDisabled(), 'assign token is blocked for an unpaid house');
-ok(await a.locator('[data-household-tokens-received="37"]').count() === 0, 'unpaid house has no Mark received button');
+ok(await a.locator('#tsBlock').isVisible() && (await text(a, '#tsBlock')).includes('37'), 'unpaid house shows its payment status in its sheet');
+ok(await a.locator('#tokenForm').count() === 0, 'no token form for an unpaid house');
+ok(await a.locator('[data-household-tokens-received="37"]').count() === 0, 'unpaid house has no Received button');
 ok((await a.locator('[data-quick-token="37"] .token-dot.amber').count()) === 1, 'unpaid house shows the amber dot');
+await a.click('#tokenSheetBody [data-ts-close]');
 await a.click('[data-quick-token="35"]'); await a.waitForTimeout(200);
-ok(!(await a.locator('#tokenForm button[type=submit]').isDisabled()), 'paid house can be issued tokens'); await a.waitForTimeout(200);
-ok(await a.inputValue('#tokenForm [name=house_number]') === '35', 'house selector preselects house 35');
-ok((await text(a, '#tokenForm .mobile-select-trigger')).trim().startsWith('35'), 'custom picker label shows 35 too');
+ok(await a.locator('#tokenForm button[type=submit]').isEnabled(), 'paid house can be issued tokens');
+ok(await a.inputValue('#tokenForm [name=house_number]') === '35', 'house sheet is for house 35');
 ok(await a.inputValue('#tokenForm [name=token_count]') === '6', 'token count prefilled with remaining members');
+await a.click('#tokenForm [data-tstep="-1"]'); await a.click('#tokenForm [data-tstep="-1"]');
+ok(await a.inputValue('#tokenForm [name=token_count]') === '4', '– button lowers the token count (6 -> 4)');
 await a.fill('#tokenForm [name=token_count]', '2'); await a.click('#tokenForm button[type=submit]'); await settle(a);
-await a.click('[data-household-tokens-received="35"]'); await settle(a);
+ok(await a.locator('#tokenSheet').isVisible(), 'house sheet stays open after assigning a token');
+await a.click('#tokenSheet [data-ts-yes]'); await settle(a);
+ok((await text(a, '#tokenSheet .ts-progress')).includes('6'), 'sheet shows 6 received after Yes');
+await a.click('#tokenSheetBody [data-ts-close]');
 const t35 = (await db(a, 'navratri_tokens')).filter(x => x.house_number === 35);
 ok(t35.every(x => x.status === 'received') && t35.reduce((s, x) => s + x.token_count, 0) === 6, 'Mark all received completes pending rows without over-counting (total 6)');
 ok(await a.locator('[data-household-tokens-received="35"]').count() === 0, 'house 35 leaves the waiting list');
@@ -162,14 +167,21 @@ ok((await s2.locator('h3.subhead').allInnerTexts()).some(x => x.includes('18 Oct
 await s2.click('[data-quick-token="33"]'); await s2.fill('#tokenForm [name=token_count]', '3'); await s2.click('#tokenForm button[type=submit]'); await settle(s2);
 let tk = (await db(s2, 'navratri_tokens')).filter(x => x.token_date === '2026-10-18' && x.house_number === 33);
 ok(tk.length === 1 && tk[0].token_count === 3, 'token assigned on the selected date');
-await s2.click('[data-token-edit]'); await s2.waitForTimeout(150);
+await s2.screenshot({ path: out + '/phone-token-sheet.png' });
+await s2.click('#tokenSheet [data-token-edit]'); await s2.waitForTimeout(150);
 await s2.fill('#tokenEditForm [name=token_count]', '1'); await s2.click('#tokenEditForm button[type=submit]'); await settle(s2);
 tk = (await db(s2, 'navratri_tokens')).filter(x => x.token_date === '2026-10-18' && x.house_number === 33);
 ok(tk[0].token_count === 1, 'token given by mistake can be edited (3 -> 1)');
-await s2.click('[data-token-received]'); await settle(s2);
+await s2.click('#tokenSheet [data-token-received]'); await settle(s2);
 ok((await db(s2, 'navratri_tokens')).find(x => x.token_date === '2026-10-18').status === 'received', 'token marked received');
-await s2.click('[data-token-unreceive]'); await settle(s2);
+await s2.click('#tokenSheet [data-token-unreceive]'); await settle(s2);
 ok((await db(s2, 'navratri_tokens')).find(x => x.token_date === '2026-10-18').status !== 'received', 'received can be undone');
+// 'No' on the whole house, then remove the token from the sheet; the received house stays as a top button
+await s2.click('#tokenSheetBody [data-ts-close]');
+await s2.click('[data-quick-token="33"]'); await s2.waitForTimeout(150);
+await s2.click('#tokenSheet [data-token-delete]'); await settle(s2);
+ok((await db(s2, 'navratri_tokens')).filter(x => x.token_date === '2026-10-18' && x.house_number === 33).length === 0, 'token removed from the house sheet');
+await s2.click('#tokenSheetBody [data-ts-close]');
 // Expenses: same day chips, quick entry
 await seg(s2, 'expenses');
 ok(await s2.locator('[data-pane="expenses"] .day-chip.active').innerText().then(x => x.includes('18 Oct')), 'expense tab shows the same selected day (18 Oct)');
