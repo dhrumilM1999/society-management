@@ -225,6 +225,9 @@ input[type=date]{display:block;min-height:48px}
 .house-selector-btn{min-width:0;min-height:44px;padding:8px 4px;border:1px solid #d9dde6;border-radius:10px;background:#fff;color:#13151b;font-weight:650;font-size:14px}
 .house-selector-btn:hover,.house-selector-btn:focus-visible{border-color:#13151b;background:#f3f5f8;outline:2px solid #a9b0c4;outline-offset:1px}
 @media(max-width:760px){.house-selector{grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}.house-selector-btn{min-height:46px;border-radius:12px}}
+
+/* Hide the crossed-out per-house payment-entry list; keep totals and household selector */
+.household-setup-panel>.list{display:none!important}
 </style>
 </head>
 <body><div class="shell">
