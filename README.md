@@ -321,3 +321,19 @@ The public directory is secondary utility, not the main product entry point. Sig
 - [x] Kept the household member selector, calculated dues, payment summary totals, and daily token workflow visible.
 - [x] This is a presentation-only change; existing contribution history and database records are preserved.
 - [ ] Verify the live deployment and festival screen in a browser/phone; not yet confirmed.
+
+
+## Festival day-by-day token controls — 12 Oct 2026
+
+### Done in code
+- Added a date picker constrained to the active festival dates in the daily token desk.
+- Daily received/waiting summaries and token lists now filter by the selected festival date, rather than always showing today.
+- Added green/red receipt indicators on house-number buttons for the selected date.
+- Added an admin-only **Undo / remove** action on token records, with a confirmation prompt; this deletes only the selected token record so an accidental entry can be corrected.
+- Kept the selected date when the view refreshes and use it for new token assignments.
+
+### Still to verify
+- Confirm database RLS allows admin deletion of token rows; if not, use a safe status/correction approach or update the policy deliberately.
+- Test date changes, day summaries, dots, token creation, receipt updates, and undo in browser and on phone.
+- Confirm live Cloudflare deployment. These checks have not been performed yet.
+- No production token records were modified as part of this code change.
