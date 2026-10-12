@@ -144,6 +144,36 @@ ok(await s1.locator('#moreSheet [data-view="houses"]').isVisible(), 'More sheet 
 await s1.click('#moreSheet [data-view="funds"]'); await s1.waitForTimeout(400);
 ok(!(await s1.locator('#moreSheet').isVisible()) && (await text(s1, '#viewTitle')) === 'Fund records', 'More sheet navigates and closes');
 await s1.screenshot({ path: out + '/phone-funds.png' });
+// Collect payment (with call / message links), then token day chips, edit and undo
+const s2 = await open('?role=admin&seed=1');
+ok(await s2.locator('.pay-due-panel [data-mark-paid="33"]').count() === 1, 'unpaid house 33 appears in Payments to collect');
+const wa = await s2.locator('.pay-due-panel a[href^="https://wa.me/919876543210"]').getAttribute('href');
+ok(!!wa && decodeURIComponent(wa).includes('house 33'), 'WhatsApp link carries a payment reminder message');
+ok(await s2.locator('.pay-due-panel a[href="tel:+919876543210"]').count() === 1, 'Call link is present');
+await s2.click('.pay-due-panel [data-mark-paid="33"]'); await settle(s2);
+ok((await s2.locator('[data-house-edit="33"] .house-payment-state').innerText()).includes('Paid'), 'Mark paid records the balance and house 33 shows Paid');
+ok(await s2.locator('.pay-due-panel [data-mark-paid="33"]').count() === 0, 'paid house leaves Payments to collect');
+await seg(s2, 'tokens');
+const chips = await s2.locator('.day-chip').count();
+ok(chips === 9, 'token desk shows a chip for each festival day (' + chips + ')');
+await s2.click('.day-chip:nth-child(2)'); await settle(s2);
+ok(await s2.inputValue('#tokenDayPicker') === '2026-10-18', 'tapping a day chip selects that date');
+ok((await s2.locator('h3.subhead').allInnerTexts()).some(x => x.includes('18 Oct 2026')), 'list header shows the selected date');
+await s2.click('[data-quick-token="33"]'); await s2.fill('#tokenForm [name=token_count]', '3'); await s2.click('#tokenForm button[type=submit]'); await settle(s2);
+let tk = (await db(s2, 'navratri_tokens')).filter(x => x.token_date === '2026-10-18' && x.house_number === 33);
+ok(tk.length === 1 && tk[0].token_count === 3, 'token assigned on the selected date');
+await s2.click('[data-token-edit]'); await s2.waitForTimeout(150);
+await s2.fill('#tokenEditForm [name=token_count]', '1'); await s2.click('#tokenEditForm button[type=submit]'); await settle(s2);
+tk = (await db(s2, 'navratri_tokens')).filter(x => x.token_date === '2026-10-18' && x.house_number === 33);
+ok(tk[0].token_count === 1, 'token given by mistake can be edited (3 -> 1)');
+await s2.click('[data-token-received]'); await settle(s2);
+ok((await db(s2, 'navratri_tokens')).find(x => x.token_date === '2026-10-18').status === 'received', 'token marked received');
+await s2.click('[data-token-unreceive]'); await settle(s2);
+ok((await db(s2, 'navratri_tokens')).find(x => x.token_date === '2026-10-18').status !== 'received', 'received can be undone');
+// an unpaid house is chased with the payment message, not the token one
+await s2.click('[data-quick-token="31"]'); await s2.waitForTimeout(100);
+ok(!(await s2.evaluate(() => document.documentElement.scrollWidth > innerWidth)), 'no horizontal overflow on the token desk');
+await s2.screenshot({ path: out + '/phone-tokens.png', fullPage: true });
 const d = await open('?role=admin&seed=1', 1280);
 ok(await d.locator('.sidebar').isVisible() && !(await d.locator('.tabbar').isVisible()), 'desktop shows the left sidebar, not the tab bar');
 await d.screenshot({ path: out + '/desktop-navratri.png', fullPage: true });
