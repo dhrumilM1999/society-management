@@ -272,6 +272,31 @@ body.modal-open{overflow:hidden}
 .quick-amounts .opt-chip{min-height:38px;padding:0 14px;font-size:13px;background:#f4f7fb}
 .day-total{margin-left:auto;font-size:15px;color:var(--ink)}
 .subhead:has(.day-total){display:flex;align-items:center;gap:8px}
+/* manage houses */
+.house-summary{margin-top:0}
+.hd-list{display:grid;gap:10px}
+.hd-card{display:flex;align-items:stretch;gap:8px;background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:6px}
+.hd-card.is-off{opacity:.75;background:#fafbfd}
+.hd-open{flex:1;min-width:0;display:flex;align-items:center;gap:14px;padding:8px 8px;border:0;background:transparent;text-align:left;border-radius:12px;min-height:72px}
+.hd-open:active{background:var(--brand-soft)}
+.hd-num{flex:0 0 52px;height:52px;border-radius:14px;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;font-size:22px;font-weight:800;letter-spacing:-.03em}
+.hd-main{min-width:0;display:grid;gap:3px}
+.hd-main strong{color:var(--ink);font-size:15px;overflow-wrap:anywhere}
+.hd-main small{font-size:12px;color:var(--muted)}
+.hd-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.tag-warn{background:var(--warn-soft);color:var(--warn)}
+.tag-ok{background:var(--ok-soft);color:var(--ok)}
+.tag-off{background:#eef1f5;color:var(--muted)}
+.hd-call{align-self:center;margin-right:6px;text-decoration:none}
+.pw-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+.switch-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px;border:1px solid var(--line);border-radius:var(--r-sm);background:#f8fafc;margin:14px 0}
+.switch-row strong{display:block;color:var(--ink);font-size:14px}
+.switch-row small{color:var(--muted);font-size:12px;line-height:1.4}
+.switch-row input{appearance:none;-webkit-appearance:none;flex:0 0 52px;width:52px;height:30px;border-radius:99px;background:#cbd5e1;position:relative;transition:background .15s;cursor:pointer;margin:0}
+.switch-row input:after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 3px #0003;transition:transform .15s}
+.switch-row input:checked{background:var(--ok)}
+.switch-row input:checked:after{transform:translateX(22px)}
+@media(min-width:900px){.hd-list{grid-template-columns:1fr 1fr}}
 /* ---------- Custom select (bottom sheet on phones) ---------- */
 .mobile-select{position:relative;width:100%;min-width:0}
 .mobile-select .native-select-source{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important;clip-path:inset(50%)!important;overflow:hidden!important}
@@ -470,23 +495,57 @@ else{heading(t('Not available','ઉપલબ્ધ નથી'),'');c.innerHTML=e
 }catch(err){console.error(err);c.innerHTML='<div class="panel"><h3>'+t('Could not load this section','આ વિભાગ લોડ થઈ શક્યો નથી')+'</h3><p class="muted">'+t('Please refresh. If the problem continues, ask the administrator to check your account permissions.','રિફ્રેશ કરો. સમસ્યા રહે તો એડમિનને પરવાનગી તપાસવા કહો.')+'</p></div>'}}
 
 async function renderHouses(c){
- heading('Manage houses','Create or update resident accounts for houses 31–49.');
+ heading(t('Manage houses','ઘર વ્યવસ્થાપન'),t('Name, phone and login for every house (31–49). Tap a house to edit.','દરેક ઘરનું નામ, ફોન અને લોગિન (31–49). ફેરફાર માટે ઘર પર ટેપ કરો.'));
  const [hr,pr]=await Promise.all([supabase.from('houses').select('house_number,is_active').order('house_number'),supabase.from('profiles').select('display_name,house_number,contact_phone,preferred_language,role')]);
  if(hr.error)throw hr.error;if(pr.error)throw pr.error;
  const people=new Map(pr.data.filter(p=>p.role==='resident').map(p=>[p.house_number,p]));
- c.innerHTML='<div class="panel"><h3>Add / edit resident</h3><form id="houseForm"><div class="field"><label>House number</label><select name="house_number">'+hr.data.map(h=>'<option value="'+h.house_number+'">'+h.house_number+'</option>').join('')+'</select></div><div class="field"><label>Resident name</label><input name="display_name" type="text" autocomplete="name" required minlength="2" maxlength="120"></div><div class="field"><label>Contact phone (private)</label><input name="contact_phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="30"></div><div class="field"><label>Temporary password (8+ characters; blank keeps existing)</label><input name="password" type="password" minlength="8" autocomplete="new-password"></div><div class="field"><label>Preferred language</label><select name="preferred_language"><option value="gu">ગુજરાતી</option><option value="en">English</option></select></div><div class="field"><label><input name="is_active" type="checkbox" checked style="width:auto"> Allow login for this house</label></div><button class="btn primary" type="submit">Save house</button><div id="houseFormMsg" class="msg"></div></form></div><h3 class="subhead">All 19 houses</h3><div class="list">'+hr.data.map(h=>{const p=people.get(h.house_number);return '<article class="item"><div class="itemtop"><div><h3>House '+h.house_number+' · '+escapeHtml(p?.display_name||'No resident added')+'</h3><div class="tiny">'+escapeHtml(p?.contact_phone||'No contact saved')+'</div></div><span class="tag">'+(h.is_active?'Active':'Inactive')+'</span></div><button class="btn" data-edit-house="'+h.house_number+'">Edit</button> <span class="tiny">Login ID: '+h.house_number+'</span></article>'}).join('')+'</div>';
- const form=$('houseForm');
- function fill(){const n=Number(form.elements.house_number.value),p=people.get(n),h=hr.data.find(x=>x.house_number===n);form.elements.display_name.value=p?.display_name||'';form.elements.contact_phone.value=p?.contact_phone||'';form.elements.password.value='';form.elements.preferred_language.value=p?.preferred_language||'gu';form.elements.is_active.checked=h?.is_active!==false;setMsg('houseFormMsg','')}
- form.elements.house_number.addEventListener('change',fill);
- c.querySelectorAll('[data-edit-house]').forEach(b=>b.addEventListener('click',()=>{form.elements.house_number.value=b.dataset.editHouse;fill();form.scrollIntoView({behavior:'smooth'})}));
- form.addEventListener('submit',saveHouse);fill();
+ const digits=v=>String(v||'').replace(/\D/g,'');
+ const withName=hr.data.filter(h=>people.get(h.house_number)?.display_name).length;
+ const withPhone=hr.data.filter(h=>digits(people.get(h.house_number)?.contact_phone).length>=10).length;
+ const total=hr.data.length;
+ const summary='<div class="grid house-summary"><div class="metric"><small>'+t('Residents added','રહેવાસી ઉમેર્યા')+'</small><strong>'+withName+' / '+total+'</strong><span>'+(total-withName?(total-withName)+' '+t('houses still need a name','ઘરોને હજી નામ જોઈએ'):t('All houses have a name','બધા ઘરોનાં નામ છે'))+'</span></div><div class="metric"><small>'+t('Phone numbers saved','ફોન નંબર સાચવ્યા')+'</small><strong>'+withPhone+' / '+total+'</strong><span>'+(total-withPhone?(total-withPhone)+' '+t('missing — needed for call / WhatsApp reminders','બાકી — કૉલ / WhatsApp રિમાઇન્ડર માટે જરૂરી'):t('Reminders can reach every house','દરેક ઘરને રિમાઇન્ડર મોકલી શકાય'))+'</span></div></div>';
+ const card=h=>{
+  const p=people.get(h.house_number),ph=digits(p?.contact_phone),missing=!p?.display_name||ph.length<10;
+  return '<article class="hd-card'+(h.is_active?'':' is-off')+'"><button type="button" class="hd-open" data-edit-house="'+h.house_number+'" aria-label="'+t('Edit house ','ઘર ફેરફાર ')+h.house_number+'"><span class="hd-num">'+h.house_number+'</span><span class="hd-main"><strong>'+escapeHtml(p?.display_name||t('Resident not added yet','રહેવાસી હજી ઉમેર્યા નથી'))+'</strong><small>'+(ph?escapeHtml(p.contact_phone):t('No phone saved','ફોન નંબર નથી'))+' · '+(p?.preferred_language==='en'?'English':'ગુજરાતી')+'</small><span class="hd-tags"><span class="tag '+(h.is_active?'':'tag-off')+'">'+(h.is_active?t('Login on','લોગિન ચાલુ'):t('Login off','લોગિન બંધ'))+'</span>'+(missing?'<span class="tag tag-warn">'+t('Details missing','વિગત બાકી')+'</span>':'<span class="tag tag-ok">'+t('Complete','પૂર્ણ')+'</span>')+'</span></span></button>'+(ph.length>=10?'<a class="btn sm hd-call" href="tel:+'+(ph.length===10?'91'+ph:ph)+'">'+t('Call','કૉલ')+'</a>':'')+'</article>';
+ };
+ const sheet='<div class="household-modal" id="houseSheet" hidden><button type="button" class="household-modal-backdrop" data-hs-close aria-label="'+t('Close','બંધ કરો')+'"></button><section class="household-modal-sheet" role="dialog" aria-modal="true" aria-labelledby="hsTitle"><div class="modal-grabber"></div><div class="modal-head"><div><h3 id="hsTitle">'+t('House','ઘર')+'</h3><div class="tiny" id="hsLogin"></div></div><button type="button" class="btn" data-hs-close>'+t('Close','બંધ કરો')+'</button></div>'
+  +'<form id="houseForm" novalidate><input type="hidden" name="house_number"><input type="hidden" name="preferred_language" value="gu">'
+  +'<div class="field"><label for="hsName">'+t('Resident name','રહેવાસીનું નામ')+' *</label><input id="hsName" name="display_name" type="text" autocomplete="off" required minlength="2" maxlength="120" placeholder="'+t('Full name','પૂરું નામ')+'"></div>'
+  +'<div class="field"><label for="hsPhone">'+t('Mobile number','મોબાઇલ નંબર')+'</label><input id="hsPhone" name="contact_phone" type="tel" inputmode="tel" autocomplete="off" maxlength="30" placeholder="98XXXXXXXX"><div class="form-hint">'+t('10-digit number. Used only for your call / WhatsApp reminders; residents cannot see it.','10 અંકનો નંબર. ફક્ત તમારા કૉલ / WhatsApp રિમાઇન્ડર માટે; રહેવાસીઓને દેખાતો નથી.')+'</div></div>'
+  +'<div class="field"><label>'+t('Preferred language','પસંદગીની ભાષા')+'</label><div class="chip-group two" data-group="preferred_language"><button type="button" class="opt-chip active" data-val="gu" aria-pressed="true">ગુજરાતી</button><button type="button" class="opt-chip" data-val="en" aria-pressed="false">English</button></div></div>'
+  +'<div class="field"><label for="hsPass">'+t('Password','પાસવર્ડ')+'</label><div class="pw-row"><input id="hsPass" name="password" type="password" minlength="8" autocomplete="new-password" placeholder="'+t('Leave blank to keep current','ખાલી રાખો તો હાલનો રહેશે')+'"><button type="button" class="btn" id="hsPassToggle">'+t('Show','બતાવો')+'</button></div><div class="form-hint">'+t('At least 8 characters. Set a new one only when giving access or resetting.','ઓછામાં ઓછા 8 અક્ષર. ફક્ત નવી એક્સેસ અથવા રીસેટ વખતે બદલો.')+'</div></div>'
+  +'<label class="switch-row" for="hsActive"><span><strong>'+t('Allow login','લોગિનની મંજૂરી')+'</strong><small>'+t('Turn off to block this house from signing in.','આ ઘરને સાઇન ઇન કરતા રોકવા બંધ કરો.')+'</small></span><input id="hsActive" name="is_active" type="checkbox" checked></label>'
+  +'<button class="btn primary" type="submit">'+t('Save details','વિગત સાચવો')+'</button><div id="houseFormMsg" class="msg" role="alert"></div></form></section></div>';
+ c.innerHTML=summary+'<div class="hd-list">'+hr.data.map(card).join('')+'</div>'+sheet;
+ const modal=$('houseSheet'),form=$('houseForm');
+ let opener=null;
+ const closeSheet=()=>{modal.hidden=true;document.body.classList.remove('modal-open');opener?.focus?.()};
+ const setLang=v=>{form.elements.preferred_language.value=v;form.querySelectorAll('[data-group="preferred_language"] [data-val]').forEach(b=>{const on=b.dataset.val===v;b.classList.toggle('active',on);b.setAttribute('aria-pressed',String(on))})};
+ form.querySelector('[data-group="preferred_language"]').addEventListener('click',e=>{const b=e.target.closest('[data-val]');if(b)setLang(b.dataset.val)});
+ $('hsPassToggle').addEventListener('click',e=>{const f=form.elements.password,show=f.type==='password';f.type=show?'text':'password';e.currentTarget.textContent=show?t('Hide','છુપાવો'):t('Show','બતાવો')});
+ modal.querySelectorAll('[data-hs-close]').forEach(b=>b.addEventListener('click',closeSheet));
+ modal.addEventListener('keydown',e=>{if(e.key==='Escape')closeSheet()});
+ c.querySelectorAll('[data-edit-house]').forEach(b=>b.addEventListener('click',()=>{
+  const n=Number(b.dataset.editHouse),p=people.get(n),h=hr.data.find(x=>x.house_number===n);opener=b;
+  $('hsTitle').textContent=t('House ','ઘર ')+n;$('hsLogin').textContent=t('Login ID: ','લોગિન ID: ')+n+' · '+t('sign in with the house number','ઘર નંબરથી સાઇન ઇન')+(p?'':' · '+t('new resident','નવા રહેવાસી'));
+  form.elements.house_number.value=n;form.elements.display_name.value=p?.display_name||'';form.elements.contact_phone.value=p?.contact_phone||'';form.elements.password.value='';form.elements.password.type='password';$('hsPassToggle').textContent=t('Show','બતાવો');
+  setLang(p?.preferred_language||'gu');form.elements.is_active.checked=h?.is_active!==false;setMsg('houseFormMsg','');
+  modal.hidden=false;document.body.classList.add('modal-open');form.elements.display_name.focus({preventScroll:true});
+ }));
+ form.addEventListener('submit',saveHouse);
 }
 async function saveHouse(e){
- e.preventDefault();const form=e.currentTarget,fd=new FormData(form),btn=form.querySelector('button[type=submit]');btn.disabled=true;
- try{const {data:{session:s}}=await supabase.auth.getSession();if(!s)throw new Error('Sign in again.');
- const res=await fetch(SUPABASE_URL+'/functions/v1/manage-house-resident',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+s.access_token,'apikey':SUPABASE_PUBLISHABLE_KEY},body:JSON.stringify({house_number:Number(fd.get('house_number')),display_name:fd.get('display_name'),contact_phone:fd.get('contact_phone'),password:fd.get('password'),preferred_language:fd.get('preferred_language'),is_active:fd.get('is_active')==='on'})});
- const out=await res.json();if(!res.ok||!out.ok)throw new Error(out.error||'Could not save.');await loadPublicHouses();await renderHouses($('viewContent'));setMsg('appMsg','Saved. Resident login number: '+out.login_id+'. '+out.message);
- }catch(err){setMsg('houseFormMsg',err.message||'Could not save. Check fields and permissions.')}finally{btn.disabled=false}
+ e.preventDefault();const form=e.currentTarget,fd=new FormData(form),btn=form.querySelector('button[type=submit]');
+ const name=String(fd.get('display_name')||'').trim(),phone=String(fd.get('contact_phone')||'').trim(),pw=String(fd.get('password')||'');
+ if(name.length<2){setMsg('houseFormMsg',t('Enter the resident name.','રહેવાસીનું નામ લખો.'));form.elements.display_name.focus();return}
+ if(phone&&String(phone).replace(/\D/g,'').length<10){setMsg('houseFormMsg',t('Enter a valid 10-digit mobile number, or leave it empty.','10 અંકનો સાચો મોબાઇલ નંબર લખો, અથવા ખાલી રાખો.'));form.elements.contact_phone.focus();return}
+ if(pw&&pw.length<8){setMsg('houseFormMsg',t('Password must be at least 8 characters.','પાસવર્ડ ઓછામાં ઓછા 8 અક્ષરનો હોવો જોઈએ.'));form.elements.password.focus();return}
+ btn.disabled=true;setMsg('houseFormMsg','');
+ try{const {data:{session:s}}=await supabase.auth.getSession();if(!s)throw new Error(t('Sign in again.','ફરી સાઇન ઇન કરો.'));
+ const res=await fetch(SUPABASE_URL+'/functions/v1/manage-house-resident',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+s.access_token,'apikey':SUPABASE_PUBLISHABLE_KEY},body:JSON.stringify({house_number:Number(fd.get('house_number')),display_name:name,contact_phone:phone,password:pw,preferred_language:fd.get('preferred_language'),is_active:fd.get('is_active')==='on'})});
+ const out=await res.json().catch(()=>({}));if(!res.ok||!out.ok)throw new Error(out.error||t('Could not save. Check the details and try again.','સાચવી શકાયું નથી. વિગત તપાસો અને ફરી પ્રયાસ કરો.'));
+ document.body.classList.remove('modal-open');await loadPublicHouses();await renderHouses($('viewContent'));setMsg('appMsg',t('Saved house ','ઘર સાચવ્યું: ')+fd.get('house_number')+' · '+t('login ID ','લોગિન ID ')+out.login_id+(out.message?' · '+out.message:''));
+ }catch(err){setMsg('houseFormMsg',err.message||t('Could not save. Check fields and permissions.','સાચવી શકાયું નથી. વિગત અને પરવાનગી તપાસો.'))}finally{btn.disabled=false}
 }
 
 
