@@ -337,3 +337,12 @@ The public directory is secondary utility, not the main product entry point. Sig
 - Test date changes, day summaries, dots, token creation, receipt updates, and undo in browser and on phone.
 - Confirm live Cloudflare deployment. These checks have not been performed yet.
 - No production token records were modified as part of this code change.
+
+
+## Household-level token collection — 12 Oct 2026
+
+- [x] Replaced one waiting row per individual placeholder with one row per house, showing the number of tokens still needed for that household.
+- [x] Added **Mark all received (N)** to record the remaining household token count in one action, for example House 35 can collect all 6 members' tokens together.
+- [x] Changing the house in the assignment form auto-fills a household label and the saved member count as the token count.
+- [ ] Verify mixed prior individual records reconcile correctly with household-level counts and that a household cannot be over-counted.
+- [ ] Test on browser/phone and confirm Cloudflare deployment. No existing token records were changed by this UI update.
