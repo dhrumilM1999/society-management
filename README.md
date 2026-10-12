@@ -300,3 +300,16 @@ The public directory is secondary utility, not the main product entry point. Sig
 - Review the Navratri screen on a phone and confirm the shorter flow is easier to scan.
 - Verify the latest commit has deployed to Cloudflare; browser and live deployment checks have not been performed.
 - This was a presentation-only change; no database or financial records were changed.
+
+
+## Festival house-number quick selector — 12 Oct 2026
+
+### Done in code
+- Added a compact 31–49 number-button selector above the household cards.
+- Tapping a house number opens that household's existing details sheet, where the participant count and calculated contribution can be reviewed/edited by an admin.
+- Reused the existing household-detail action so the selector and house cards behave consistently.
+
+### Still to verify
+- Test every house number and confirm the matching household opens, especially on phone-sized screens.
+- Verify the latest GitHub commit has deployed to Cloudflare; live deployment and browser testing are not yet confirmed.
+- No database or financial records were changed.
