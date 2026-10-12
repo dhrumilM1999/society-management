@@ -53,16 +53,17 @@ ok((await db(a, 'navratri_contributions')).length === 1, 'double-tap records exa
 await a.keyboard.press('Escape');
 
 for (const [n, m, pay] of [[36, 1, '1000'], [37, 1, null]]) {
-  await a.click(`[data-house-edit="${n}"]`); await a.fill('#householdMemberCount', String(m)); await a.click('#householdForm button[type=submit]'); await settle(a);
-  if (pay) { await a.click(`[data-house-edit="${n}"]`); await a.fill('#contributionAmount', pay); await a.click('#contributionForm button[type=submit]'); await settle(a); }
+  await seg(a, 'houses'); await a.click(`[data-house-edit="${n}"]`); await a.fill('#householdMemberCount', String(m)); await a.click('#householdForm button[type=submit]'); await settle(a);
+  if (pay) { await seg(a, 'houses'); await a.click(`[data-house-edit="${n}"]`); await a.fill('#contributionAmount', pay); await a.click('#contributionForm button[type=submit]'); await settle(a); }
 }
+await seg(a, 'houses');
 const kpi = await a.locator('.festival-kpis .metric strong').allInnerTexts();
 ok(kpi[0].includes('4,000') && kpi[1].includes('500'), 'pending is per-house (overpay at 36 does not hide 37 owing): ' + kpi.join(' | '));
 ok((await a.locator('[data-house-edit="31"] .house-payment-state').innerText()).includes('Not participating'), 'house with 0 members shows Not participating');
 ok((await a.locator('[data-house-edit="36"] .house-payment-state').innerText()).includes('Overpaid'), 'house 36 shows Overpaid with amount');
 
 // Overpayment refund: house 36 overpaid -> record refund -> back to Paid
-await a.click('[data-house-edit="36"]'); await a.waitForTimeout(150);
+await seg(a, 'houses'); await a.click('[data-house-edit="36"]'); await a.waitForTimeout(150);
 ok(await a.locator('#refundBox').isVisible(), 'overpaid house shows the refund box');
 const refundAmt = await a.inputValue('#refundAmount');
 await a.click('#refundForm button[type=submit]'); await settle(a);
@@ -73,7 +74,15 @@ await a.click('[data-house-edit="36"]'); await a.waitForTimeout(150);
 ok(!(await a.locator('#refundBox').isVisible()), 'refund box hidden once nothing is overpaid');
 await a.keyboard.press('Escape');
 
-await seg(a, 'tokens'); await a.click('[data-quick-token="35"]'); await a.waitForTimeout(200);
+await seg(a, 'tokens'); await a.click('[data-quick-token="35"]');
+// Payment gate: house 37 owes money, so no tokens until it pays.
+await a.click('[data-quick-token="37"]'); await a.waitForTimeout(200);
+ok(await a.locator('#tokenStatus').isVisible() && (await text(a, '#tokenStatus')).includes('37'), 'unpaid house shows its payment status in the token form');
+ok(await a.locator('#tokenForm button[type=submit]').isDisabled(), 'assign token is blocked for an unpaid house');
+ok(await a.locator('[data-household-tokens-received="37"]').count() === 0, 'unpaid house has no Mark received button');
+ok((await a.locator('[data-quick-token="37"] .token-dot.amber').count()) === 1, 'unpaid house shows the amber dot');
+await a.click('[data-quick-token="35"]'); await a.waitForTimeout(200);
+ok(!(await a.locator('#tokenForm button[type=submit]').isDisabled()), 'paid house can be issued tokens'); await a.waitForTimeout(200);
 ok(await a.inputValue('#tokenForm [name=house_number]') === '35', 'house selector preselects house 35');
 ok((await text(a, '#tokenForm .mobile-select-trigger')).trim().startsWith('35'), 'custom picker label shows 35 too');
 ok(await a.inputValue('#tokenForm [name=token_count]') === '6', 'token count prefilled with remaining members');

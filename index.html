@@ -196,7 +196,11 @@ button.house-number-card:active{transform:scale(.97)}
 .house-selector-btn:disabled{opacity:.55;cursor:default}
 .house-token-dots{display:flex;gap:4px;justify-content:center;min-height:8px}
 .token-dot{display:inline-block;width:8px;height:8px;border-radius:50%}
-.token-dot.green{background:#27834a}.token-dot.red{background:#d64545}
+.token-dot.green{background:#27834a}.token-dot.red{background:#d64545}.token-dot.amber{background:#d97706}
+.token-legend{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:4px 0 8px}
+.token-status.is-hold{color:var(--warn)}
+.token-blocked-note{color:var(--warn);margin-top:2px}
+.token-status-box{padding:12px 14px;border:1px solid #fcd9a8;background:#fff8ec;color:#92400e;border-radius:var(--r-sm);font-size:13px;font-weight:600;margin-bottom:8px}
 .token-entry-form{padding:14px;background:#f4f7fb;border:1px solid var(--line);border-radius:var(--r-sm);margin:12px 0}
 .token-pending-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:var(--r-sm);background:#fff}
 .token-pending-row>div{min-width:0;overflow-wrap:anywhere}
@@ -577,15 +581,21 @@ async function renderNavratri(c){
   +(canEdit?'<div id="refundBox" class="refund-box" hidden><strong>'+t('Overpaid — return the extra amount','વધુ ચૂકવેલ — વધારાની રકમ પાછી આપો')+'</strong><div class="tiny" id="refundHint"></div><form id="refundForm"><div class="field"><label for="refundAmount">'+t('Amount to return (₹)','પરત આપવાની રકમ (₹)')+'</label><input id="refundAmount" name="amount" type="number" inputmode="decimal" min="0.01" step="0.01" required></div><div class="field"><label>'+t('Returned by','કેવી રીતે પરત આપ્યા')+'</label><select name="method"><option value="cash">'+t('Cash','રોકડ')+'</option><option value="upi">UPI</option><option value="bank">'+t('Bank','બેંક')+'</option><option value="other">'+t('Other','અન્ય')+'</option></select></div><button class="btn primary" type="submit">'+t('Record refund','પરત રકમ નોંધો')+'</button><div id="refundMsg" class="msg"></div></form></div><form id="contributionForm"><div class="field"><label for="contributionAmount">'+t('Amount received (₹)','મળેલી રકમ (₹)')+'</label><input id="contributionAmount" name="amount" type="number" inputmode="decimal" min="0.01" step="0.01" required></div><div class="field"><label>'+t('Payment method','પેમેન્ટ રીત')+'</label><select name="method"><option value="cash">'+t('Cash','રોકડ')+'</option><option value="upi">UPI</option><option value="bank">'+t('Bank','બેંક')+'</option><option value="other">'+t('Other','અન્ય')+'</option></select></div><button class="btn primary" type="submit">'+t('Record payment','પેમેન્ટ નોંધો')+'</button><div id="contributionMsg" class="msg"></div></form>':'')
   +'</div></section></div>':'';
 
- const firstWaiting=houses.find(x=>x.remaining>0);
- const dot=x=>x.members===0?'':x.remaining===0?'<i class="token-dot green"></i>':'<i class="token-dot red"></i>';
- const waitingRows=houses.filter(x=>x.remaining>0).map(x=>'<article class="token-pending-row"><div><strong>'+t('House ','ઘર ')+x.n+'</strong><div class="tiny">'+x.remaining+' '+t('of','માંથી')+' '+x.members+' '+t('still to collect','હજુ લેવાના બાકી')+(x.pendingTokens?' · '+x.pendingTokens+' '+t('assigned, not yet received','આપેલા, હજુ મળ્યા નથી'):'')+'</div></div><span class="token-status is-pending">● '+t('Waiting','બાકી')+'</span>'+(canEdit?'<button class="btn" type="button" data-household-tokens-received="'+x.n+'">'+t('Mark all received','બધા મળ્યા')+' ('+x.remaining+')</button>':'')+'</article>').join('');
+ // Tokens are only issued once a house has members and has paid its full contribution.
+ const tokenBlock=x=>{
+  if(x.members===0)return t('No members added yet — add members first.','હજી સભ્યો ઉમેર્યા નથી — પહેલા સભ્યો ઉમેરો.');
+  if(x.paid<x.due)return (x.paid>0?t('Partly paid','અંશતઃ ચૂકવેલ'):t('Payment pending','પેમેન્ટ બાકી'))+' — '+money(x.due-x.paid)+' '+t('to pay before tokens.','ટોકન પહેલા ચૂકવવાના બાકી.');
+  return '';
+ };
+ const firstWaiting=houses.find(x=>x.remaining>0&&!tokenBlock(x))||houses.find(x=>x.remaining>0);
+ const dot=x=>x.members===0?'':tokenBlock(x)?'<i class="token-dot amber"></i>':x.remaining===0?'<i class="token-dot green"></i>':'<i class="token-dot red"></i>';
+ const waitingRows=houses.filter(x=>x.remaining>0).map(x=>'<article class="token-pending-row"><div><strong>'+t('House ','ઘર ')+x.n+'</strong><div class="tiny">'+x.remaining+' '+t('of','માંથી')+' '+x.members+' '+t('still to collect','હજુ લેવાના બાકી')+(x.pendingTokens?' · '+x.pendingTokens+' '+t('assigned, not yet received','આપેલા, હજુ મળ્યા નથી'):'')+'</div>'+(tokenBlock(x)?'<div class="tiny token-blocked-note">'+escapeHtml(tokenBlock(x))+'</div>':'')+'</div><span class="token-status '+(tokenBlock(x)?'is-hold':'is-pending')+'">● '+(tokenBlock(x)?t('On hold','રોકાયેલ'):t('Waiting','બાકી'))+'</span>'+(canEdit&&!tokenBlock(x)?'<button class="btn" type="button" data-household-tokens-received="'+x.n+'">'+t('Mark all received','બધા મળ્યા')+' ('+x.remaining+')</button>':'')+'</article>').join('');
  const recordRows=tokens.map(x=>'<article class="token-pending-row"><div><strong>'+t('House ','ઘર ')+escapeHtml(x.house_number)+' · '+escapeHtml(x.member_label)+'</strong><div class="tiny">'+escapeHtml(x.token_count)+' '+t('token(s)','ટોકન')+'</div></div><span class="token-status '+(x.status==='received'?'is-done':'is-pending')+'">● '+(x.status==='received'?t('Received','મળી ગયા'):t('Pending','બાકી'))+'</span>'+(canEdit&&x.status!=='received'?'<button class="btn" type="button" data-token-received="'+escapeHtml(x.id)+'">'+t('Mark received','મળ્યું')+'</button>':'')+(canEdit?'<button class="btn token-undo-btn" type="button" data-token-delete="'+escapeHtml(x.id)+'">'+t('Undo / remove','ભૂલ સુધારો / દૂર કરો')+'</button>':'')+'</article>').join('');
  const tokenDesk='<div class="panel token-workspace"><div class="eyebrow">'+t('Step 2 · Daily workflow','પગલું 2 · રોજિંદું કામ')+'</div><h3>'+t('Daily token desk','દૈનિક ટોકન વિતરણ')+'</h3>'
   +'<div class="field token-day-field"><label for="tokenDayPicker">'+t('Festival day / date','ઉત્સવનો દિવસ / તારીખ')+'</label><input id="tokenDayPicker" type="date" min="'+escapeHtml(season.starts_on)+'" max="'+escapeHtml(season.ends_on)+'" value="'+escapeHtml(selectedDate)+'"></div>'
   +'<div class="token-summary-grid"><div class="token-summary"><small>'+t('Total members','કુલ સભ્યો')+'</small><strong>'+totalMembers+'</strong></div><div class="token-summary"><small>'+t('Received this day','આ દિવસે મળ્યા')+'</small><strong>'+receivedDay+'</strong></div><div class="token-summary"><small>'+t('Waiting','બાકી')+'</small><strong>'+Math.max(0,totalMembers-receivedDay)+'</strong></div></div>'
   +(admin?'<div class="house-selector" role="group" aria-label="'+t('Choose house number','ઘર નંબર પસંદ કરો')+'">'+houses.map(x=>'<button type="button" class="house-selector-btn" data-quick-token="'+x.n+'"'+(canEdit?'':' disabled')+'>'+x.n+'<span class="house-token-dots">'+dot(x)+'</span></button>').join('')+'</div>':'')
-  +(canEdit?'<form id="tokenForm" class="token-entry-form"><div class="field"><label>'+t('House number','ઘર નંબર')+'</label><select name="house_number">'+houses.map(x=>'<option value="'+x.n+'"'+(x===firstWaiting?' selected':'')+'>'+x.n+'</option>').join('')+'</select></div><div class="field"><label>'+t('Member name / label','સભ્યનું નામ')+'</label><input name="member_label" type="text" autocomplete="off" required maxlength="80" placeholder="'+t('Member name or Member 1','સભ્યનું નામ અથવા સભ્ય 1')+'"></div><div class="field"><label>'+t('Token count','ટોકન સંખ્યા')+'</label><input name="token_count" type="number" inputmode="numeric" min="1" max="100" step="1" value="1" required></div><button class="btn primary" type="submit">'+t('Assign token','ટોકન આપો')+'</button><span id="tokenMsg" class="msg"></span></form>':'')
+  +(admin?'<div class="tiny token-legend"><i class="token-dot green"></i> '+t('collected','લઈ લીધા')+' · <i class="token-dot red"></i> '+t('waiting','બાકી')+' · <i class="token-dot amber"></i> '+t('payment pending / no members','પેમેન્ટ બાકી / સભ્યો નથી')+'</div>':'')+(canEdit?'<form id="tokenForm" class="token-entry-form"><div id="tokenStatus" class="token-status-box" hidden></div><div class="field"><label>'+t('House number','ઘર નંબર')+'</label><select name="house_number">'+houses.map(x=>'<option value="'+x.n+'"'+(x===firstWaiting?' selected':'')+'>'+x.n+'</option>').join('')+'</select></div><div class="field"><label>'+t('Member name / label','સભ્યનું નામ')+'</label><input name="member_label" type="text" autocomplete="off" required maxlength="80" placeholder="'+t('Member name or Member 1','સભ્યનું નામ અથવા સભ્ય 1')+'"></div><div class="field"><label>'+t('Token count','ટોકન સંખ્યા')+'</label><input name="token_count" type="number" inputmode="numeric" min="1" max="100" step="1" value="1" required></div><button class="btn primary" type="submit">'+t('Assign token','ટોકન આપો')+'</button><span id="tokenMsg" class="msg"></span></form>':'')
   +'<h3 class="subhead">'+t('People still waiting','હજુ રાહ જોઈ રહ્યા છે')+'</h3><div class="list">'+(waitingRows||empty(t('Nobody is waiting for tokens on this day.','આ દિવસે કોઈ ટોકન માટે બાકી નથી.')))+'</div>'
   +'<h3 class="subhead">'+t('Token records for ','ટોકન રેકોર્ડ: ')+dayLabel+'</h3><div class="list">'+(recordRows||empty(t('No tokens recorded on this day.','આ દિવસે ટોકન નોંધાયા નથી.')))+'</div></div>';
 
@@ -646,7 +656,11 @@ async function renderNavratri(c){
   withBusy(form.querySelector('button[type=submit]'),async()=>{
    const {error}=await supabase.from('navratri_households').update({participant_count:count,contribution_per_person_paise:ratePaise,is_participating:count>0,updated_at:new Date().toISOString()}).eq('id',sheetHouse.h.id);
    if(error){setMsg('householdMsg',error.message||t('Could not save household.','ઘરની વિગતો સાચવી શકાઈ નથી.'));return}
-   closeSheet();await rerender();
+   closeSheet();
+   const newDue=count*ratePaise,ready=count>0&&sheetHouse.paid>=newDue;
+   if(ready)navratriSeg='tokens';
+   await rerender();
+   if(count>0)setMsg('appMsg',ready?t('House ','ઘર ')+sheetHouse.n+t(' is paid — you can issue tokens now.',' ની ચુકવણી પૂર્ણ — હવે ટોકન આપી શકો.'):t('House ','ઘર ')+sheetHouse.n+t(' saved. Payment pending ',' સાચવ્યું. પેમેન્ટ બાકી ')+money(newDue-sheetHouse.paid)+t(' — tokens start after payment.',' — ચુકવણી પછી ટોકન મળશે.'));
   });
  });
  $('contributionForm').addEventListener('submit',e=>{e.preventDefault();const form=e.currentTarget,fd=new FormData(form),amount=toPaise(fd.get('amount'));
@@ -654,7 +668,10 @@ async function renderNavratri(c){
   withBusy(form.querySelector('button[type=submit]'),async()=>{
    const {error}=await supabase.from('navratri_contributions').insert({household_id:sheetHouse.h.id,amount_paise:amount,payment_method:fd.get('method'),received_by:profile.id});
    if(error){setMsg('contributionMsg',error.message);return}
-   closeSheet();await rerender();setMsg('appMsg',t('Payment recorded for house ','પેમેન્ટ નોંધાયું, ઘર ')+sheetHouse.n+': '+money(amount));
+   closeSheet();
+   const cleared=sheetHouse.members>0&&sheetHouse.paid+amount>=sheetHouse.due;
+   if(cleared)navratriSeg='tokens';
+   await rerender();setMsg('appMsg',t('Payment recorded for house ','પેમેન્ટ નોંધાયું, ઘર ')+sheetHouse.n+': '+money(amount)+(cleared?' · '+t('tokens can be issued now.','હવે ટોકન આપી શકાય.'):''));
   });
  });
 
@@ -674,7 +691,10 @@ async function renderNavratri(c){
  const prefillToken=n=>{const x=byHouse.get(n);if(!x)return;
   tokenForm.elements.member_label.value='Household '+n+' — '+(x.remaining||x.members)+' members';
   tokenForm.elements.token_count.value=Math.max(1,x.remaining-x.pendingTokens);
-  setMsg('tokenMsg',x.remaining===0&&x.members>0?t('This house has already collected all tokens for this day.','આ ઘરે આ દિવસના બધા ટોકન લઈ લીધા છે.'):'');
+  const blk=tokenBlock(x),box=$('tokenStatus'),submit=tokenForm.querySelector('button[type=submit]');
+  box.hidden=!blk;box.textContent=blk?t('House ','ઘર ')+n+': '+blk:'';
+  submit.disabled=!!blk;
+  setMsg('tokenMsg',!blk&&x.remaining===0&&x.members>0?t('This house has already collected all tokens for this day.','આ ઘરે આ દિવસના બધા ટોકન લઈ લીધા છે.'):'');
  };
  tokenForm.elements.house_number.addEventListener('change',e=>prefillToken(Number(e.currentTarget.value)));
  c.querySelectorAll('[data-quick-token]').forEach(b=>b.addEventListener('click',()=>{
@@ -687,6 +707,7 @@ async function renderNavratri(c){
  const overCount=(x,adding)=>x.members>0&&x.received+x.pendingTokens+adding>x.members;
  tokenForm.addEventListener('submit',e=>{e.preventDefault();const form=e.currentTarget,fd=new FormData(form),n=Number(fd.get('house_number')),count=Number(fd.get('token_count')),x=byHouse.get(n);
   if(!x||!Number.isInteger(count)||count<1){setMsg('tokenMsg',t('Enter a whole token count.','ટોકનની પૂર્ણ સંખ્યા દાખલ કરો.'));return}
+  if(tokenBlock(x)){setMsg('tokenMsg',tokenBlock(x));return}
   if(overCount(x,count)&&!confirm(t('House ','ઘર ')+n+t(' has ',' માં ')+x.members+t(' members and already has ',' સભ્યો છે અને પહેલેથી ')+(x.received+x.pendingTokens)+t(' tokens for this day. Add anyway?',' ટોકન છે. છતાં ઉમેરવા છે?')))return;
   withBusy(form.querySelector('button[type=submit]'),async()=>{
    const {error}=await supabase.from('navratri_tokens').insert({season_id:season.id,token_date:selectedDate,house_number:n,member_label:String(fd.get('member_label')).trim(),token_count:count,issued_by:profile.id});
