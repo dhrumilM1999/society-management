@@ -30,10 +30,10 @@ const text = (p, s) => p.locator(s).first().innerText();
 // ---------- Admin ----------
 const a = await open('?role=admin');
 await a.fill('#seasonForm [name=starts_on]', '2026-10-25'); await a.fill('#seasonForm [name=ends_on]', '2026-10-17');
-await a.click('#seasonForm button'); await settle(a);
+await a.click('#seasonForm button[type=submit]'); await settle(a);
 ok((await db(a, 'navratri_seasons')).length === 0, 'end-before-start season is rejected client-side');
 await a.fill('#seasonForm [name=starts_on]', '2026-10-17'); await a.fill('#seasonForm [name=ends_on]', '2026-10-25');
-await a.dblclick('#seasonForm button'); await a.waitForTimeout(900);
+await a.dblclick('#seasonForm button[type=submit]'); await a.waitForTimeout(900);
 ok((await db(a, 'navratri_seasons')).length === 1, 'double-tap creates exactly one season');
 ok((await db(a, 'navratri_households')).length === 19, '19 households seeded');
 ok(await a.inputValue('#tokenDayPicker') === '2026-10-17', 'token day clamps to season start when today is before the festival');
@@ -182,6 +182,25 @@ await s2.click('[data-quick-token="33"]'); await s2.waitForTimeout(150);
 await s2.click('#tokenSheet [data-token-delete]'); await settle(s2);
 ok((await db(s2, 'navratri_tokens')).filter(x => x.token_date === '2026-10-18' && x.house_number === 33).length === 0, 'token removed from the house sheet');
 await s2.click('#tokenSheetBody [data-ts-close]');
+// Calendar date picker on the token date
+await seg(s2, 'tokens');
+await s2.click('[data-pane="tokens"] .date-trigger'); await s2.waitForTimeout(150);
+ok(await s2.locator('.dp-wrap').isVisible(), 'date field opens the calendar picker');
+await s2.screenshot({ path: out + '/phone-calendar.png' });
+ok(await s2.locator('.dp-day:not(:disabled)').count() === 9 && await s2.locator('.dp-day:disabled').count() === 22, 'calendar only allows the festival days (9 of 31 in October)');
+await s2.click('.dp-day[data-date="2026-10-21"]'); await settle(s2);
+ok(await s2.inputValue('#tokenDayPicker') === '2026-10-21' && !(await s2.locator('.dp-wrap').isVisible()), 'picking a day sets the date and closes the calendar');
+ok((await s2.locator('[data-pane="tokens"] .date-trigger').innerText()).includes('21'), 'trigger shows the chosen date');
+await s2.click('[data-pane="tokens"] .date-trigger'); await s2.waitForTimeout(150); await s2.click('.dp-day[data-date="2026-10-18"]'); await settle(s2);
+// A house without a phone number must still get a full-width Received button (regression)
+await s2.evaluate(() => { window.__db.profiles.find(p => p.house_number === 33).contact_phone = null; });
+await s2.click('#refreshBtn'); await settle(s2);
+await s2.click('[data-quick-token="33"]'); await s2.fill('#tokenForm [name=token_count]', '1'); await s2.click('#tokenForm button[type=submit]'); await settle(s2);
+await s2.click('#tokenSheetBody [data-ts-close]');
+const rcv = await s2.locator('[data-household-tokens-received="33"]').boundingBox();
+ok(rcv && rcv.width > 150 && rcv.height > 40, 'Received button keeps its full size when no phone is saved (' + Math.round(rcv.width) + 'x' + Math.round(rcv.height) + ')');
+ok((await s2.locator('.wait-row .contact-none').count()) >= 1, 'no-phone note is shown under the buttons');
+await s2.screenshot({ path: out + '/phone-nophone.png', fullPage: true });
 // Expenses: same day chips, quick entry
 await seg(s2, 'expenses');
 ok(await s2.locator('[data-pane="expenses"] .day-chip.active').innerText().then(x => x.includes('18 Oct')), 'expense tab shows the same selected day (18 Oct)');
@@ -223,6 +242,19 @@ await mh.click('#houseForm button[type=submit]'); await settle(mh);
 ok(saved && saved.house_number === 31 && saved.display_name === 'Ramesh Patel' && saved.contact_phone === '98765 43211' && saved.preferred_language === 'en' && saved.is_active === true, 'saved payload is correct: ' + JSON.stringify(saved));
 ok(!(await mh.locator('#houseSheet').isVisible()), 'sheet closes after saving');
 ok(!(await mh.evaluate(() => document.documentElement.scrollWidth > innerWidth)), 'no horizontal overflow on Manage houses');
+// Dashboard shortcuts and festival card
+const ov = await open('?role=admin&seed=1');
+await go(ov, 'overview'); await settle(ov);
+ok(await ov.locator('.fest-card').isVisible() && (await ov.locator('.fest-card').innerText()).includes('TEST Navratri'), 'dashboard shows the festival card');
+ok(await ov.locator('.shortcut').count() === 9, 'admin dashboard has 9 shortcuts');
+await ov.screenshot({ path: out + '/phone-dashboard.png', fullPage: true });
+await ov.click('.fest-card [data-seg="tokens"]'); await settle(ov);
+ok(await ov.locator('[data-pane="tokens"]').isVisible() && (await text(ov, '#viewTitle')) === 'Navratri festival', 'festival card Tokens button jumps straight to the Tokens tab');
+await go(ov, 'overview'); await settle(ov);
+await ov.click('.shortcut[data-seg="expenses"]'); await settle(ov);
+ok(await ov.locator('[data-pane="expenses"]').isVisible(), 'Add expense shortcut opens the Expenses tab');
+const rv = await open('?role=resident&seed=1'); await go(rv, 'overview'); await settle(rv);
+ok(await rv.locator('.shortcut').count() === 5, 'resident dashboard has 5 shortcuts');
 const d = await open('?role=admin&seed=1', 1280);
 ok(await d.locator('.sidebar').isVisible() && !(await d.locator('.tabbar').isVisible()), 'desktop shows the left sidebar, not the tab bar');
 await d.screenshot({ path: out + '/desktop-navratri.png', fullPage: true });

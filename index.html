@@ -298,7 +298,7 @@ body.modal-open{overflow:hidden}
 .switch-row input:checked:after{transform:translateX(22px)}
 @media(min-width:900px){.hd-list{grid-template-columns:1fr 1fr}}
 /* token actions: big icon buttons */
-.act{flex:1 1 0;min-width:0;min-height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:6px 4px;border:1px solid var(--line);border-radius:14px;background:#fff;color:var(--ink);font-size:11px;font-weight:700;line-height:1.1;text-decoration:none;text-align:center}
+.act{flex:1 1 0;min-width:64px;min-height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:6px 4px;border:1px solid var(--line);border-radius:14px;background:#fff;color:var(--ink);font-size:11px;font-weight:700;line-height:1.1;text-decoration:none;text-align:center}
 .act .ic{width:22px;height:22px}
 .act:active{transform:scale(.97)}
 .act:disabled{opacity:.4}
@@ -309,10 +309,10 @@ body.modal-open{overflow:hidden}
 .act-wa{background:#ecf8f1;border-color:#c5e8d3;color:#0f7a43}
 .act-sms{background:#f1f5f9;border-color:#dbe3ee;color:#475569}
 .act-wide{flex:1.4 1 0}
-.act-row{display:flex;gap:8px;align-items:stretch}
+.act-row{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch}
 .act-row.big .act{min-height:68px;font-size:13px}
 .contact-actions{display:contents}
-.act-row .contact-none{flex:1 1 100%}
+.act-row .contact-none{flex:1 1 100%;order:5;margin:0}
 .wait-row,.rec-row{display:grid;gap:10px;padding:12px;border:1px solid var(--line);border-radius:var(--r);background:#fff}
 .wait-open{display:flex;align-items:center;gap:12px;width:100%;padding:0;border:0;background:transparent;text-align:left;min-width:0}
 .wait-info{flex:1;min-width:0;display:grid;gap:2px}
@@ -334,6 +334,60 @@ body.modal-open{overflow:hidden}
 .records-details summary{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:52px;cursor:pointer;font-weight:700;color:var(--ink);font-size:14px;list-style:none}
 .records-details summary::-webkit-details-marker{display:none}
 .records-details[open]{padding-bottom:14px}
+/* dashboard: festival card + shortcuts */
+.greet{display:flex;flex-direction:column;gap:2px;margin:0 0 12px}
+.greet b{font-size:18px;color:var(--ink)}
+.fest-card{padding:16px;border-radius:20px;color:#fff;background:linear-gradient(150deg,#1e3a8a 0%,#0f1c33 80%);margin-bottom:6px;box-shadow:var(--shadow)}
+.fest-card .eyebrow{color:#93b4f5}
+.fest-card h3{color:#fff;font-size:20px;margin:4px 0 2px}
+.fest-card .tiny{color:#c0cde6}
+.fest-card .tag{background:#ffffff22;color:#fff}
+.fest-card.is-idle{display:flex;flex-direction:column;gap:12px;background:#fff;color:var(--text);border:1px solid var(--line)}
+.fest-card.is-idle .eyebrow{color:var(--brand-2)}.fest-card.is-idle h3{color:var(--ink)}.fest-card.is-idle .tiny{color:var(--muted)}
+.fc-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.fc-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:14px 0}
+.fc-stat{background:#ffffff14;border:1px solid #ffffff22;border-radius:12px;padding:10px;min-width:0}
+.fc-stat small{display:block;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#c0cde6}
+.fc-stat b{display:block;font-size:16px;margin-top:3px;overflow-wrap:anywhere}
+.fc-actions{display:flex;flex-wrap:wrap;gap:8px}
+.fc-actions .btn{flex:1 1 0;min-width:96px;min-height:44px;font-size:13px;background:#ffffff18;border-color:#ffffff40;color:#fff}
+.fc-actions .btn.primary{background:#fff;border-color:#fff;color:var(--brand)}
+.fest-card.is-idle .btn.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
+.sc-title{margin-top:20px}
+.shortcut-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.shortcut{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:4px;padding:14px 6px 12px;border:1px solid var(--line);border-radius:var(--r);background:#fff;box-shadow:var(--shadow);text-align:center;min-width:0;color:var(--ink)}
+.shortcut:active{transform:scale(.97);background:var(--brand-soft)}
+.sc-ic{width:44px;height:44px;border-radius:14px;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;margin-bottom:2px}
+.sc-ic .ic{width:24px;height:24px}
+.shortcut b{font-size:13px;line-height:1.2}
+.shortcut small{font-size:11px;color:var(--muted);line-height:1.2}
+@media(min-width:600px){.shortcut-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:900px){.shortcut-grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
+/* calendar date picker */
+.date-field{position:relative;width:100%;min-width:0}
+.date-field .native-date-source{position:absolute!important;width:1px!important;height:1px!important;min-height:1px!important;opacity:0!important;pointer-events:none!important;padding:0!important;border:0!important;clip-path:inset(50%)!important;overflow:hidden!important}
+.date-trigger{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:50px;padding:12px 14px;border:1px solid #cbd5e1;border-radius:var(--r-sm);background:#fff;color:var(--ink);text-align:left;font-size:16px;font-weight:550}
+.date-trigger.is-empty .date-text{color:#94a3b8;font-weight:450}
+.date-trigger .ic{color:var(--brand-2)}
+.date-trigger:disabled{background:#f1f5f9;color:var(--muted)}
+.dp-wrap{position:fixed;inset:0;z-index:400;display:flex;align-items:flex-end;justify-content:center}
+.dp-wrap[hidden]{display:none}
+.dp-backdrop{position:absolute;inset:0;width:100%;height:100%;border:0;background:#0f1c3366;padding:0;border-radius:0}
+.dp-sheet{position:relative;width:min(100%,420px);background:#fff;border-radius:24px 24px 0 0;padding:10px 16px calc(16px + var(--safe-b));box-shadow:0 -16px 48px #0f1c3340;animation:slideup .2s ease-out}
+.dp-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:2px 0 10px}
+.dp-head .icon-btn:disabled{opacity:.35}
+.dp-title{font-size:17px;color:var(--ink);text-align:center;flex:1}
+.dp-week,.dp-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.dp-week span{text-align:center;font-size:11px;font-weight:700;color:var(--muted);padding:4px 0;text-transform:uppercase}
+.dp-day,.dp-pad{aspect-ratio:1/1;min-height:42px}
+.dp-day{border:0;border-radius:12px;background:transparent;color:var(--ink);font-size:15px;font-weight:600}
+.dp-day.in-range{background:#f1f5fb}
+.dp-day.is-today{box-shadow:inset 0 0 0 2px var(--brand-2)}
+.dp-day.is-selected{background:var(--brand);color:#fff;box-shadow:none}
+.dp-day:disabled{color:#cbd5e1;background:transparent;cursor:not-allowed}
+.dp-day:not(:disabled):active{background:var(--brand-soft)}
+.dp-foot{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+@media(min-width:900px){.dp-wrap{align-items:center}.dp-sheet{border-radius:24px;padding-top:18px}.dp-sheet .modal-grabber{display:none}}
 /* ---------- Custom select (bottom sheet on phones) ---------- */
 .mobile-select{position:relative;width:100%;min-width:0}
 .mobile-select .native-select-source{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important;clip-path:inset(50%)!important;overflow:hidden!important}
@@ -422,6 +476,9 @@ body.modal-open{overflow:hidden}
 <symbol id="i-sms" viewBox="0 0 24 24"><path d="M3 6h18v12H3zM3 7l9 7 9-7"/></symbol>
 <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4zM13.5 6.5l4 4"/></symbol>
 <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></symbol>
+<symbol id="i-calpick" viewBox="0 0 24 24"><path d="M4 6h16v14H4zM4 10h16M8 3v4M16 3v4M8 14h2M12 14h2M16 14h.01M8 17h2M12 17h2"/></symbol>
+<symbol id="i-chev-l" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+<symbol id="i-chev-r" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></symbol>
 <symbol id="i-logout" viewBox="0 0 24 24"><path d="M15 4h4a1 1 0 011 1v14a1 1 0 01-1 1h-4M10 8l-4 4 4 4M6 12h11"/></symbol>
 </defs></svg>
 
@@ -501,12 +558,15 @@ function money(paise){return new Intl.NumberFormat(lang==='gu'?'gu-IN':'en-IN',{
 function date(v){return v?new Date(v).toLocaleDateString(lang==='gu'?'gu-IN':'en-IN',{day:'numeric',month:'short',year:'numeric'}):''}
 let toastTimer;
 function setMsg(id,msg){$(id).textContent=msg||'';if(id==='appMsg'){clearTimeout(toastTimer);if(msg)toastTimer=setTimeout(()=>{$('appMsg').textContent=''},4500)}}
-function applyLang(){document.documentElement.lang=lang;document.querySelectorAll('[data-en]').forEach(el=>el.textContent=el.dataset[lang]);document.querySelectorAll('.lang-btn').forEach(b=>b.textContent=lang==='en'?'ગુજરાતી':'English');$('refreshBtn').setAttribute('aria-label',t('Refresh data','ડેટા રિફ્રેશ'));if(session) renderView(); }
+function applyLang(){document.documentElement.lang=lang;document.querySelectorAll('[data-en]').forEach(el=>el.textContent=el.dataset[lang]);document.querySelectorAll('.lang-btn').forEach(b=>b.textContent=lang==='en'?'ગુજરાતી':'English');document.querySelectorAll('input[data-date-enhanced]').forEach(i=>syncDateTrigger(i));$('refreshBtn').setAttribute('aria-label',t('Refresh data','ડેટા રિફ્રેશ'));if(session) renderView(); }
 document.querySelectorAll('.lang-btn').forEach(b=>b.addEventListener('click',()=>{lang=lang==='en'?'gu':'en';applyLang()}));
 $('loginForm').addEventListener('submit',async e=>{e.preventDefault();setMsg('loginMsg','');$('loginBtn').disabled=true;try{const identifier=$('email').value.trim();const loginEmail=/^\d{1,2}$/.test(identifier)?('house'+identifier+'@sonalpark-gate2.invalid'):identifier;const {error}=await supabase.auth.signInWithPassword({email:loginEmail,password:$('password').value});if(error)throw error;}catch(err){setMsg('loginMsg',t('Could not sign in. Check your credentials or contact the administrator.','સાઇન ઇન થઈ શક્યું નથી. વિગતો તપાસો અથવા એડમિનનો સંપર્ક કરો.'));}finally{$('loginBtn').disabled=false}});
 document.querySelectorAll('.sign-out-btn').forEach(b=>b.addEventListener('click',()=>{closeMore();supabase.auth.signOut()}));
 $('refreshBtn').addEventListener('click',async()=>{await loadView();setMsg('appMsg',t('Data refreshed.','ડેટા રિફ્રેશ થયો.'))});
-$('app').addEventListener('click',e=>{const b=e.target.closest('button[data-view]');if(!b)return;activeView=b.dataset.view;closeMore();window.scrollTo({top:0});renderView()});
+$('app').addEventListener('click',e=>{
+ const g=e.target.closest('[data-go]');
+ if(g){activeView=g.dataset.go;if(g.dataset.seg)navratriSeg=g.dataset.seg;if(g.dataset.today)navratriSelectedDate=null;closeMore();window.scrollTo({top:0});renderView();return}
+ const b=e.target.closest('button[data-view]');if(!b)return;activeView=b.dataset.view;closeMore();window.scrollTo({top:0});renderView()});
 const MORE_VIEWS=['funds','programmes','houses','admin'];
 function openMore(){$('moreSheet').hidden=false;document.body.classList.add('modal-open')}
 function closeMore(){$('moreSheet').hidden=true;if($('householdModal')?.hidden!==false)document.body.classList.remove('modal-open')}
@@ -529,7 +589,7 @@ async function renderView(){if(!profile)return;document.querySelectorAll('#app [
 try{
 if(activeView==='navratri'){await renderNavratri(c)}
 else if(activeView==='houses'&&profile.role==='admin'){await renderHouses(c)}
-else if(activeView==='overview'){heading(t('Overview','ઝાંખી'),t('Your society updates at a glance.','સોસાયટીના અપડેટ્સ એક નજરમાં.'));const {notices,meetings}=await fetchNotices();const [payments,charges]=await Promise.all([supabase.from('payment_submissions').select('id,amount_paise,status,fund,payment_date,created_at').order('created_at',{ascending:false}).limit(5),supabase.from('maintenance_charges').select('id,amount_paise,period_start,period_end,description').order('period_start',{ascending:false}).limit(5)]);if(payments.error)throw payments.error;if(charges.error)throw charges.error;c.innerHTML='<div class="grid"><div class="metric"><small>'+t('House','ઘર')+'</small><strong>'+escapeHtml(profile.house_number??'Admin')+'</strong><span>'+t('Houses 31–49','ઘર 31–49')+'</span></div><div class="metric"><small>'+t('Published notices','પ્રકાશિત નોટિસ')+'</small><strong>'+notices.length+'</strong><span>'+t('Latest community updates','તાજેતરના અપડેટ્સ')+'</span></div><div class="metric"><small>'+t('Pending payments','બાકી પેમેન્ટ')+'</small><strong>'+payments.data.filter(x=>x.status==='pending').length+'</strong><span>'+t('Awaiting administrator review','એડમિન સમીક્ષા બાકી')+'</span></div></div><div class="split"><div><h3 class="subhead">'+t('Latest notices','તાજેતરની નોટિસ')+'</h3><div class="list">'+(notices.slice(0,3).map(x=>item(localTitle(x),localBody(x),date(x.published_at),'Notice')).join('')||empty(t('No notices published yet.','હજી કોઈ નોટિસ નથી.')) )+'</div></div><div><h3 class="subhead">'+t('Upcoming meetings','આગામી મિટિંગ')+'</h3><div class="list">'+(meetings.filter(x=>new Date(x.starts_at)>=new Date()).slice(0,3).map(x=>item(localTitle(x),localBody(x)+'\n'+(x.location||''),date(x.starts_at),'Meeting')).join('')||empty(t('No upcoming meetings.','આગામી મિટિંગ નથી.')) )+'</div></div></div>'}
+else if(activeView==='overview'){heading(t('Overview','ઝાંખી'),t('Your society updates at a glance.','સોસાયટીના અપડેટ્સ એક નજરમાં.'));const {notices,meetings}=await fetchNotices();const [payments,charges]=await Promise.all([supabase.from('payment_submissions').select('id,amount_paise,status,fund,payment_date,created_at').order('created_at',{ascending:false}).limit(5),supabase.from('maintenance_charges').select('id,amount_paise,period_start,period_end,description').order('period_start',{ascending:false}).limit(5)]);if(payments.error)throw payments.error;if(charges.error)throw charges.error;c.innerHTML=await overviewTop()+'<div class="grid"><div class="metric"><small>'+t('House','ઘર')+'</small><strong>'+escapeHtml(profile.house_number??'Admin')+'</strong><span>'+t('Houses 31–49','ઘર 31–49')+'</span></div><div class="metric"><small>'+t('Published notices','પ્રકાશિત નોટિસ')+'</small><strong>'+notices.length+'</strong><span>'+t('Latest community updates','તાજેતરના અપડેટ્સ')+'</span></div><div class="metric"><small>'+t('Pending payments','બાકી પેમેન્ટ')+'</small><strong>'+payments.data.filter(x=>x.status==='pending').length+'</strong><span>'+t('Awaiting administrator review','એડમિન સમીક્ષા બાકી')+'</span></div></div><div class="split"><div><h3 class="subhead">'+t('Latest notices','તાજેતરની નોટિસ')+'</h3><div class="list">'+(notices.slice(0,3).map(x=>item(localTitle(x),localBody(x),date(x.published_at),'Notice')).join('')||empty(t('No notices published yet.','હજી કોઈ નોટિસ નથી.')) )+'</div></div><div><h3 class="subhead">'+t('Upcoming meetings','આગામી મિટિંગ')+'</h3><div class="list">'+(meetings.filter(x=>new Date(x.starts_at)>=new Date()).slice(0,3).map(x=>item(localTitle(x),localBody(x)+'\n'+(x.location||''),date(x.starts_at),'Meeting')).join('')||empty(t('No upcoming meetings.','આગામી મિટિંગ નથી.')) )+'</div></div></div>'}
 else if(activeView==='notices'){heading(t('Notices & meetings','નોટિસ અને મિટિંગ'),t('Published announcements for the community.','સમુદાય માટે પ્રકાશિત જાહેરાતો.'));const {notices,meetings}=await fetchNotices();c.innerHTML='<h3 class="subhead">'+t('Notices','નોટિસ')+'</h3><div class="list">'+(notices.map(x=>item(localTitle(x),localBody(x),date(x.published_at),'Notice')).join('')||empty(t('No published notices.','પ્રકાશિત નોટિસ નથી.')) )+'</div><h3 class="subhead">'+t('Meetings','મિટિંગ')+'</h3><div class="list">'+(meetings.map(x=>item(localTitle(x),localBody(x)+'\n'+(x.location||''),date(x.starts_at),'Meeting')).join('')||empty(t('No published meetings.','પ્રકાશિત મિટિંગ નથી.')) )+'</div>'}
 else if(activeView==='payments'){heading(t('Payments','પેમેન્ટ'),t('Submit a payment for administrator confirmation and review your submissions.','એડમિન પુષ્ટિ માટે પેમેન્ટ મોકલો અને તમારા રેકોર્ડ જુઓ.'));const {data:payments,error}=await supabase.from('payment_submissions').select('id,amount_paise,status,fund,payment_date,reference_note,created_at').order('created_at',{ascending:false}).limit(50);if(error)throw error;c.innerHTML=(profile.role==='resident'?'<div class="panel"><h3>'+t('Submit payment','પેમેન્ટ મોકલો')+'</h3><form id="paymentForm"><div class="field"><label>'+t('Fund','ફંડ')+'</label><select name="fund"><option value="maintenance">'+t('Maintenance','મેન્ટેનન્સ')+'</option><option value="festival">'+t('Festival','તહેવાર')+'</option><option value="general">'+t('General','જનરલ')+'</option></select></div><div class="field"><label>'+t('Amount (₹)','રકમ (₹)')+'</label><input name="amount" type="number" inputmode="decimal" min="0.01" step="0.01" required></div><div class="field"><label>'+t('Payment date','પેમેન્ટ તારીખ')+'</label><input name="date" type="date" value="'+new Date().toISOString().slice(0,10)+'" required></div><div class="field"><label>'+t('Reference / note (optional)','રેફરન્સ / નોંધ (વૈકલ્પિક)')+'</label><input name="note" type="text" maxlength="250" autocomplete="off"></div><button class="btn primary" type="submit">'+t('Submit for review','સમીક્ષા માટે મોકલો')+'</button><div class="msg" id="paymentMsg"></div></form><p class="tiny">'+t('Submission is not a receipt. The payment is recorded in fund totals only after an administrator confirms it.','આ સબમિશન રસીદ નથી. એડમિન પુષ્ટિ કર્યા પછી જ ફંડમાં ગણાશે.')+'</p></div>':'<div class="noticebar">'+t('Admin: use Admin review to confirm or reject submissions.','એડમિન: સબમિશન મંજૂર અથવા નકારવા Admin review ખોલો.')+'</div>')+'<h3 class="subhead">'+t('Payment history','પેમેન્ટ ઇતિહાસ')+'</h3><div class="list">'+(payments.map(x=>item(money(x.amount_paise)+' · '+t(x.fund,x.fund),date(x.payment_date)+(x.reference_note?' · '+x.reference_note:''),date(x.created_at),t(x.status,({pending:'બાકી',approved:'મંજૂર',rejected:'નકારેલ'})[x.status]||x.status))).join('')||empty(t('No payments submitted yet.','હજી કોઈ પેમેન્ટ નથી.')) )+'</div>';const f=$('paymentForm');if(f)f.addEventListener('submit',submitPayment)}
 else if(activeView==='funds'){heading(t('Fund records','ફંડ રેકોર્ડ'),t('Posted entries only; pending payment claims are excluded.','મંજૂર થયેલી એન્ટ્રીઓ જ; બાકી પેમેન્ટનો સમાવેશ નથી.'));const {data,error}=await supabase.from('fund_ledger').select('id,fund,house_number,amount_paise,entry_type,description,posted_at').order('posted_at',{ascending:false}).limit(100);if(error)throw error;const funds=['maintenance','festival','general'];c.innerHTML='<div class="grid">'+funds.map(f=>'<div class="metric"><small>'+t(f,({maintenance:'મેન્ટેનન્સ',festival:'તહેવાર',general:'જનરલ'})[f])+'</small><strong>'+money(data.filter(x=>x.fund===f).reduce((s,x)=>s+Number(x.amount_paise),0))+'</strong><span>'+t('Visible posted balance','દેખાતું બેલેન્સ')+'</span></div>').join('')+'</div><div class="noticebar">'+t('Residents see their house-specific ledger entries. Admins see society-wide entries. A visible resident total may not represent the entire society fund balance.','રહેવાસીઓ પોતાનાં ઘરનાં લેજર જુએ છે. એડમિન સોસાયટીની બધી એન્ટ્રીઓ જુએ છે. રહેવાસીનું બેલેન્સ સમગ્ર ફંડનું બેલેન્સ ન પણ હોય.')+'</div><div class="list">'+(data.map(x=>item(money(x.amount_paise)+' · '+t(x.fund,x.fund),x.description,(x.house_number?'House '+x.house_number+' · ':'')+date(x.posted_at),x.entry_type)).join('')||empty(t('No confirmed ledger entries yet.','હજી લેજર એન્ટ્રી નથી.')) )+'</div>'}
@@ -537,6 +597,58 @@ else if(activeView==='programmes'){heading(t('Programmes','કાર્યક્
 else if(activeView==='admin'&&profile.role==='admin'){heading(t('Admin review','એડમિન સમીક્ષા'),t('Review payment submissions and publish community updates.','પેમેન્ટ સમીક્ષા કરો અને સોસાયટી અપડેટ પ્રકાશિત કરો.'));const {data:payments,error}=await supabase.from('payment_submissions').select('id,house_number,amount_paise,fund,payment_date,reference_note,created_at,submitted_by').eq('status','pending').order('created_at');if(error)throw error;c.innerHTML='<div class="panel"><h3>'+t('Pending payment submissions','બાકી પેમેન્ટ સબમિશન')+'</h3><div class="list">'+(payments.map(x=>'<article class="item"><div class="itemtop"><div><h3>'+money(x.amount_paise)+' · '+t(x.fund,x.fund)+'</h3><div class="tiny">House '+x.house_number+' · '+date(x.payment_date)+' · '+date(x.created_at)+'</div><p>'+escapeHtml(x.reference_note||'—')+'</p></div><span class="tag">Pending</span></div><div class="row" style="margin-top:12px"><button class="btn primary" data-approve="'+x.id+'">'+t('Confirm payment','પેમેન્ટ મંજૂર કરો')+'</button><button class="btn" data-reject="'+x.id+'">'+t('Reject','નકારો')+'</button></div></article>').join('')||empty(t('No payments awaiting review.','સમીક્ષા માટે પેમેન્ટ નથી.')) )+'</div></div><div class="panel" style="margin-top:16px"><h3>'+t('Publish a notice','નોટિસ પ્રકાશિત કરો')+'</h3><form id="noticeForm"><div class="field"><label>'+t('Title (English)','શીર્ષક (અંગ્રેજી)')+'</label><input name="title_en" type="text" required maxlength="180"></div><div class="field"><label>'+t('Message (English)','સંદેશ (અંગ્રેજી)')+'</label><textarea name="body_en" required rows="3"></textarea></div><div class="field"><label>'+t('Title (Gujarati)','શીર્ષક (ગુજરાતી)')+'</label><input name="title_gu" type="text" maxlength="180"></div><div class="field"><label>'+t('Message (Gujarati)','સંદેશ (ગુજરાતી)')+'</label><textarea name="body_gu" rows="3"></textarea></div><button class="btn primary" type="submit">'+t('Publish notice','નોટિસ પ્રકાશિત કરો')+'</button><div class="msg" id="noticeMsg"></div></form></div>';c.querySelectorAll('[data-approve]').forEach(b=>b.addEventListener('click',()=>reviewPayment(b.dataset.approve,true)));c.querySelectorAll('[data-reject]').forEach(b=>b.addEventListener('click',()=>reviewPayment(b.dataset.reject,false)));$('noticeForm').addEventListener('submit',publishNotice)}
 else{heading(t('Not available','ઉપલબ્ધ નથી'),'');c.innerHTML=empty(t('This section is only available to administrators.','આ વિભાગ ફક્ત એડમિન માટે છે.'))}
 }catch(err){console.error(err);c.innerHTML='<div class="panel"><h3>'+t('Could not load this section','આ વિભાગ લોડ થઈ શક્યો નથી')+'</h3><p class="muted">'+t('Please refresh. If the problem continues, ask the administrator to check your account permissions.','રિફ્રેશ કરો. સમસ્યા રહે તો એડમિનને પરવાનગી તપાસવા કહો.')+'</p></div>'}}
+
+/* ---------- Dashboard: festival card + shortcuts ---------- */
+async function overviewTop(){
+ const admin=profile.role==='admin';
+ const tile=(go,icon,label,sub,seg,today)=>'<button type="button" class="shortcut" data-go="'+go+'"'+(seg?' data-seg="'+seg+'"':'')+(today?' data-today="1"':'')+'><span class="sc-ic"><svg class="ic"><use href="#i-'+icon+'"/></svg></span><b>'+label+'</b>'+(sub?'<small>'+sub+'</small>':'')+'</button>';
+ const tiles=admin?[
+  tile('navratri','flame',t('Navratri','નવરાત્રી'),t('Festival home','ઉત્સવ'),'houses'),
+  tile('navratri','wallet',t('Collect payments','ફાળો લો'),t('Houses to pay','ઘર'),'houses'),
+  tile('navratri','check',t('Today\'s tokens','આજના ટોકન'),t('Give / receive','આપો / લો'),'tokens',1),
+  tile('navratri','chart',t('Add expense','ખર્ચ ઉમેરો'),t('Daily spending','દૈનિક'),'expenses',1),
+  tile('admin','shield',t('Admin review','એડમિન સમીક્ષા'),t('Payments & notices','પેમેન્ટ')),
+  tile('houses','houses',t('Manage houses','ઘર વ્યવસ્થાપન'),t('Names & phones','નામ અને ફોન')),
+  tile('notices','bell',t('Notices','નોટિસ'),t('& meetings','અને મિટિંગ')),
+  tile('funds','chart',t('Fund records','ફંડ'),t('Ledger','લેજર')),
+  tile('programmes','cal',t('Programmes','કાર્યક્રમો'),t('Events','ઇવેન્ટ'))
+ ]:[
+  tile('navratri','flame',t('Navratri','નવરાત્રી'),t('My festival','મારો ઉત્સવ'),'houses'),
+  tile('payments','wallet',t('Payments','પેમેન્ટ'),t('Submit & track','મોકલો')),
+  tile('notices','bell',t('Notices','નોટિસ'),t('& meetings','અને મિટિંગ')),
+  tile('funds','chart',t('Fund records','ફંડ'),t('Ledger','લેજર')),
+  tile('programmes','cal',t('Programmes','કાર્યક્રમો'),t('Events','ઇવેન્ટ'))
+ ];
+ let fest='';
+ try{
+  const {data:seasons,error}=await supabase.from('navratri_seasons').select('id,title,starts_on,ends_on,status').order('starts_on',{ascending:false}).limit(5);
+  if(error)throw error;
+  const season=(seasons||[]).find(x=>x.status==='active');
+  if(!season){
+   fest=admin?'<div class="fest-card is-idle"><div><div class="eyebrow">'+t('Festival','ઉત્સવ')+'</div><h3>'+t('No festival is running','કોઈ ઉત્સવ ચાલુ નથી')+'</h3><div class="tiny">'+t('Create a season to start collecting and giving tokens.','ફાળો અને ટોકન શરૂ કરવા સીઝન બનાવો.')+'</div></div><button type="button" class="btn primary" data-go="navratri">'+t('Create season','સીઝન બનાવો')+'</button></div>':'';
+  }else{
+   const hh=await supabase.from('navratri_households').select('id,house_number,participant_count,amount_due_paise').eq('season_id',season.id);
+   if(hh.error)throw hh.error;
+   const ids=hh.data.map(h=>h.id);
+   const today=new Date().toLocaleDateString('en-CA'),d=today<season.starts_on?season.starts_on:today>season.ends_on?season.ends_on:today;
+   const [cr,tk]=await Promise.all([ids.length?supabase.from('navratri_contributions').select('household_id,amount_paise,entry_type').in('household_id',ids):Promise.resolve({data:[],error:null}),supabase.from('navratri_tokens').select('house_number,token_count,status').eq('season_id',season.id).eq('token_date',d)]);
+   if(cr.error)throw cr.error;if(tk.error)throw tk.error;
+   const paidOf=h=>cr.data.filter(x=>x.household_id===h.id).reduce((n,x)=>n+(x.entry_type==='refund'?-1:1)*Number(x.amount_paise),0);
+   const rows=hh.data.map(h=>({n:Number(h.house_number),members:Number(h.participant_count)||0,due:Number(h.amount_due_paise)||0,paid:paidOf(h)}));
+   const members=rows.reduce((n,x)=>n+x.members,0),collected=rows.reduce((n,x)=>n+x.paid,0),pending=rows.reduce((n,x)=>n+Math.max(x.due-x.paid,0),0),unpaid=rows.filter(x=>x.members>0&&x.paid<x.due).length;
+   const received=tk.data.filter(x=>x.status==='received').reduce((n,x)=>n+Number(x.token_count||0),0);
+   const dayNo=Math.round((new Date(d+'T00:00:00')-new Date(season.starts_on+'T00:00:00'))/864e5)+1,total=Math.round((new Date(season.ends_on+'T00:00:00')-new Date(season.starts_on+'T00:00:00'))/864e5)+1;
+   const stat=(l,v)=>'<div class="fc-stat"><small>'+l+'</small><b>'+v+'</b></div>';
+   const own=rows.find(x=>x.n===Number(profile.house_number));
+   fest='<div class="fest-card"><div class="fc-head"><div><div class="eyebrow">'+t('Festival now','ચાલુ ઉત્સવ')+'</div><h3>'+escapeHtml(season.title)+'</h3><div class="tiny">'+escapeHtml(day(season.starts_on))+' — '+escapeHtml(day(season.ends_on))+'</div></div><span class="tag">'+(today>=season.starts_on&&today<=season.ends_on?t('Day ','દિવસ ')+dayNo+'/'+total:t('Active','ચાલુ'))+'</span></div>'
+    +(admin?'<div class="fc-stats">'+stat(t('Collected','એકત્રિત'),money(collected))+stat(t('Pending','બાકી'),money(pending))+stat(t('Tokens today','આજના ટોકન'),received+'/'+members)+'</div>'
+      +'<div class="fc-actions"><button type="button" class="btn primary" data-go="navratri" data-seg="tokens" data-today="1">'+t('Tokens','ટોકન')+'</button><button type="button" class="btn" data-go="navratri" data-seg="houses">'+t('Collect','ફાળો લો')+(unpaid?' ('+unpaid+')':'')+'</button><button type="button" class="btn" data-go="navratri" data-seg="expenses" data-today="1">'+t('Expense','ખર્ચ')+'</button></div>'
+     :(own?'<div class="fc-stats">'+stat(t('Your contribution','તમારો ફાળો'),money(own.due))+stat(t('Paid','ચૂકવેલ'),money(own.paid))+stat(t('Pending','બાકી'),money(Math.max(own.due-own.paid,0)))+'</div>':'')+'<div class="fc-actions"><button type="button" class="btn primary" data-go="navratri" data-seg="houses">'+t('Open festival','ઉત્સવ ખોલો')+'</button></div>')+'</div>';
+  }
+ }catch(err){console.error(err)}
+ return '<div class="greet"><b>'+t('Namaste, ','નમસ્તે, ')+escapeHtml((profile.display_name||'').split(' ')[0])+'</b><span class="tiny">'+escapeHtml(new Date().toLocaleDateString(lang==='gu'?'gu-IN':'en-IN',{weekday:'long',day:'numeric',month:'long'}))+'</span></div>'+fest
+  +'<h3 class="subhead sc-title">'+t('Shortcuts','શૉર્ટકટ')+'</h3><div class="shortcut-grid">'+tiles.join('')+'</div><h3 class="subhead">'+t('At a glance','એક નજરમાં')+'</h3>';
+}
 
 async function renderHouses(c){
  heading(t('Manage houses','ઘર વ્યવસ્થાપન'),t('Name, phone and login for every house (31–49). Tap a house to edit.','દરેક ઘરનું નામ, ફોન અને લોગિન (31–49). ફેરફાર માટે ઘર પર ટેપ કરો.'));
@@ -1032,6 +1144,64 @@ function enhanceSelect(select){
 }
 function enhanceAllSelects(root=document){root.querySelectorAll('select:not([data-mobile-enhanced="true"])').forEach(enhanceSelect)}
 enhanceAllSelects();
-new MutationObserver(records=>records.forEach(record=>record.addedNodes.forEach(node=>{if(node.nodeType===1){if(node.matches?.('select'))enhanceSelect(node);enhanceAllSelects(node)}}))).observe(document.body,{childList:true,subtree:true});
+
+/* Calendar date picker: replaces the browser's date control with a touch-friendly sheet */
+function isoOf(y,m,d){return y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0')}
+function parseIso(v){const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(v||'');return m?{y:+m[1],m:+m[2]-1,d:+m[3]}:null}
+function longDate(v){const p=parseIso(v);return p?new Date(p.y,p.m,p.d).toLocaleDateString(lang==='gu'?'gu-IN':'en-IN',{weekday:'short',day:'numeric',month:'short',year:'numeric'}):''}
+const DP={root:null,input:null,y:0,m:0};
+function unlockBodyIfIdle(){if(!document.querySelector('.household-modal:not([hidden])')&&$('moreSheet')?.hidden!==false)document.body.classList.remove('modal-open')}
+function dpBuild(){
+ const el=document.createElement('div');el.className='dp-wrap';el.hidden=true;
+ el.innerHTML='<button type="button" class="dp-backdrop" data-dp-close aria-label="Close"></button><section class="dp-sheet" role="dialog" aria-modal="true" aria-label="Choose date"><div class="modal-grabber"></div><div class="dp-head"><button type="button" class="btn icon-btn" data-dp-nav="-1" aria-label="Previous month"><svg class="ic"><use href="#i-chev-l"/></svg></button><strong class="dp-title" aria-live="polite"></strong><button type="button" class="btn icon-btn" data-dp-nav="1" aria-label="Next month"><svg class="ic"><use href="#i-chev-r"/></svg></button></div><div class="dp-week"></div><div class="dp-grid" role="grid"></div><div class="dp-foot"><button type="button" class="btn" data-dp-today></button><button type="button" class="btn" data-dp-close></button></div></section>';
+ document.body.appendChild(el);DP.root=el;
+ el.addEventListener('click',e=>{
+  if(e.target.closest('[data-dp-close]')){dpClose();return}
+  const nav=e.target.closest('[data-dp-nav]');if(nav){dpMove(Number(nav.dataset.dpNav));return}
+  if(e.target.closest('[data-dp-today]')){const n=new Date(),iso=isoOf(n.getFullYear(),n.getMonth(),n.getDate());dpPick(dpClamp(iso));return}
+  const d=e.target.closest('[data-date]');if(d&&!d.disabled)dpPick(d.dataset.date);
+ });
+ el.addEventListener('keydown',e=>{if(e.key==='Escape')dpClose()});
+}
+function dpClamp(iso){const i=DP.input;if(i.min&&iso<i.min)return i.min;if(i.max&&iso>i.max)return i.max;return iso}
+function dpMove(delta){let m=DP.m+delta,y=DP.y;if(m<0){m=11;y--}else if(m>11){m=0;y++}DP.m=m;DP.y=y;dpRender()}
+function dpRender(){
+ const loc=lang==='gu'?'gu-IN':'en-IN',i=DP.input,sel=parseIso(i.value),n=new Date(),todayIso=isoOf(n.getFullYear(),n.getMonth(),n.getDate());
+ DP.root.querySelector('.dp-title').textContent=new Date(DP.y,DP.m,1).toLocaleDateString(loc,{month:'long',year:'numeric'});
+ DP.root.querySelector('.dp-week').innerHTML=[0,1,2,3,4,5,6].map(k=>'<span>'+new Date(2023,0,1+k).toLocaleDateString(loc,{weekday:'short'}).slice(0,lang==='gu'?3:2)+'</span>').join('');
+ const first=new Date(DP.y,DP.m,1).getDay(),count=new Date(DP.y,DP.m+1,0).getDate();let h='';
+ for(let k=0;k<first;k++)h+='<span class="dp-pad"></span>';
+ for(let d=1;d<=count;d++){const iso=isoOf(DP.y,DP.m,d),off=(i.min&&iso<i.min)||(i.max&&iso>i.max),inRange=i.min&&i.max&&!off;
+  h+='<button type="button" role="gridcell" class="dp-day'+(iso===i.value?' is-selected':'')+(iso===todayIso?' is-today':'')+(inRange?' in-range':'')+'" data-date="'+iso+'"'+(off?' disabled':'')+(iso===i.value?' aria-selected="true"':'')+'>'+d+'</button>'}
+ DP.root.querySelector('.dp-grid').innerHTML=h;
+ DP.root.querySelector('[data-dp-today]').textContent=t('Today','આજે');
+ DP.root.querySelector('.dp-foot [data-dp-close]').textContent=t('Close','બંધ કરો');
+ const ym=isoOf(DP.y,DP.m,1).slice(0,7);
+ DP.root.querySelector('.dp-head [data-dp-nav="-1"]').disabled=!!(i.min&&i.min.slice(0,7)>=ym);
+ DP.root.querySelector('.dp-head [data-dp-nav="1"]').disabled=!!(i.max&&i.max.slice(0,7)<=ym);
+}
+function dpOpen(input){
+ if(!DP.root)dpBuild();DP.input=input;
+ const n=new Date(),start=parseIso(input.value)||parseIso(dpClamp(isoOf(n.getFullYear(),n.getMonth(),n.getDate())));
+ DP.y=start.y;DP.m=start.m;dpRender();DP.root.hidden=false;document.body.classList.add('modal-open');
+ (DP.root.querySelector('.is-selected')||DP.root.querySelector('.is-today')||DP.root.querySelector('.dp-day:not(:disabled)'))?.focus({preventScroll:true});
+}
+function dpClose(){if(!DP.root)return;DP.root.hidden=true;unlockBodyIfIdle();DP.trigger?.focus?.()}
+function dpPick(iso){const i=DP.input;i.value=iso;i.dispatchEvent(new Event('input',{bubbles:true}));i.dispatchEvent(new Event('change',{bubbles:true}));dpClose()}
+function syncDateTrigger(input){const b=input.closest('.date-field')?.querySelector('.date-trigger');if(!b)return;const txt=b.querySelector('.date-text');txt.textContent=input.value?longDate(input.value):t('Select date','તારીખ પસંદ કરો');b.classList.toggle('is-empty',!input.value);b.disabled=input.disabled}
+function enhanceDate(input){
+ if(input.dataset.dateEnhanced==='true')return;input.dataset.dateEnhanced='true';
+ const wrap=document.createElement('div');wrap.className='date-field';input.parentNode.insertBefore(wrap,input);wrap.appendChild(input);input.classList.add('native-date-source');input.tabIndex=-1;
+ const b=document.createElement('button');b.type='button';b.className='date-trigger';b.setAttribute('aria-haspopup','dialog');
+ b.innerHTML='<span class="date-text"></span><svg class="ic"><use href="#i-calpick"/></svg>';
+ b.addEventListener('click',()=>{DP.trigger=b;dpOpen(input)});wrap.appendChild(b);
+ const label=input.closest('.field')?.querySelector('label');if(label&&input.id){label.addEventListener('click',e=>{e.preventDefault();b.click()})}
+ ['input','change'].forEach(ev=>input.addEventListener(ev,()=>syncDateTrigger(input)));
+ syncDateTrigger(input);
+}
+function enhanceAllDates(root=document){root.querySelectorAll('input[type=date]:not([data-date-enhanced="true"])').forEach(enhanceDate)}
+enhanceAllDates();
+
+new MutationObserver(records=>records.forEach(record=>record.addedNodes.forEach(node=>{if(node.nodeType===1){if(node.matches?.('select'))enhanceSelect(node);enhanceAllSelects(node);if(node.matches?.('input[type=date]'))enhanceDate(node);enhanceAllDates(node)}}))).observe(document.body,{childList:true,subtree:true});
 
 </script></body></html>
