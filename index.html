@@ -260,6 +260,18 @@ body.modal-open{overflow:hidden}
 .pay-pending-amt{font-size:16px;color:var(--bad);white-space:nowrap}
 .pay-due-panel{margin-top:14px}
 .pay-due-panel h3{display:flex;align-items:center;gap:8px}
+/* expenses: quick entry */
+.expense-form{margin-top:6px}
+.amount-input{font-size:28px!important;font-weight:750;letter-spacing:-.02em;min-height:60px!important}
+.quick-amounts{display:flex;flex-wrap:wrap;gap:8px;margin:-4px 0 6px}
+.chip-group{display:flex;flex-wrap:wrap;gap:8px}
+.chip-group.two{display:grid;grid-template-columns:1fr 1fr}
+.opt-chip{min-height:44px;padding:0 16px;border:1px solid #cbd5e1;border-radius:99px;background:#fff;color:var(--ink);font-weight:650;font-size:14px}
+.chip-group.two .opt-chip{border-radius:var(--r-sm);padding:0 8px}
+.opt-chip.active{background:var(--brand);border-color:var(--brand);color:#fff}
+.quick-amounts .opt-chip{min-height:38px;padding:0 14px;font-size:13px;background:#f4f7fb}
+.day-total{margin-left:auto;font-size:15px;color:var(--ink)}
+.subhead:has(.day-total){display:flex;align-items:center;gap:8px}
 /* ---------- Custom select (bottom sheet on phones) ---------- */
 .mobile-select{position:relative;width:100%;min-width:0}
 .mobile-select .native-select-source{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important;clip-path:inset(50%)!important;overflow:hidden!important}
@@ -647,9 +659,22 @@ async function renderNavratri(c){
   +'<h3 class="subhead">'+t('People still waiting','હજુ રાહ જોઈ રહ્યા છે')+'</h3><div class="list">'+(waitingRows||empty(t('Nobody is waiting for tokens on this day.','આ દિવસે કોઈ ટોકન માટે બાકી નથી.')))+'</div>'
   +'<h3 class="subhead">'+t('Token records for ','ટોકન રેકોર્ડ: ')+dayLabel+' <span class="tag">'+tokens.length+'</span></h3><div class="list">'+(recordRows||empty(t('No tokens recorded on this day.','આ દિવસે ટોકન નોંધાયા નથી.')))+'</div></div>';
 
- const expensesPanel=admin?'<div class="panel"><h3>'+t('Daily expenses','દૈનિક ખર્ચ')+'</h3><div class="tiny">'+t('From Navratri fund','નવરાત્રી ફંડમાંથી')+': '+money(spent)+' · '+t('From main society fund','મુખ્ય સોસાયટી ફંડમાંથી')+': '+money(mainFundSpent)+'</div>'
-  +(canEdit?'<form id="expenseForm"><div class="field"><label>'+t('Date','તારીખ')+'</label><input name="spent_on" type="date" value="'+localToday()+'" required></div><div class="field"><label>'+t('Category','કેટેગરી')+'</label><select name="category"><option value="snacks">'+t('Snacks','નાસ્તો')+'</option><option value="drinks">'+t('Drinks','પીણાં')+'</option><option value="decorations">'+t('Decorations','સજાવટ')+'</option><option value="sound">'+t('Sound','સાઉન્ડ')+'</option><option value="supplies">'+t('Supplies','સામગ્રી')+'</option><option value="other">'+t('Other','અન્ય')+'</option></select></div><div class="field"><label>'+t('Description','વિગત')+'</label><input name="description" type="text" required minlength="2" maxlength="240"></div><div class="field"><label>'+t('Amount ₹','રકમ ₹')+'</label><input name="amount" type="number" inputmode="decimal" min="0.01" step="0.01" required></div><div class="field"><label>'+t('Paid from','કયા ફંડમાંથી')+'</label><select name="paid_from"><option value="navratri_contributions">'+t('Navratri contributions','નવરાત્રી ફાળો')+'</option><option value="main_society_fund">'+t('Main society fund','મુખ્ય સોસાયટી ફંડ')+'</option></select></div><button class="btn primary" type="submit">'+t('Add expense','ખર્ચ ઉમેરો')+'</button><span id="expenseMsg" class="msg"></span></form>':'')
-  +'<div class="list">'+(expenses.map(x=>'<article class="item"><div class="itemtop"><div><h3>'+escapeHtml(x.description)+'</h3><div class="tiny">'+escapeHtml(day(x.spent_on))+' · '+escapeHtml(x.category)+' · '+t('Paid from','ફંડ')+': '+(x.paid_from==='main_society_fund'?t('Main fund','મુખ્ય ફંડ'):t('Navratri fund','નવરાત્રી ફંડ'))+'</div></div><strong>'+money(x.amount_paise)+'</strong></div></article>').join('')||empty(t('No expenses recorded yet.','હજી કોઈ ખર્ચ નોંધાયો નથી.')))+'</div></div>':'';
+ const EXPENSE_CATS=[['snacks',t('Snacks','નાસ્તો')],['drinks',t('Drinks','પીણાં')],['decorations',t('Decorations','સજાવટ')],['sound',t('Sound','સાઉન્ડ')],['supplies',t('Supplies','સામગ્રી')],['other',t('Other','અન્ય')]];
+ const catLabel=k=>(EXPENSE_CATS.find(c0=>c0[0]===k)||[k,k])[1];
+ const dayExpenses=expenses.filter(x=>x.spent_on===selectedDate);
+ const dayExpenseTotal=dayExpenses.reduce((n,x)=>n+Number(x.amount_paise),0);
+ const chipGroup=(name,opts,cls)=>'<div class="chip-group '+(cls||'')+'" data-group="'+name+'" role="group">'+opts.map((o,i)=>'<button type="button" class="opt-chip'+(i===0?' active':'')+'" data-val="'+o[0]+'" aria-pressed="'+(i===0)+'">'+o[1]+'</button>').join('')+'</div>';
+ const expensesPanel=admin?'<div class="panel"><h3>'+t('Daily expenses','દૈનિક ખર્ચ')+'</h3><div class="tiny">'+t('Season total — Navratri fund','આખી સીઝન — નવરાત્રી ફંડ')+': '+money(spent)+' · '+t('main society fund','મુખ્ય સોસાયટી ફંડ')+': '+money(mainFundSpent)+'</div>'+dayChips
+  +(canEdit?'<form id="expenseForm" class="expense-form"><input type="hidden" name="category" value="snacks"><input type="hidden" name="paid_from" value="navratri_contributions">'
+   +'<div class="field"><label for="expenseAmount">'+t('Amount ₹','રકમ ₹')+'</label><input id="expenseAmount" class="amount-input" name="amount" type="number" inputmode="decimal" min="0.01" step="0.01" required placeholder="0"></div>'
+   +'<div class="quick-amounts" aria-label="'+t('Quick add','ઝડપી ઉમેરો')+'">'+[50,100,200,500,1000].map(v=>'<button type="button" class="opt-chip" data-amt="'+v+'">+'+v+'</button>').join('')+'<button type="button" class="opt-chip" data-amt-clear>'+t('Clear','સાફ')+'</button></div>'
+   +'<div class="field"><label>'+t('What for?','શેના માટે?')+'</label>'+chipGroup('category',EXPENSE_CATS)+'</div>'
+   +'<div class="field"><label for="expenseDesc">'+t('Details (optional)','વિગત (વૈકલ્પિક)')+'</label><input id="expenseDesc" name="description" type="text" maxlength="240" autocomplete="off" placeholder="'+t('e.g. tea and biscuits','દા.ત. ચા અને બિસ્કિટ')+'"></div>'
+   +'<div class="field"><label>'+t('Paid from','કયા ફંડમાંથી')+'</label>'+chipGroup('paid_from',[['navratri_contributions',t('Navratri fund','નવરાત્રી ફંડ')],['main_society_fund',t('Main society fund','મુખ્ય સોસાયટી ફંડ')]],'two')+'</div>'
+   +'<div class="field"><label for="expenseDate">'+t('Date','તારીખ')+'</label><input id="expenseDate" name="spent_on" type="date" value="'+escapeHtml(selectedDate)+'" required></div>'
+   +'<button class="btn primary" type="submit">'+t('Add expense','ખર્ચ ઉમેરો')+'</button><span id="expenseMsg" class="msg"></span></form>':'')
+  +'<h3 class="subhead">'+t('Expenses on ','ખર્ચ: ')+dayLabel+' <span class="tag">'+dayExpenses.length+'</span> <span class="day-total">'+money(dayExpenseTotal)+'</span></h3>'
+  +'<div class="list">'+(dayExpenses.map(x=>'<article class="item"><div class="itemtop"><div><h3>'+escapeHtml(x.description)+'</h3><div class="tiny">'+escapeHtml(catLabel(x.category))+' · '+(x.paid_from==='main_society_fund'?t('Main fund','મુખ્ય ફંડ'):t('Navratri fund','નવરાત્રી ફંડ'))+'</div></div><strong>'+money(x.amount_paise)+'</strong></div></article>').join('')||empty(t('No expenses recorded on this day.','આ દિવસે કોઈ ખર્ચ નોંધાયો નથી.')))+'</div></div>':'';
 
  const segs=[['houses',t('Houses','ઘર')],['tokens',t('Tokens','ટોકન')]].concat(admin?[['expenses',t('Expenses','ખર્ચ')]]:[]);
  if(!segs.some(x=>x[0]===navratriSeg))navratriSeg='houses';
@@ -810,12 +835,17 @@ async function renderNavratri(c){
   withBusy(b,async()=>{const {error}=await supabase.from('navratri_tokens').delete().eq('id',b.dataset.tokenDelete).eq('season_id',season.id);if(error){alert(error.message);return}await rerender()});
  }));
 
+ const expForm=$('expenseForm');
+ expForm.querySelectorAll('[data-group]').forEach(g=>g.addEventListener('click',e=>{const b=e.target.closest('[data-val]');if(!b)return;g.querySelectorAll('[data-val]').forEach(x=>{x.classList.toggle('active',x===b);x.setAttribute('aria-pressed',String(x===b))});expForm.elements[g.dataset.group].value=b.dataset.val}));
+ expForm.querySelectorAll('[data-amt]').forEach(b=>b.addEventListener('click',()=>{const f=expForm.elements.amount;f.value=(Number(f.value)||0)+Number(b.dataset.amt)}));
+ expForm.querySelector('[data-amt-clear]').addEventListener('click',()=>{expForm.elements.amount.value='';expForm.elements.amount.focus()});
  $('expenseForm').addEventListener('submit',e=>{e.preventDefault();const form=e.currentTarget,fd=new FormData(form),amount=toPaise(fd.get('amount'));
   if(!amount){setMsg('expenseMsg',t('Enter a valid amount.','યોગ્ય રકમ દાખલ કરો.'));return}
   withBusy(form.querySelector('button[type=submit]'),async()=>{
-   const {error}=await supabase.from('navratri_expenses').insert({season_id:season.id,spent_on:fd.get('spent_on'),category:fd.get('category'),description:String(fd.get('description')).trim(),amount_paise:amount,paid_from:fd.get('paid_from'),created_by:profile.id});
+   const {error}=await supabase.from('navratri_expenses').insert({season_id:season.id,spent_on:fd.get('spent_on'),category:fd.get('category'),description:String(fd.get('description')).trim()||catLabel(fd.get('category')),amount_paise:amount,paid_from:fd.get('paid_from'),created_by:profile.id});
    if(error){setMsg('expenseMsg',error.message);return}
-   await rerender();
+   navratriSelectedDate=fd.get('spent_on')||navratriSelectedDate;
+   await rerender();setMsg('appMsg',t('Expense added: ','ખર્ચ ઉમેર્યો: ')+money(amount));
   });
  });
 }
