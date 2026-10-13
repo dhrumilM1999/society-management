@@ -9,3 +9,5 @@ testing against the Supabase test project.
 npm i --no-save playwright && npx playwright install chromium
 node tests/navratri/e2e.mjs            # prints PASS/FAIL per check, screenshots go to /tmp
 ```
+
+Programme SQL (split, RLS, payments) is tested separately on an in-memory Postgres: `node tests/programmes/sql-test.mjs` (needs `npm i --no-save @electric-sql/pglite`).

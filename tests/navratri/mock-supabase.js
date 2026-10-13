@@ -9,6 +9,7 @@ const db = window.__db = {
   ],
   houses: Array.from({ length: 19 }, (_, i) => ({ house_number: 31 + i, is_active: true })),
   navratri_seasons: [], navratri_households: [], navratri_contributions: [], navratri_tokens: [], navratri_expenses: [],
+  prog_programmes: [], prog_expenses: [], prog_attendance: [], prog_shares: [],
   notices: [], meetings: [], payment_submissions: [], maintenance_charges: [], fund_ledger: [], programmes: [],
 };
 window.__calls = [];
@@ -22,6 +23,12 @@ function visible(table, rows) {
   if (table === 'navratri_contributions') { const ids = db.navratri_households.filter(h => h.house_number === 33).map(h => h.id); return rows.filter(r => ids.includes(r.household_id)); }
   if (table === 'navratri_tokens') return rows.filter(r => r.house_number === 33);
   if (table === 'navratri_expenses') throw new Error('permission denied for navratri_expenses');
+  // Simulates the prog_* RLS policies: residents see finalized programmes and only their own house rows.
+  const fin = id => db.prog_programmes.some(p => p.id === id && p.status === 'finalized');
+  if (table === 'prog_programmes') return rows.filter(r => r.status === 'finalized');
+  if (table === 'prog_expenses') return rows.filter(r => fin(r.programme_id));
+  if (table === 'prog_attendance') return rows.filter(r => r.house_number === 33 && fin(r.programme_id));
+  if (table === 'prog_shares') return rows.filter(r => r.house_number === 33);
   return rows;
 }
 class Q {
@@ -42,6 +49,8 @@ class Q {
   then(res, rej) { return new Promise(r => setTimeout(r, 30)).then(() => this.run()).then(res, rej); }
   run() {
     const T = db[this.table]; window.__calls.push(this.op + ' ' + this.table);
+    if (new URLSearchParams(location.search).get('progmissing') && this.table.startsWith('prog_')) return { data: null, error: { code: 'PGRST205', message: "Could not find the table 'public." + this.table + "' in the schema cache" } };
+    if (role !== 'admin' && this.op !== 'select' && this.table.startsWith('prog_')) return { data: null, error: { message: 'RLS: admin only' } };
     if (role !== 'admin' && this.op !== 'select' && this.table.startsWith('navratri')) return { data: null, error: { message: 'RLS: admin only' } };
     const match = r => this.filters.every(f => f(r));
     if (this.op === 'insert' || this.op === 'upsert') {
@@ -71,7 +80,42 @@ const session = { user: { id: uid }, access_token: 'x' };
 export function createClient() {
   return {
     from: t => new Q(t),
-    rpc: async () => ({ data: null, error: null }),
+    // Mirrors the SQL functions in docs/migrations/2026-10-13-programmes.sql (the SQL itself is tested in tests/programmes).
+    rpc: async (name, a) => {
+      await new Promise(r => setTimeout(r, 30));
+      window.__calls.push('rpc ' + name);
+      const err = message => ({ data: null, error: { message } });
+      if (role !== 'admin') return err('Only an administrator can do that.');
+      const prog = db.prog_programmes.find(p => p.id === a.p_programme_id);
+      if (!prog) return err('Programme not found.');
+      if (name === 'prog_finalize') {
+        if (prog.status !== 'draft') return err('This programme is already finalized.');
+        const total = db.prog_expenses.filter(e => e.programme_id === prog.id).reduce((n, e) => n + e.amount_paise, 0);
+        if (total <= 0) return err('Add at least one expense before finalizing.');
+        const att = new Map(db.prog_attendance.filter(x => x.programme_id === prog.id).map(x => [x.house_number, x.attendees]));
+        const w = []; for (let n = 31; n <= 49; n++) { const wt = prog.split_method === 'equal_houses' ? 1 : prog.split_method === 'attending_houses' ? ((att.get(n) || 0) > 0 ? 1 : 0) : (att.get(n) || 0); if (wt > 0) w.push({ n, wt }); }
+        const sum = w.reduce((x, y) => x + y.wt, 0); if (sum <= 0) return err('No house is marked as attending, so the cost cannot be shared.');
+        const rows = w.map(x => ({ programme_id: prog.id, house_number: x.n, share_paise: Math.floor(total * x.wt / sum), paid_paise: 0 }));
+        let left = total - rows.reduce((x, y) => x + y.share_paise, 0); for (const r of rows) { if (left <= 0) break; r.share_paise++; left--; }
+        db.prog_shares = db.prog_shares.filter(x => x.programme_id !== prog.id); db.prog_shares.push(...rows);
+        Object.assign(prog, { status: 'finalized', total_paise: total, finalized_at: new Date().toISOString() });
+        return { data: { total_paise: total, houses: rows.length }, error: null };
+      }
+      if (name === 'prog_reopen') {
+        if (prog.status !== 'finalized') return err('This programme is not finalized.');
+        if (db.prog_shares.some(x => x.programme_id === prog.id && x.paid_paise > 0)) return err('Payments are already recorded against this programme. Reverse them before reopening.');
+        db.prog_shares = db.prog_shares.filter(x => x.programme_id !== prog.id); Object.assign(prog, { status: 'draft', total_paise: null });
+        return { data: null, error: null };
+      }
+      if (name === 'prog_record_payment') {
+        const sh = db.prog_shares.find(x => x.programme_id === prog.id && x.house_number === a.p_house_number);
+        if (!sh) return err('This house has no share in this programme.');
+        if (sh.paid_paise + a.p_amount_paise > sh.share_paise) return err('That is more than the pending share.');
+        if (sh.paid_paise + a.p_amount_paise < 0) return err('That is more than what was paid.');
+        sh.paid_paise += a.p_amount_paise; return { data: sh.paid_paise, error: null };
+      }
+      return { data: null, error: null };
+    },
     auth: {
       onAuthStateChange(cb) { setTimeout(() => cb('SIGNED_IN', session), 0); return { data: { subscription: { unsubscribe() {} } } }; },
       signInWithPassword: async () => ({ error: null }), signOut: async () => ({}), getSession: async () => ({ data: { session } }),
@@ -79,6 +123,10 @@ export function createClient() {
   };
 }
 if (new URLSearchParams(location.search).get('seed')) {
+  db.prog_programmes.push({ id: 'pg1', title_en: 'Garba Night', title_gu: null, details: 'Sound and lights', held_on: '2026-10-20', split_method: 'equal_houses', status: 'finalized', total_paise: 190000 },
+    { id: 'pg2', title_en: 'Draft Event', held_on: '2026-10-22', split_method: 'equal_houses', status: 'draft' });
+  db.prog_expenses.push({ id: 'pe1', programme_id: 'pg1', description: 'Sound system', amount_paise: 190000, paid_from: 'main_society_fund', spent_on: '2026-10-20' });
+  for (let n = 31; n <= 49; n++) db.prog_shares.push({ programme_id: 'pg1', house_number: n, share_paise: 10000, paid_paise: n === 34 ? 10000 : 0 });
   db.navratri_seasons.push({ id: 's1', title: 'TEST Navratri', starts_on: '2026-10-17', ends_on: '2026-10-25', status: 'active' });
   for (let n = 31; n <= 49; n++) db.navratri_households.push({ id: 'h' + n, season_id: 's1', house_number: n, participant_count: n === 33 ? 2 : 0, contribution_per_person_paise: 50000 });
   db.navratri_contributions.push({ id: 'c1', household_id: 'h33', amount_paise: 50000, paid_on: '2026-10-12', payment_method: 'cash' });

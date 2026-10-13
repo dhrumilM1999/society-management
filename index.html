@@ -388,6 +388,33 @@ body.modal-open{overflow:hidden}
 .dp-day:not(:disabled):active{background:var(--brand-soft)}
 .dp-foot{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
 @media(min-width:900px){.dp-wrap{align-items:center}.dp-sheet{border-radius:24px;padding-top:18px}.dp-sheet .modal-grabber{display:none}}
+/* programmes */
+.prog-top{display:flex;margin-bottom:12px}
+.prog-top .btn{width:100%}
+.prog-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.prog-actions .btn{flex:1 1 140px}
+.share-table{display:grid;gap:6px;margin-top:10px}
+.share-line{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#fff;font-size:14px}
+.share-line strong{color:var(--ink);white-space:nowrap}
+.share-total{background:var(--brand-soft);border-color:#cfdbf3}
+.exp-line{grid-template-columns:minmax(0,1fr) auto auto}
+.exp-line>span{display:grid;gap:2px;min-width:0;overflow-wrap:anywhere}
+.my-share{display:grid;gap:2px;margin-top:14px;padding:14px;border-radius:var(--r-sm);background:var(--warn-soft);border:1px solid #f5dfa3}
+.my-share small{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--warn)}
+.my-share strong{font-size:26px;color:var(--ink);letter-spacing:-.02em}
+.my-share span{font-size:13px;font-weight:650;color:var(--warn)}
+.my-share.is-paid{background:var(--ok-soft);border-color:#bfe3cb}.my-share.is-paid small,.my-share.is-paid span{color:var(--ok)}
+.prog-stats{margin:14px 0}
+.prog-stats .fc-stat{background:#f4f7fb;border-color:var(--line)}.prog-stats .fc-stat small{color:var(--muted)}.prog-stats .fc-stat b{color:var(--ink)}
+.prog-exp-form{margin-top:10px;padding:14px;border:1px solid var(--line);border-radius:var(--r-sm);background:#f8fafc}
+.att-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
+.att-cell{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.att-cell b{font-size:16px;color:var(--ink);min-width:26px}
+.att-step{display:flex;align-items:center;gap:4px}
+.att-step button{width:38px;height:38px;border:1px solid #cbd5e1;border-radius:10px;background:#fff;font-size:20px;color:var(--brand)}
+.att-step input{width:46px;height:38px;text-align:center;border:1px solid #cbd5e1;border-radius:10px;font-size:16px;font-weight:700;padding:0;min-width:0}
+.programme-card.is-open{border-color:#93b4f5}
+@media(min-width:600px){.att-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.prog-top .btn{width:auto}}
 /* ---------- Custom select (bottom sheet on phones) ---------- */
 .mobile-select{position:relative;width:100%;min-width:0}
 .mobile-select .native-select-source{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important;clip-path:inset(50%)!important;overflow:hidden!important}
@@ -585,7 +612,7 @@ function item(title,body,meta,tag){return '<article class="item"><div class="ite
 async function fetchNotices(){const [n,m]=await Promise.all([supabase.from('notices').select('id,title_en,body_en,title_gu,body_gu,published_at,status').eq('status','published').order('published_at',{ascending:false}).limit(30),supabase.from('meetings').select('id,title_en,details_en,title_gu,details_gu,starts_at,location,status').eq('status','published').order('starts_at',{ascending:true}).limit(30)]);if(n.error)throw n.error;if(m.error)throw m.error;return {notices:n.data,meetings:m.data}}
 function localTitle(x){return (lang==='gu'&&x.title_gu)||x.title_en}
 function localBody(x){return (lang==='gu'&&(x.body_gu||x.details_gu))||(x.body_en||x.details_en)||''}
-async function renderView(){if(!profile)return;document.querySelectorAll('#app [data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===activeView));$('moreBtn').classList.toggle('active',MORE_VIEWS.includes(activeView));$('appMsg').textContent='';const c=$('viewContent');c.innerHTML='<div class="empty">'+t('Loading secure data…','સુરક્ષિત ડેટા લોડ થઈ રહ્યો છે…')+'</div>';
+async function renderView(){if(!profile)return;flushProg();document.querySelectorAll('#app [data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===activeView));$('moreBtn').classList.toggle('active',MORE_VIEWS.includes(activeView));$('appMsg').textContent='';const c=$('viewContent');c.innerHTML='<div class="empty">'+t('Loading secure data…','સુરક્ષિત ડેટા લોડ થઈ રહ્યો છે…')+'</div>';
 try{
 if(activeView==='navratri'){await renderNavratri(c)}
 else if(activeView==='houses'&&profile.role==='admin'){await renderHouses(c)}
@@ -593,7 +620,7 @@ else if(activeView==='overview'){heading(t('Overview','ઝાંખી'),t('Your
 else if(activeView==='notices'){heading(t('Notices & meetings','નોટિસ અને મિટિંગ'),t('Published announcements for the community.','સમુદાય માટે પ્રકાશિત જાહેરાતો.'));const {notices,meetings}=await fetchNotices();c.innerHTML='<h3 class="subhead">'+t('Notices','નોટિસ')+'</h3><div class="list">'+(notices.map(x=>item(localTitle(x),localBody(x),date(x.published_at),'Notice')).join('')||empty(t('No published notices.','પ્રકાશિત નોટિસ નથી.')) )+'</div><h3 class="subhead">'+t('Meetings','મિટિંગ')+'</h3><div class="list">'+(meetings.map(x=>item(localTitle(x),localBody(x)+'\n'+(x.location||''),date(x.starts_at),'Meeting')).join('')||empty(t('No published meetings.','પ્રકાશિત મિટિંગ નથી.')) )+'</div>'}
 else if(activeView==='payments'){heading(t('Payments','પેમેન્ટ'),t('Submit a payment for administrator confirmation and review your submissions.','એડમિન પુષ્ટિ માટે પેમેન્ટ મોકલો અને તમારા રેકોર્ડ જુઓ.'));const {data:payments,error}=await supabase.from('payment_submissions').select('id,amount_paise,status,fund,payment_date,reference_note,created_at').order('created_at',{ascending:false}).limit(50);if(error)throw error;c.innerHTML=(profile.role==='resident'?'<div class="panel"><h3>'+t('Submit payment','પેમેન્ટ મોકલો')+'</h3><form id="paymentForm"><div class="field"><label>'+t('Fund','ફંડ')+'</label><select name="fund"><option value="maintenance">'+t('Maintenance','મેન્ટેનન્સ')+'</option><option value="festival">'+t('Festival','તહેવાર')+'</option><option value="general">'+t('General','જનરલ')+'</option></select></div><div class="field"><label>'+t('Amount (₹)','રકમ (₹)')+'</label><input name="amount" type="number" inputmode="decimal" min="0.01" step="0.01" required></div><div class="field"><label>'+t('Payment date','પેમેન્ટ તારીખ')+'</label><input name="date" type="date" value="'+new Date().toISOString().slice(0,10)+'" required></div><div class="field"><label>'+t('Reference / note (optional)','રેફરન્સ / નોંધ (વૈકલ્પિક)')+'</label><input name="note" type="text" maxlength="250" autocomplete="off"></div><button class="btn primary" type="submit">'+t('Submit for review','સમીક્ષા માટે મોકલો')+'</button><div class="msg" id="paymentMsg"></div></form><p class="tiny">'+t('Submission is not a receipt. The payment is recorded in fund totals only after an administrator confirms it.','આ સબમિશન રસીદ નથી. એડમિન પુષ્ટિ કર્યા પછી જ ફંડમાં ગણાશે.')+'</p></div>':'<div class="noticebar">'+t('Admin: use Admin review to confirm or reject submissions.','એડમિન: સબમિશન મંજૂર અથવા નકારવા Admin review ખોલો.')+'</div>')+'<h3 class="subhead">'+t('Payment history','પેમેન્ટ ઇતિહાસ')+'</h3><div class="list">'+(payments.map(x=>item(money(x.amount_paise)+' · '+t(x.fund,x.fund),date(x.payment_date)+(x.reference_note?' · '+x.reference_note:''),date(x.created_at),t(x.status,({pending:'બાકી',approved:'મંજૂર',rejected:'નકારેલ'})[x.status]||x.status))).join('')||empty(t('No payments submitted yet.','હજી કોઈ પેમેન્ટ નથી.')) )+'</div>';const f=$('paymentForm');if(f)f.addEventListener('submit',submitPayment)}
 else if(activeView==='funds'){heading(t('Fund records','ફંડ રેકોર્ડ'),t('Posted entries only; pending payment claims are excluded.','મંજૂર થયેલી એન્ટ્રીઓ જ; બાકી પેમેન્ટનો સમાવેશ નથી.'));const {data,error}=await supabase.from('fund_ledger').select('id,fund,house_number,amount_paise,entry_type,description,posted_at').order('posted_at',{ascending:false}).limit(100);if(error)throw error;const funds=['maintenance','festival','general'];c.innerHTML='<div class="grid">'+funds.map(f=>'<div class="metric"><small>'+t(f,({maintenance:'મેન્ટેનન્સ',festival:'તહેવાર',general:'જનરલ'})[f])+'</small><strong>'+money(data.filter(x=>x.fund===f).reduce((s,x)=>s+Number(x.amount_paise),0))+'</strong><span>'+t('Visible posted balance','દેખાતું બેલેન્સ')+'</span></div>').join('')+'</div><div class="noticebar">'+t('Residents see their house-specific ledger entries. Admins see society-wide entries. A visible resident total may not represent the entire society fund balance.','રહેવાસીઓ પોતાનાં ઘરનાં લેજર જુએ છે. એડમિન સોસાયટીની બધી એન્ટ્રીઓ જુએ છે. રહેવાસીનું બેલેન્સ સમગ્ર ફંડનું બેલેન્સ ન પણ હોય.')+'</div><div class="list">'+(data.map(x=>item(money(x.amount_paise)+' · '+t(x.fund,x.fund),x.description,(x.house_number?'House '+x.house_number+' · ':'')+date(x.posted_at),x.entry_type)).join('')||empty(t('No confirmed ledger entries yet.','હજી લેજર એન્ટ્રી નથી.')) )+'</div>'}
-else if(activeView==='programmes'){heading(t('Programmes','કાર્યક્રમો'),t('Published events and festival expense shares.','પ્રકાશિત કાર્યક્રમો અને તહેવાર ખર્ચના હિસ્સા.'));const {data:programmes,error}=await supabase.from('programmes').select('id,title_en,title_gu,details_en,details_gu,starts_at,split_method,status').eq('status','published').order('starts_at',{ascending:false}).limit(50);if(error)throw error;let html='';for(const p of programmes){const {data:expenses,error:ee}=await supabase.from('programme_expenses').select('id,description,amount_paise,fund,spent_on').eq('programme_id',p.id);if(ee)throw ee;let expenseHtml='';for(const ex of expenses){const {data:shares,error:se}=await supabase.from('programme_shares').select('share_paise,house_number,attendee_count').eq('expense_id',ex.id).order('house_number');if(se)throw se;const own=shares.find(s=>s.house_number===profile.house_number);expenseHtml+=item(ex.description,money(ex.amount_paise)+' · '+t(ex.fund,ex.fund)+(own?'\n'+t('Your house share: ','તમારા ઘરનો હિસ્સો: ')+money(own.share_paise):''),date(ex.spent_on),p.split_method)}html+='<article class="programme-card"><div class="programme-date">'+escapeHtml(date(p.starts_at))+'</div><h3>'+escapeHtml(localTitle(p))+'</h3><div class="programme-details">'+escapeHtml(localBody(p))+'</div><div class="tiny" style="margin-top:10px">'+t('Expense sharing','ખર્ચ વહેંચણી')+': '+escapeHtml(p.split_method||t('Not specified','નક્કી નથી'))+'</div>'+(expenseHtml?'<div class="programme-expenses"><div class="tiny" style="font-weight:750;margin:8px 0">'+t('Recorded expenses and house share','નોંધાયેલ ખર્ચ અને ઘરનો હિસ્સો')+'</div><div class="list">'+expenseHtml+'</div></div>':'')+'</article>'}c.innerHTML='<div class="list">'+(html||empty(t('No published programmes yet.','હજી કોઈ કાર્યક્રમ પ્રકાશિત નથી.')) )+'</div>'}
+else if(activeView==='programmes'){await renderProgrammes(c)}
 else if(activeView==='admin'&&profile.role==='admin'){heading(t('Admin review','એડમિન સમીક્ષા'),t('Review payment submissions and publish community updates.','પેમેન્ટ સમીક્ષા કરો અને સોસાયટી અપડેટ પ્રકાશિત કરો.'));const {data:payments,error}=await supabase.from('payment_submissions').select('id,house_number,amount_paise,fund,payment_date,reference_note,created_at,submitted_by').eq('status','pending').order('created_at');if(error)throw error;c.innerHTML='<div class="panel"><h3>'+t('Pending payment submissions','બાકી પેમેન્ટ સબમિશન')+'</h3><div class="list">'+(payments.map(x=>'<article class="item"><div class="itemtop"><div><h3>'+money(x.amount_paise)+' · '+t(x.fund,x.fund)+'</h3><div class="tiny">House '+x.house_number+' · '+date(x.payment_date)+' · '+date(x.created_at)+'</div><p>'+escapeHtml(x.reference_note||'—')+'</p></div><span class="tag">Pending</span></div><div class="row" style="margin-top:12px"><button class="btn primary" data-approve="'+x.id+'">'+t('Confirm payment','પેમેન્ટ મંજૂર કરો')+'</button><button class="btn" data-reject="'+x.id+'">'+t('Reject','નકારો')+'</button></div></article>').join('')||empty(t('No payments awaiting review.','સમીક્ષા માટે પેમેન્ટ નથી.')) )+'</div></div><div class="panel" style="margin-top:16px"><h3>'+t('Publish a notice','નોટિસ પ્રકાશિત કરો')+'</h3><form id="noticeForm"><div class="field"><label>'+t('Title (English)','શીર્ષક (અંગ્રેજી)')+'</label><input name="title_en" type="text" required maxlength="180"></div><div class="field"><label>'+t('Message (English)','સંદેશ (અંગ્રેજી)')+'</label><textarea name="body_en" required rows="3"></textarea></div><div class="field"><label>'+t('Title (Gujarati)','શીર્ષક (ગુજરાતી)')+'</label><input name="title_gu" type="text" maxlength="180"></div><div class="field"><label>'+t('Message (Gujarati)','સંદેશ (ગુજરાતી)')+'</label><textarea name="body_gu" rows="3"></textarea></div><button class="btn primary" type="submit">'+t('Publish notice','નોટિસ પ્રકાશિત કરો')+'</button><div class="msg" id="noticeMsg"></div></form></div>';c.querySelectorAll('[data-approve]').forEach(b=>b.addEventListener('click',()=>reviewPayment(b.dataset.approve,true)));c.querySelectorAll('[data-reject]').forEach(b=>b.addEventListener('click',()=>reviewPayment(b.dataset.reject,false)));$('noticeForm').addEventListener('submit',publishNotice)}
 else{heading(t('Not available','ઉપલબ્ધ નથી'),'');c.innerHTML=empty(t('This section is only available to administrators.','આ વિભાગ ફક્ત એડમિન માટે છે.'))}
 }catch(err){console.error(err);c.innerHTML='<div class="panel"><h3>'+t('Could not load this section','આ વિભાગ લોડ થઈ શક્યો નથી')+'</h3><p class="muted">'+t('Please refresh. If the problem continues, ask the administrator to check your account permissions.','રિફ્રેશ કરો. સમસ્યા રહે તો એડમિનને પરવાનગી તપાસવા કહો.')+'</p></div>'}}
@@ -648,6 +675,174 @@ async function overviewTop(){
  }catch(err){console.error(err)}
  return '<div class="greet"><b>'+t('Namaste, ','નમસ્તે, ')+escapeHtml((profile.display_name||'').split(' ')[0])+'</b><span class="tiny">'+escapeHtml(new Date().toLocaleDateString(lang==='gu'?'gu-IN':'en-IN',{weekday:'long',day:'numeric',month:'long'}))+'</span></div>'+fest
   +'<h3 class="subhead sc-title">'+t('Shortcuts','શૉર્ટકટ')+'</h3><div class="shortcut-grid">'+tiles.join('')+'</div><h3 class="subhead">'+t('At a glance','એક નજરમાં')+'</h3>';
+}
+
+/* ---------- Programmes & expense sharing ----------
+   Data lives in prog_* tables (docs/migrations/2026-10-13-programmes.sql). Splitting and payments go through
+   database functions so the shares are saved all-or-nothing. progSplit() below mirrors the SQL for the live preview. */
+const PROG_HOUSES=Array.from({length:19},(_,i)=>31+i);
+let progOpen=null, progNew=false;
+const progPending=new Map();
+let progTimer=null;
+const progMissing=e=>/PGRST205|42P01|schema cache|prog_programmes/i.test(String(e?.code||'')+' '+String(e?.message||''));
+function progMethods(){return [
+ ['equal_houses',t('All houses equally','બધા ઘર સરખા'),t('Every one of the 19 houses pays the same.','દરેક 19 ઘર સરખી રકમ આપે.')],
+ ['attending_houses',t('Attending houses equally','હાજર ઘર સરખા'),t('Only houses that sent people pay, the same amount each.','જે ઘરમાંથી લોકો આવ્યા તે જ ઘર, દરેક સરખું.')],
+ ['per_attendee',t('Per person attended','હાજર વ્યક્તિ દીઠ'),t('Each house pays in proportion to how many people attended.','હાજર વ્યક્તિઓ પ્રમાણે દરેક ઘર ચૂકવે.')]]}
+function progMethodName(m){return (progMethods().find(x=>x[0]===m)||[m,m])[1]}
+// Same rules as prog_finalize(): floor each share, then give the left-over paise to the lowest house numbers.
+function progSplit(total,method,att){
+ const w=PROG_HOUSES.map(n=>({n,wt:method==='equal_houses'?1:method==='attending_houses'?((att.get(n)||0)>0?1:0):(att.get(n)||0)})).filter(x=>x.wt>0);
+ const sum=w.reduce((a,x)=>a+x.wt,0);if(total<=0||sum<=0)return null;
+ const rows=w.map(x=>({n:x.n,share:Math.floor(total*x.wt/sum)}));
+ let left=total-rows.reduce((a,x)=>a+x.share,0);
+ for(const r of rows){if(left<=0)break;r.share+=1;left-=1}
+ return rows;
+}
+async function flushProg(){
+ if(progTimer){clearTimeout(progTimer);progTimer=null}
+ if(!progPending.size)return;
+ const rows=[...progPending.values()];progPending.clear();
+ const {error}=await supabase.from('prog_attendance').upsert(rows,{onConflict:'programme_id,house_number'});
+ if(error){console.error(error);setMsg('appMsg',t('Could not save attendance: ','હાજરી સાચવી શકાઈ નથી: ')+error.message)}
+}
+const progIcon=(cls,icon,label,attrs)=>'<button type="button" class="act '+cls+'" '+(attrs||'')+' aria-label="'+escapeHtml(label)+'"><svg class="ic"><use href="#i-'+icon+'"/></svg><span>'+label+'</span></button>';
+const progLink=(cls,icon,label,href,ext)=>'<a class="act '+cls+'" href="'+href+'"'+(ext?' target="_blank" rel="noopener"':'')+' aria-label="'+escapeHtml(label)+'"><svg class="ic"><use href="#i-'+icon+'"/></svg><span>'+label+'</span></a>';
+function phoneIntl(raw){const d=String(raw||'').replace(/\D/g,'');return d.length===10?'91'+d:d.length>=11?d:''}
+function bindChips(root){root.querySelectorAll('[data-group]').forEach(g=>g.addEventListener('click',e=>{const b=e.target.closest('[data-val]');if(!b)return;g.querySelectorAll('[data-val]').forEach(x=>{x.classList.toggle('active',x===b);x.setAttribute('aria-pressed',String(x===b))});const f=g.closest('form');if(f)f.elements[g.dataset.group].value=b.dataset.val}))}
+function progChips(name,opts,current){return '<div class="chip-group'+(opts.length===2?' two':'')+'" data-group="'+name+'" role="group">'+opts.map(o=>'<button type="button" class="opt-chip'+(o[0]===current?' active':'')+'" data-val="'+o[0]+'" aria-pressed="'+(o[0]===current)+'">'+o[1]+'</button>').join('')+'</div>'}
+
+function progForm(p){
+ const m=progMethods();
+ return '<form class="prog-form" data-prog-form="'+(p?escapeHtml(p.id):'new')+'" novalidate><input type="hidden" name="split_method" value="'+(p?.split_method||'equal_houses')+'">'
+  +'<div class="field"><label>'+t('Programme name (English)','કાર્યક્રમનું નામ (અંગ્રેજી)')+' *</label><input name="title_en" type="text" required maxlength="160" autocomplete="off" value="'+escapeHtml(p?.title_en||'')+'" placeholder="'+t('e.g. Sharad Purnima Garba','દા.ત. શરદ પૂર્ણિમા ગરબા')+'"></div>'
+  +'<div class="field"><label>'+t('Name (Gujarati, optional)','નામ (ગુજરાતી, વૈકલ્પિક)')+'</label><input name="title_gu" type="text" maxlength="160" autocomplete="off" value="'+escapeHtml(p?.title_gu||'')+'"></div>'
+  +'<div class="field"><label>'+t('Date','તારીખ')+' *</label><input name="held_on" type="date" required value="'+escapeHtml(p?.held_on||localToday())+'"></div>'
+  +'<div class="field"><label>'+t('Details (optional)','વિગત (વૈકલ્પિક)')+'</label><textarea name="details" rows="3" maxlength="2000">'+escapeHtml(p?.details||'')+'</textarea></div>'
+  +'<div class="field"><label>'+t('How is the cost shared?','ખર્ચ કેવી રીતે વહેંચવો?')+'</label>'+progChips('split_method',m.map(x=>[x[0],x[1]]),p?.split_method||'equal_houses')+'<div class="form-hint prog-method-hint">'+escapeHtml((m.find(x=>x[0]===(p?.split_method||'equal_houses'))||m[0])[2])+'</div></div>'
+  +'<button class="btn primary" type="submit">'+(p?t('Save changes','ફેરફાર સાચવો'):t('Create programme','કાર્યક્રમ બનાવો'))+'</button><div class="msg prog-form-msg" role="alert"></div></form>';
+}
+function progPreview(p,total,att){
+ const rows=progSplit(total,p.split_method,att);
+ if(total<=0)return {html:'<div class="empty">'+t('Add the expenses to see how the cost is shared.','ખર્ચ કેવી રીતે વહેંચાશે તે જોવા ખર્ચ ઉમેરો.')+'</div>',ok:false};
+ if(!rows)return {html:'<div class="empty">'+t('Enter how many people attended from each house to see the split.','વહેંચણી જોવા દરેક ઘરમાંથી કેટલા લોકો આવ્યા તે લખો.')+'</div>',ok:false};
+ const per=p.split_method==='per_attendee';
+ return {ok:true,html:'<div class="share-table">'+rows.map(r=>'<div class="share-line"><b>'+t('House ','ઘર ')+r.n+'</b>'+(per?'<span class="tiny">'+(att.get(r.n)||0)+' '+t('people','વ્યક્તિ')+'</span>':'<span></span>')+'<strong>'+money(r.share)+'</strong></div>').join('')+'<div class="share-line share-total"><b>'+t('Total','કુલ')+' · '+rows.length+' '+t('houses','ઘર')+'</b><span></span><strong>'+money(rows.reduce((a,x)=>a+x.share,0))+'</strong></div></div>'};
+}
+
+async function renderProgrammes(c){
+ const admin=profile.role==='admin';
+ heading(t('Programmes','કાર્યક્રમો'),admin?t('Create events, record their costs and share them between houses.','કાર્યક્રમ બનાવો, ખર્ચ નોંધો અને ઘરો વચ્ચે વહેંચો.'):t('Events and your house share of their cost.','કાર્યક્રમો અને તમારા ઘરનો ખર્ચ હિસ્સો.'));
+ const rerender=async()=>{await flushProg();return renderProgrammes(c).catch(err=>{console.error(err);setMsg('appMsg',t('Could not refresh programmes. Tap Refresh.','કાર્યક્રમો રિફ્રેશ થયા નથી. રિફ્રેશ દબાવો.'))})};
+ const pr=await supabase.from('prog_programmes').select('*').order('held_on',{ascending:false}).limit(60);
+ if(pr.error){
+  if(progMissing(pr.error)){
+   c.innerHTML=admin?'<div class="panel"><h3>'+t('One-time database setup needed','એક વખતનું ડેટાબેઝ સેટઅપ જરૂરી')+'</h3><p class="muted">'+t('Programmes use new database tables. Open Supabase → SQL Editor, paste the file below, and press Run. Then come back and tap Refresh.','કાર્યક્રમો માટે નવા ડેટાબેઝ ટેબલ જોઈએ. Supabase → SQL Editor ખોલો, નીચેની ફાઇલ પેસ્ટ કરી Run દબાવો. પછી પાછા આવી રિફ્રેશ કરો.')+'</p><div class="noticebar"><code>docs/migrations/2026-10-13-programmes.sql</code></div></div>':'<div class="panel"><h3>'+t('Programmes are not set up yet','કાર્યક્રમો હજી શરૂ થયા નથી')+'</h3><p class="muted">'+t('Please ask the administrator.','કૃપા કરી એડમિનને કહો.')+'</p></div>';
+   return;
+  }
+  throw pr.error;
+ }
+ const progs=pr.data,ids=progs.map(x=>x.id),none=Promise.resolve({data:[],error:null});
+ const [ex,at,sh,pp]=await Promise.all([
+  ids.length?supabase.from('prog_expenses').select('*').in('programme_id',ids).order('spent_on',{ascending:true}):none,
+  ids.length?supabase.from('prog_attendance').select('*').in('programme_id',ids):none,
+  ids.length?supabase.from('prog_shares').select('*').in('programme_id',ids):none,
+  admin?supabase.from('profiles').select('house_number,display_name,contact_phone,preferred_language').eq('role','resident'):none]);
+ for(const x of [ex,at,sh])if(x.error)throw x.error;
+ if(activeView!=='programmes')return;
+ const people=new Map((pp.error?[]:pp.data).map(x=>[Number(x.house_number),x]));
+ const own=Number(profile.house_number);
+ const attOf=pid=>new Map(at.data.filter(a=>a.programme_id===pid).map(a=>[Number(a.house_number),Number(a.attendees)]));
+ const expOf=pid=>ex.data.filter(e=>e.programme_id===pid);
+ const sum=list=>list.reduce((n,e)=>n+Number(e.amount_paise),0);
+ const fundName=f=>f==='navratri_contributions'?t('Navratri fund','નવરાત્રી ફંડ'):t('Main society fund','મુખ્ય સોસાયટી ફંડ');
+ const expRows=(list,editable)=>list.map(e=>'<div class="share-line exp-line"><span><b>'+escapeHtml(e.description)+'</b><span class="tiny">'+escapeHtml(day(e.spent_on))+' · '+fundName(e.paid_from)+'</span></span><strong>'+money(e.amount_paise)+'</strong>'+(editable?'<button type="button" class="btn sm token-undo-btn" data-exp-del="'+escapeHtml(e.id)+'" aria-label="'+t('Remove','દૂર કરો')+'">'+t('Remove','દૂર કરો')+'</button>':'')+'</div>').join('');
+ const statusOf=sx=>sx.paid_paise>=sx.share_paise?{k:'paid',l:t('Paid','ચૂકવેલ')}:sx.paid_paise>0?{k:'part',l:t('Partly paid','અંશતઃ ચૂકવેલ')}:{k:'due',l:t('Pending','બાકી')};
+
+ const card=p=>{
+  const list=expOf(p.id),total=p.status==='finalized'?Number(p.total_paise)||sum(list):sum(list),att=attOf(p.id),shares=sh.data.filter(x=>x.programme_id===p.id).sort((a,b)=>a.house_number-b.house_number);
+  const head='<div class="programme-date">'+escapeHtml(day(p.held_on))+'</div> <span class="tag">'+(p.status==='finalized'?t('Finalized','પૂર્ણ'):t('Draft','ડ્રાફ્ટ'))+'</span><h3>'+escapeHtml(localTitle(p)||p.title_en)+'</h3>'+(p.details?'<div class="programme-details">'+escapeHtml(p.details)+'</div>':'')+'<div class="tiny" style="margin-top:8px">'+t('Sharing','વહેંચણી')+': <b>'+escapeHtml(progMethodName(p.split_method))+'</b>'+(total?' · '+t('Total','કુલ')+' <b>'+money(total)+'</b>':'')+'</div>';
+  // ----- resident view (finalized only; RLS hides drafts) -----
+  if(!admin){
+   const mine=shares.find(x=>Number(x.house_number)===own),st=mine&&statusOf(mine);
+   return '<article class="programme-card">'+head+(list.length?'<div class="share-table" style="margin-top:12px">'+expRows(list,false)+'</div>':'')
+    +(mine?'<div class="my-share is-'+st.k+'"><small>'+t('Your house share','તમારા ઘરનો હિસ્સો')+'</small><strong>'+money(mine.share_paise)+'</strong><span>'+st.l+(mine.paid_paise>0&&st.k!=='paid'?' · '+t('Paid','ચૂકવેલ')+' '+money(mine.paid_paise):'')+'</span></div>':'<div class="noticebar">'+t('Your house is not part of this cost sharing.','આ ખર્ચ વહેંચણીમાં તમારું ઘર નથી.')+'</div>')+'</article>';
+  }
+  // ----- admin: finalized -----
+  if(p.status==='finalized'){
+   const paid=shares.reduce((n,x)=>n+Number(x.paid_paise),0),all=shares.reduce((n,x)=>n+Number(x.share_paise),0);
+   return '<article class="programme-card">'+head+(list.length?'<details class="records-details"><summary>'+t('Expenses','ખર્ચ')+' <span class="tag">'+list.length+'</span></summary><div class="share-table">'+expRows(list,false)+'</div></details>':'')
+    +'<div class="fc-stats prog-stats"><div class="fc-stat"><small>'+t('Collected','એકત્રિત')+'</small><b>'+money(paid)+'</b></div><div class="fc-stat"><small>'+t('Pending','બાકી')+'</small><b>'+money(all-paid)+'</b></div><div class="fc-stat"><small>'+t('Houses','ઘર')+'</small><b>'+shares.length+'</b></div></div>'
+    +'<div class="list">'+shares.map(x=>{const st=statusOf(x),n=Number(x.house_number),pend=Number(x.share_paise)-Number(x.paid_paise),person=people.get(n),ph=phoneIntl(person?.contact_phone);
+      const msg=((person?.preferred_language||lang)==='gu')?'નમસ્તે '+(person?.display_name||'ઘર '+n)+', "'+(p.title_gu||p.title_en)+'" ના ખર્ચમાં ઘર '+n+' નો હિસ્સો '+money(x.share_paise)+' છે, બાકી '+money(pend)+'. કૃપા કરી ચૂકવશો. – સોનલપાર્ક સોસાયટી ગેટ-2':'Hello '+(person?.display_name||'House '+n)+', house '+n+'\'s share of "'+p.title_en+'" is '+money(x.share_paise)+', pending '+money(pend)+'. Please pay at your earliest. – Sonalpark Society Gate-2';
+      return '<article class="wait-row"><div class="wait-open"><span class="hd-num sm">'+n+'</span><span class="wait-info"><strong>'+escapeHtml(person?.display_name||t('House ','ઘર ')+n)+'</strong><span class="tiny">'+t('Share','હિસ્સો')+' '+money(x.share_paise)+' · '+t('Paid','ચૂકવેલ')+' '+money(x.paid_paise)+'</span></span><span class="token-status '+(st.k==='paid'?'is-done':'is-pending')+'">● '+st.l+'</span></div>'
+       +'<div class="act-row">'+(pend>0?progIcon('act-yes act-wide','check',t('Mark paid','ચૂકવ્યા')+' ('+money(pend)+')','data-share-pay="'+escapeHtml(p.id)+':'+n+':'+pend+'"')+(ph?progLink('act-call','phone',t('Call','કૉલ'),'tel:+'+ph)+progLink('act-wa','chat','WhatsApp','https://wa.me/'+ph+'?text='+encodeURIComponent(msg),true)+progLink('act-sms','sms','SMS','sms:+'+ph+'?&body='+encodeURIComponent(msg)):'<div class="tiny contact-none">'+t('No phone saved — add it in Manage houses.','ફોન નંબર નથી — ઘર વ્યવસ્થાપનમાં ઉમેરો.')+'</div>'):'')
+       +(x.paid_paise>0?progIcon('act-no','x',t('Undo payment','ચુકવણી રદ'),'data-share-pay="'+escapeHtml(p.id)+':'+n+':-'+x.paid_paise+'"'):'')+'</div></article>'}).join('')+'</div>'
+    +'<div class="prog-actions"><button type="button" class="btn" data-prog-reopen="'+escapeHtml(p.id)+'">'+t('Reopen to correct','સુધારવા ફરી ખોલો')+'</button></div></article>';
+  }
+  // ----- admin: draft -----
+  const open=progOpen===p.id;
+  if(!open)return '<article class="programme-card">'+head+'<div class="prog-actions"><button type="button" class="btn primary" data-prog-open="'+escapeHtml(p.id)+'">'+t('Open editor','એડિટર ખોલો')+'</button></div></article>';
+  const usesAtt=p.split_method!=='equal_houses';
+  const pv=progPreview(p,total,att);
+  return '<article class="programme-card is-open" data-editor="'+escapeHtml(p.id)+'">'+head
+   +'<details class="records-details"><summary>'+t('Edit programme details','કાર્યક્રમની વિગત બદલો')+'</summary><div style="padding-top:4px">'+progForm(p)+'</div></details>'
+   +'<h3 class="subhead">1 · '+t('Expenses','ખર્ચ')+' <span class="tag">'+list.length+'</span></h3><div class="share-table" data-exp-list>'+(expRows(list,true)||'<div class="empty">'+t('No expenses yet.','હજી કોઈ ખર્ચ નથી.')+'</div>')+'</div>'
+   +'<form class="prog-exp-form" data-exp-form="'+escapeHtml(p.id)+'" novalidate><input type="hidden" name="paid_from" value="main_society_fund"><div class="field"><label>'+t('Amount ₹','રકમ ₹')+'</label><input name="amount" class="amount-input" type="number" inputmode="decimal" min="0.01" step="0.01" placeholder="0" required></div><div class="field"><label>'+t('What for?','શેના માટે?')+'</label><input name="description" type="text" maxlength="240" autocomplete="off" required placeholder="'+t('e.g. Sound system','દા.ત. સાઉન્ડ સિસ્ટમ')+'"></div><div class="field"><label>'+t('Paid from','કયા ફંડમાંથી')+'</label>'+progChips('paid_from',[['main_society_fund',t('Main society fund','મુખ્ય સોસાયટી ફંડ')],['navratri_contributions',t('Navratri fund','નવરાત્રી ફંડ')]],'main_society_fund')+'</div><div class="field"><label>'+t('Date','તારીખ')+'</label><input name="spent_on" type="date" required value="'+escapeHtml(p.held_on)+'"></div><button class="btn primary" type="submit">'+t('Add expense','ખર્ચ ઉમેરો')+'</button><div class="msg prog-form-msg" role="alert"></div></form>'
+   +(usesAtt?'<h3 class="subhead">2 · '+t('Who attended?','કોણ હાજર હતા?')+'</h3><div class="tiny">'+t('How many people came from each house.','દરેક ઘરમાંથી કેટલા લોકો આવ્યા.')+'</div><div class="att-grid">'+PROG_HOUSES.map(n=>'<div class="att-cell"><b>'+n+'</b><div class="att-step"><button type="button" data-att="'+n+':-1" aria-label="'+t('One less','એક ઓછું')+'">−</button><input type="number" inputmode="numeric" min="0" max="100" value="'+(att.get(n)||0)+'" data-att-input="'+n+'" aria-label="'+t('House ','ઘર ')+n+'"><button type="button" data-att="'+n+':1" aria-label="'+t('One more','એક વધુ')+'">+</button></div></div>').join('')+'</div>':'')
+   +'<h3 class="subhead">'+(usesAtt?'3':'2')+' · '+t('Split preview','વહેંચણી પૂર્વાવલોકન')+'</h3><div data-preview>'+pv.html+'</div>'
+   +'<div class="prog-actions"><button type="button" class="btn primary" data-prog-finalize="'+escapeHtml(p.id)+'"'+(pv.ok?'':' disabled')+'>'+t('Finalize & share the cost','પૂર્ણ કરી ખર્ચ વહેંચો')+'</button><button type="button" class="btn" data-prog-close>'+t('Close editor','એડિટર બંધ કરો')+'</button><button type="button" class="btn token-undo-btn" data-prog-delete="'+escapeHtml(p.id)+'">'+t('Delete draft','ડ્રાફ્ટ કાઢો')+'</button></div></article>';
+ };
+
+ const visible=admin?progs:progs.filter(x=>x.status==='finalized');
+ c.innerHTML=(admin?'<div class="prog-top"><button type="button" class="btn primary" data-prog-new>'+(progNew?t('Cancel','રદ કરો'):'+ '+t('New programme','નવો કાર્યક્રમ'))+'</button></div>'+(progNew?'<div class="panel" style="margin-bottom:14px"><h3>'+t('New programme','નવો કાર્યક્રમ')+'</h3>'+progForm(null)+'</div>':''):'')
+  +(visible.map(card).join('')||empty(admin?t('No programmes yet. Tap “New programme” to start.','હજી કોઈ કાર્યક્રમ નથી. “નવો કાર્યક્રમ” દબાવો.'):t('No programmes have been published yet.','હજી કોઈ કાર્યક્રમ પ્રકાશિત થયો નથી.')));
+ if(!admin)return;
+ bindChips(c);
+ c.querySelectorAll('.prog-form [data-group="split_method"]').forEach(g=>g.addEventListener('click',()=>{const f=g.closest('form'),m=progMethods().find(x=>x[0]===f.elements.split_method.value);const h=f.querySelector('.prog-method-hint');if(h&&m)h.textContent=m[2]}));
+ const fail=(el,msg)=>{const m=el.querySelector('.prog-form-msg');if(m)m.textContent=msg;else setMsg('appMsg',msg)};
+ c.querySelector('[data-prog-new]').addEventListener('click',()=>{progNew=!progNew;rerender()});
+ c.querySelectorAll('[data-prog-open]').forEach(b=>b.addEventListener('click',()=>{progOpen=b.dataset.progOpen;rerender()}));
+ c.querySelectorAll('[data-prog-close]').forEach(b=>b.addEventListener('click',()=>{progOpen=null;rerender()}));
+ // create / edit programme
+ c.querySelectorAll('[data-prog-form]').forEach(form=>form.addEventListener('submit',e=>{e.preventDefault();const fd=new FormData(form),title=String(fd.get('title_en')||'').trim(),held=String(fd.get('held_on')||''),id=form.dataset.progForm;
+  if(title.length<2){fail(form,t('Enter the programme name.','કાર્યક્રમનું નામ લખો.'));return}
+  if(!held){fail(form,t('Choose the date.','તારીખ પસંદ કરો.'));return}
+  const row={title_en:title,title_gu:String(fd.get('title_gu')||'').trim()||null,details:String(fd.get('details')||'').trim()||null,held_on:held,split_method:fd.get('split_method')};
+  withBusy(form.querySelector('button[type=submit]'),async()=>{
+   if(id==='new'){const {data,error}=await supabase.from('prog_programmes').insert({...row,status:'draft',created_by:profile.id}).select('id').single();if(error){fail(form,error.message);return}progNew=false;progOpen=data.id}
+   else{const {error}=await supabase.from('prog_programmes').update(row).eq('id',id);if(error){fail(form,error.message);return}}
+   await rerender();setMsg('appMsg',id==='new'?t('Programme created. Add its expenses below.','કાર્યક્રમ બન્યો. નીચે ખર્ચ ઉમેરો.'):t('Programme updated.','કાર્યક્રમ સુધાર્યો.'));
+  });
+ }));
+ // expenses
+ c.querySelectorAll('[data-exp-form]').forEach(form=>form.addEventListener('submit',e=>{e.preventDefault();const fd=new FormData(form),amount=toPaise(fd.get('amount')),desc=String(fd.get('description')||'').trim();
+  if(!amount){fail(form,t('Enter a valid amount.','યોગ્ય રકમ લખો.'));return}
+  if(desc.length<2){fail(form,t('Write what the money was for.','પૈસા શેના માટે હતા તે લખો.'));return}
+  withBusy(form.querySelector('button[type=submit]'),async()=>{const {error}=await supabase.from('prog_expenses').insert({programme_id:form.dataset.expForm,description:desc,amount_paise:amount,paid_from:fd.get('paid_from'),spent_on:fd.get('spent_on')});if(error){fail(form,error.message);return}await rerender();setMsg('appMsg',t('Expense added: ','ખર્ચ ઉમેર્યો: ')+money(amount))});
+ }));
+ c.querySelectorAll('[data-exp-del]').forEach(b=>b.addEventListener('click',()=>{if(!confirm(t('Remove this expense?','આ ખર્ચ દૂર કરવો છે?')))return;withBusy(b,async()=>{const {error}=await supabase.from('prog_expenses').delete().eq('id',b.dataset.expDel);if(error){setMsg('appMsg',error.message);return}await rerender()})}));
+ // attendance (saved a moment after the last tap) with a live preview
+ const ed=c.querySelector('[data-editor]');
+ if(ed){
+  const p=progs.find(x=>x.id===ed.dataset.editor),att=attOf(p.id),total=sum(expOf(p.id));
+  const refresh=()=>{const pv=progPreview(p,total,att);ed.querySelector('[data-preview]').innerHTML=pv.html;const fb=ed.querySelector('[data-prog-finalize]');if(fb)fb.disabled=!pv.ok};
+  const setAtt=(n,v)=>{v=Math.min(100,Math.max(0,Math.round(Number(v)||0)));att.set(n,v);const inp=ed.querySelector('[data-att-input="'+n+'"]');if(inp&&Number(inp.value)!==v)inp.value=v;progPending.set(p.id+':'+n,{programme_id:p.id,house_number:n,attendees:v});clearTimeout(progTimer);progTimer=setTimeout(flushProg,350);refresh()};
+  ed.querySelectorAll('[data-att]').forEach(b=>b.addEventListener('click',()=>{const [n,d]=b.dataset.att.split(':').map(Number);setAtt(n,(att.get(n)||0)+d)}));
+  ed.querySelectorAll('[data-att-input]').forEach(i=>i.addEventListener('input',()=>setAtt(Number(i.dataset.attInput),i.value)));
+  ed.querySelector('[data-prog-finalize]').addEventListener('click',e=>{
+   const rows=progSplit(total,p.split_method,att);if(!rows)return;
+   if(!confirm(t('Finalize "','"')+(p.title_en)+t('" and share ','" પૂર્ણ કરી ')+money(total)+t(' between ',' વચ્ચે વહેંચવા ')+rows.length+t(' houses? Expenses will be locked.',' ઘર? ખર્ચ લૉક થશે.')))return;
+   withBusy(e.currentTarget,async()=>{await flushProg();const {error}=await supabase.rpc('prog_finalize',{p_programme_id:p.id});if(error){setMsg('appMsg',error.message);return}progOpen=null;await rerender();setMsg('appMsg',t('Finalized. Each house now has its share.','પૂર્ણ થયું. દરેક ઘરનો હિસ્સો નક્કી થયો.'))});
+  });
+  ed.querySelector('[data-prog-delete]').addEventListener('click',e=>{if(!confirm(t('Delete this draft programme and its expenses?','આ ડ્રાફ્ટ કાર્યક્રમ અને તેના ખર્ચ કાઢી નાખવા છે?')))return;withBusy(e.currentTarget,async()=>{progPending.clear();const {error}=await supabase.from('prog_programmes').delete().eq('id',p.id);if(error){setMsg('appMsg',error.message);return}progOpen=null;await rerender()})});
+ }
+ // finalized: payments and reopen
+ c.querySelectorAll('[data-share-pay]').forEach(b=>b.addEventListener('click',()=>{const [pid,house,amt]=b.dataset.sharePay.split(':'),amount=Number(amt);
+  if(!confirm(amount>0?t('Record ','નોંધો: ')+money(amount)+t(' received from house ',' મળ્યા, ઘર ')+house+'?':t('Undo the recorded payment of ','નોંધાયેલ ચુકવણી રદ કરવી: ')+money(-amount)+t(' for house ',' ઘર ')+house+'?'))return;
+  withBusy(b,async()=>{const {error}=await supabase.rpc('prog_record_payment',{p_programme_id:pid,p_house_number:Number(house),p_amount_paise:amount});if(error){setMsg('appMsg',error.message);return}await rerender();setMsg('appMsg',amount>0?t('Payment recorded for house ','ચુકવણી નોંધાઈ, ઘર ')+house:t('Payment undone for house ','ચુકવણી રદ, ઘર ')+house)});
+ }));
+ c.querySelectorAll('[data-prog-reopen]').forEach(b=>b.addEventListener('click',()=>{if(!confirm(t('Reopen this programme? The shares are cleared and you can correct the expenses, then finalize again.','આ કાર્યક્રમ ફરી ખોલવો? હિસ્સા ભૂંસાશે, ખર્ચ સુધારી ફરી પૂર્ણ કરી શકશો.')))return;withBusy(b,async()=>{const {error}=await supabase.rpc('prog_reopen',{p_programme_id:b.dataset.progReopen});if(error){setMsg('appMsg',error.message);return}progOpen=b.dataset.progReopen;await rerender()})}));
 }
 
 async function renderHouses(c){
