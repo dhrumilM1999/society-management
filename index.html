@@ -506,6 +506,7 @@ body.modal-open{overflow:hidden}
 <symbol id="i-calpick" viewBox="0 0 24 24"><path d="M4 6h16v14H4zM4 10h16M8 3v4M16 3v4M8 14h2M12 14h2M16 14h.01M8 17h2M12 17h2"/></symbol>
 <symbol id="i-chev-l" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
 <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><path d="M12 12a4 4 0 100-8 4 4 0 000 8zM4 21a8 8 0 0116 0"/></symbol>
 <symbol id="i-logout" viewBox="0 0 24 24"><path d="M15 4h4a1 1 0 011 1v14a1 1 0 01-1 1h-4M10 8l-4 4 4 4M6 12h11"/></symbol>
 </defs></svg>
 
@@ -532,6 +533,7 @@ body.modal-open{overflow:hidden}
 <button data-view="notices"><svg class="ic"><use href="#i-bell"/></svg><span data-en="Notices & meetings" data-gu="નોટિસ અને મિટિંગ">Notices & meetings</span></button>
 <button data-view="funds"><svg class="ic"><use href="#i-chart"/></svg><span data-en="Fund records" data-gu="ફંડ રેકોર્ડ">Fund records</span></button>
 <button data-view="programmes"><svg class="ic"><use href="#i-cal"/></svg><span data-en="Programmes" data-gu="કાર્યક્રમો">Programmes</span></button>
+<button data-view="account"><svg class="ic"><use href="#i-user"/></svg><span data-en="My account" data-gu="મારું એકાઉન્ટ">My account</span></button>
 <div class="side-label admin-only hidden" data-en="Admin" data-gu="એડમિન">Admin</div>
 <button class="admin-only hidden" data-view="houses"><svg class="ic"><use href="#i-houses"/></svg><span data-en="Manage houses" data-gu="ઘર વ્યવસ્થાપન">Manage houses</span></button>
 <button class="admin-only hidden" data-view="admin"><svg class="ic"><use href="#i-shield"/></svg><span data-en="Admin review" data-gu="એડમિન સમીક્ષા">Admin review</span></button>
@@ -562,6 +564,7 @@ body.modal-open{overflow:hidden}
 <div class="user-card"><div class="avatar js-avatar">S</div><div><strong class="js-user-name">Welcome</strong><small class="js-user-sub"></small></div></div>
 <div class="more-list">
 <button class="more-item" data-view="funds"><svg class="ic"><use href="#i-chart"/></svg><span data-en="Fund records" data-gu="ફંડ રેકોર્ડ">Fund records</span></button>
+<button class="more-item" data-view="account"><svg class="ic"><use href="#i-user"/></svg><span data-en="My account" data-gu="મારું એકાઉન્ટ">My account</span></button>
 <button class="more-item" data-view="programmes"><svg class="ic"><use href="#i-cal"/></svg><span data-en="Programmes" data-gu="કાર્યક્રમો">Programmes</span></button>
 <button class="more-item admin-only hidden" data-view="houses"><svg class="ic"><use href="#i-houses"/></svg><span data-en="Manage houses" data-gu="ઘર વ્યવસ્થાપન">Manage houses</span></button>
 <button class="more-item admin-only hidden" data-view="admin"><svg class="ic"><use href="#i-shield"/></svg><span data-en="Admin review" data-gu="એડમિન સમીક્ષા">Admin review</span></button>
@@ -594,7 +597,7 @@ $('app').addEventListener('click',e=>{
  const g=e.target.closest('[data-go]');
  if(g){activeView=g.dataset.go;if(g.dataset.seg)navratriSeg=g.dataset.seg;if(g.dataset.today)navratriSelectedDate=null;closeMore();window.scrollTo({top:0});renderView();return}
  const b=e.target.closest('button[data-view]');if(!b)return;activeView=b.dataset.view;closeMore();window.scrollTo({top:0});renderView()});
-const MORE_VIEWS=['funds','programmes','houses','admin'];
+const MORE_VIEWS=['funds','programmes','account','houses','admin'];
 function openMore(){$('moreSheet').hidden=false;document.body.classList.add('modal-open')}
 function closeMore(){$('moreSheet').hidden=true;if($('householdModal')?.hidden!==false)document.body.classList.remove('modal-open')}
 $('moreBtn').addEventListener('click',openMore);$('moreClose').addEventListener('click',closeMore);
@@ -621,6 +624,7 @@ else if(activeView==='notices'){heading(t('Notices & meetings','નોટિસ 
 else if(activeView==='payments'){heading(t('Payments','પેમેન્ટ'),t('Submit a payment for administrator confirmation and review your submissions.','એડમિન પુષ્ટિ માટે પેમેન્ટ મોકલો અને તમારા રેકોર્ડ જુઓ.'));const {data:payments,error}=await supabase.from('payment_submissions').select('id,amount_paise,status,fund,payment_date,reference_note,created_at').order('created_at',{ascending:false}).limit(50);if(error)throw error;c.innerHTML=(profile.role==='resident'?'<div class="panel"><h3>'+t('Submit payment','પેમેન્ટ મોકલો')+'</h3><form id="paymentForm"><div class="field"><label>'+t('Fund','ફંડ')+'</label><select name="fund"><option value="maintenance">'+t('Maintenance','મેન્ટેનન્સ')+'</option><option value="festival">'+t('Festival','તહેવાર')+'</option><option value="general">'+t('General','જનરલ')+'</option></select></div><div class="field"><label>'+t('Amount (₹)','રકમ (₹)')+'</label><input name="amount" type="number" inputmode="decimal" min="0.01" step="0.01" required></div><div class="field"><label>'+t('Payment date','પેમેન્ટ તારીખ')+'</label><input name="date" type="date" value="'+new Date().toISOString().slice(0,10)+'" required></div><div class="field"><label>'+t('Reference / note (optional)','રેફરન્સ / નોંધ (વૈકલ્પિક)')+'</label><input name="note" type="text" maxlength="250" autocomplete="off"></div><button class="btn primary" type="submit">'+t('Submit for review','સમીક્ષા માટે મોકલો')+'</button><div class="msg" id="paymentMsg"></div></form><p class="tiny">'+t('Submission is not a receipt. The payment is recorded in fund totals only after an administrator confirms it.','આ સબમિશન રસીદ નથી. એડમિન પુષ્ટિ કર્યા પછી જ ફંડમાં ગણાશે.')+'</p></div>':'<div class="noticebar">'+t('Admin: use Admin review to confirm or reject submissions.','એડમિન: સબમિશન મંજૂર અથવા નકારવા Admin review ખોલો.')+'</div>')+'<h3 class="subhead">'+t('Payment history','પેમેન્ટ ઇતિહાસ')+'</h3><div class="list">'+(payments.map(x=>item(money(x.amount_paise)+' · '+t(x.fund,x.fund),date(x.payment_date)+(x.reference_note?' · '+x.reference_note:''),date(x.created_at),t(x.status,({pending:'બાકી',approved:'મંજૂર',rejected:'નકારેલ'})[x.status]||x.status))).join('')||empty(t('No payments submitted yet.','હજી કોઈ પેમેન્ટ નથી.')) )+'</div>';const f=$('paymentForm');if(f)f.addEventListener('submit',submitPayment)}
 else if(activeView==='funds'){heading(t('Fund records','ફંડ રેકોર્ડ'),t('Posted entries only; pending payment claims are excluded.','મંજૂર થયેલી એન્ટ્રીઓ જ; બાકી પેમેન્ટનો સમાવેશ નથી.'));const {data,error}=await supabase.from('fund_ledger').select('id,fund,house_number,amount_paise,entry_type,description,posted_at').order('posted_at',{ascending:false}).limit(100);if(error)throw error;const funds=['maintenance','festival','general'];c.innerHTML='<div class="grid">'+funds.map(f=>'<div class="metric"><small>'+t(f,({maintenance:'મેન્ટેનન્સ',festival:'તહેવાર',general:'જનરલ'})[f])+'</small><strong>'+money(data.filter(x=>x.fund===f).reduce((s,x)=>s+Number(x.amount_paise),0))+'</strong><span>'+t('Visible posted balance','દેખાતું બેલેન્સ')+'</span></div>').join('')+'</div><div class="noticebar">'+t('Residents see their house-specific ledger entries. Admins see society-wide entries. A visible resident total may not represent the entire society fund balance.','રહેવાસીઓ પોતાનાં ઘરનાં લેજર જુએ છે. એડમિન સોસાયટીની બધી એન્ટ્રીઓ જુએ છે. રહેવાસીનું બેલેન્સ સમગ્ર ફંડનું બેલેન્સ ન પણ હોય.')+'</div><div class="list">'+(data.map(x=>item(money(x.amount_paise)+' · '+t(x.fund,x.fund),x.description,(x.house_number?'House '+x.house_number+' · ':'')+date(x.posted_at),x.entry_type)).join('')||empty(t('No confirmed ledger entries yet.','હજી લેજર એન્ટ્રી નથી.')) )+'</div>'}
 else if(activeView==='programmes'){await renderProgrammes(c)}
+else if(activeView==='account'){await renderAccount(c)}
 else if(activeView==='admin'&&profile.role==='admin'){heading(t('Admin review','એડમિન સમીક્ષા'),t('Review payment submissions and publish community updates.','પેમેન્ટ સમીક્ષા કરો અને સોસાયટી અપડેટ પ્રકાશિત કરો.'));const {data:payments,error}=await supabase.from('payment_submissions').select('id,house_number,amount_paise,fund,payment_date,reference_note,created_at,submitted_by').eq('status','pending').order('created_at');if(error)throw error;c.innerHTML='<div class="panel"><h3>'+t('Pending payment submissions','બાકી પેમેન્ટ સબમિશન')+'</h3><div class="list">'+(payments.map(x=>'<article class="item"><div class="itemtop"><div><h3>'+money(x.amount_paise)+' · '+t(x.fund,x.fund)+'</h3><div class="tiny">House '+x.house_number+' · '+date(x.payment_date)+' · '+date(x.created_at)+'</div><p>'+escapeHtml(x.reference_note||'—')+'</p></div><span class="tag">Pending</span></div><div class="row" style="margin-top:12px"><button class="btn primary" data-approve="'+x.id+'">'+t('Confirm payment','પેમેન્ટ મંજૂર કરો')+'</button><button class="btn" data-reject="'+x.id+'">'+t('Reject','નકારો')+'</button></div></article>').join('')||empty(t('No payments awaiting review.','સમીક્ષા માટે પેમેન્ટ નથી.')) )+'</div></div><div class="panel" style="margin-top:16px"><h3>'+t('Publish a notice','નોટિસ પ્રકાશિત કરો')+'</h3><form id="noticeForm"><div class="field"><label>'+t('Title (English)','શીર્ષક (અંગ્રેજી)')+'</label><input name="title_en" type="text" required maxlength="180"></div><div class="field"><label>'+t('Message (English)','સંદેશ (અંગ્રેજી)')+'</label><textarea name="body_en" required rows="3"></textarea></div><div class="field"><label>'+t('Title (Gujarati)','શીર્ષક (ગુજરાતી)')+'</label><input name="title_gu" type="text" maxlength="180"></div><div class="field"><label>'+t('Message (Gujarati)','સંદેશ (ગુજરાતી)')+'</label><textarea name="body_gu" rows="3"></textarea></div><button class="btn primary" type="submit">'+t('Publish notice','નોટિસ પ્રકાશિત કરો')+'</button><div class="msg" id="noticeMsg"></div></form></div>';c.querySelectorAll('[data-approve]').forEach(b=>b.addEventListener('click',()=>reviewPayment(b.dataset.approve,true)));c.querySelectorAll('[data-reject]').forEach(b=>b.addEventListener('click',()=>reviewPayment(b.dataset.reject,false)));$('noticeForm').addEventListener('submit',publishNotice)}
 else{heading(t('Not available','ઉપલબ્ધ નથી'),'');c.innerHTML=empty(t('This section is only available to administrators.','આ વિભાગ ફક્ત એડમિન માટે છે.'))}
 }catch(err){console.error(err);c.innerHTML='<div class="panel"><h3>'+t('Could not load this section','આ વિભાગ લોડ થઈ શક્યો નથી')+'</h3><p class="muted">'+t('Please refresh. If the problem continues, ask the administrator to check your account permissions.','રિફ્રેશ કરો. સમસ્યા રહે તો એડમિનને પરવાનગી તપાસવા કહો.')+'</p></div>'}}
@@ -843,6 +847,57 @@ async function renderProgrammes(c){
   withBusy(b,async()=>{const {error}=await supabase.rpc('prog_record_payment',{p_programme_id:pid,p_house_number:Number(house),p_amount_paise:amount});if(error){setMsg('appMsg',error.message);return}await rerender();setMsg('appMsg',amount>0?t('Payment recorded for house ','ચુકવણી નોંધાઈ, ઘર ')+house:t('Payment undone for house ','ચુકવણી રદ, ઘર ')+house)});
  }));
  c.querySelectorAll('[data-prog-reopen]').forEach(b=>b.addEventListener('click',()=>{if(!confirm(t('Reopen this programme? The shares are cleared and you can correct the expenses, then finalize again.','આ કાર્યક્રમ ફરી ખોલવો? હિસ્સા ભૂંસાશે, ખર્ચ સુધારી ફરી પૂર્ણ કરી શકશો.')))return;withBusy(b,async()=>{const {error}=await supabase.rpc('prog_reopen',{p_programme_id:b.dataset.progReopen});if(error){setMsg('appMsg',error.message);return}progOpen=b.dataset.progReopen;await rerender()})}));
+}
+
+/* ---------- My account: every signed-in user manages their own details and password ---------- */
+async function renderAccount(c){
+ heading(t('My account','મારું એકાઉન્ટ'),t('Your contact details and password.','તમારી સંપર્ક વિગત અને પાસવર્ડ.'));
+ // The phone column may be private for some roles; if it cannot be read, the form simply leaves it out.
+ let res=await supabase.from('profiles').select('display_name,contact_phone,preferred_language,role,house_number').eq('id',session.user.id).maybeSingle();
+ let phoneOk=true;
+ if(res.error){phoneOk=false;res=await supabase.from('profiles').select('display_name,preferred_language,role,house_number').eq('id',session.user.id).maybeSingle()}
+ if(res.error||!res.data)throw res.error||new Error('profile');
+ const me=res.data,admin=me.role==='admin';
+ c.innerHTML='<div class="panel"><div class="user-card"><div class="avatar">'+escapeHtml(admin?'A':String(me.house_number??'?'))+'</div><div><strong>'+escapeHtml(me.display_name)+'</strong><small>'+(admin?t('Administrator','એડમિન'):t('House no. ','ઘર નં. ')+escapeHtml(me.house_number))+'</small></div></div>'
+  +'<p class="tiny" style="margin-top:10px">'+t('Your house number and role can only be changed by an administrator.','તમારો ઘર નંબર અને ભૂમિકા ફક્ત એડમિન બદલી શકે.')+'</p></div>'
+  +'<div class="panel" style="margin-top:14px"><h3>'+t('My details','મારી વિગત')+'</h3><form id="accountForm" novalidate><input type="hidden" name="preferred_language" value="'+(me.preferred_language==='en'?'en':'gu')+'">'
+  +'<div class="field"><label for="acName">'+t('Name','નામ')+' *</label><input id="acName" name="display_name" type="text" autocomplete="name" maxlength="120" value="'+escapeHtml(me.display_name)+'"></div>'
+  +(phoneOk?'<div class="field"><label for="acPhone">'+t('Mobile number','મોબાઇલ નંબર')+'</label><input id="acPhone" name="contact_phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="30" value="'+escapeHtml(me.contact_phone||'')+'" placeholder="98XXXXXXXX"><div class="form-hint">'+t('Only the society administrators can see this, for call / WhatsApp reminders.','ફક્ત સોસાયટી એડમિન જોઈ શકે, કૉલ / WhatsApp રિમાઇન્ડર માટે.')+'</div></div>':'')
+  +'<div class="field"><label>'+t('Language','ભાષા')+'</label>'+progChips('preferred_language',[['gu','ગુજરાતી'],['en','English']],me.preferred_language==='en'?'en':'gu')+'</div>'
+  +'<button class="btn primary" type="submit">'+t('Save details','વિગત સાચવો')+'</button><div id="accountMsg" class="msg" role="alert"></div></form></div>'
+  +'<div class="panel" style="margin-top:14px"><h3>'+t('Change password','પાસવર્ડ બદલો')+'</h3><form id="passwordForm" novalidate>'
+  +'<div class="field"><label for="acPw1">'+t('New password','નવો પાસવર્ડ')+'</label><div class="pw-row"><input id="acPw1" name="pw1" type="password" autocomplete="new-password" minlength="8" placeholder="'+t('At least 8 characters','ઓછામાં ઓછા 8 અક્ષર')+'"><button type="button" class="btn" id="acPwToggle">'+t('Show','બતાવો')+'</button></div></div>'
+  +'<div class="field"><label for="acPw2">'+t('Repeat new password','નવો પાસવર્ડ ફરી લખો')+'</label><input id="acPw2" name="pw2" type="password" autocomplete="new-password" minlength="8"></div>'
+  +'<button class="btn primary" type="submit">'+t('Change password','પાસવર્ડ બદલો')+'</button><div id="passwordMsg" class="msg" role="alert"></div></form></div>';
+ bindChips(c);
+ const form=$('accountForm');
+ form.addEventListener('submit',e=>{e.preventDefault();const fd=new FormData(form),name=String(fd.get('display_name')||'').trim(),phone=String(fd.get('contact_phone')||'').trim();
+  if(name.length<2){setMsg('accountMsg',t('Enter your name.','તમારું નામ લખો.'));return}
+  if(phoneOk&&phone&&phone.replace(/\D/g,'').length<10){setMsg('accountMsg',t('Enter a valid 10-digit mobile number, or leave it empty.','10 અંકનો સાચો મોબાઇલ નંબર લખો, અથવા ખાલી રાખો.'));return}
+  const row={display_name:name,preferred_language:fd.get('preferred_language')};if(phoneOk)row.contact_phone=phone||null;
+  withBusy(form.querySelector('button[type=submit]'),async()=>{
+   setMsg('accountMsg','');
+   const {error}=await supabase.from('profiles').update(row).eq('id',session.user.id);
+   if(error){setMsg('accountMsg',t('Could not save. You may not have permission to edit details yet — please ask the administrator. ','સાચવી શકાયું નથી. વિગત બદલવાની પરવાનગી નહીં હોય — એડમિનને કહો. ')+(error.message||''));return}
+   Object.assign(profile,{display_name:name,preferred_language:row.preferred_language});
+   document.querySelectorAll('.js-user-name').forEach(el=>el.textContent=name);
+   const changed=lang!==row.preferred_language;lang=row.preferred_language;
+   if(changed)applyLang();
+   setMsg('appMsg',t('Details saved.','વિગત સાચવી.'));
+  });
+ });
+ $('acPwToggle').addEventListener('click',e=>{const f=$('acPw1'),show=f.type==='password';f.type=show?'text':'password';$('acPw2').type=f.type;e.currentTarget.textContent=show?t('Hide','છુપાવો'):t('Show','બતાવો')});
+ const pform=$('passwordForm');
+ pform.addEventListener('submit',e=>{e.preventDefault();const a=$('acPw1').value,b=$('acPw2').value;
+  if(a.length<8){setMsg('passwordMsg',t('Password must be at least 8 characters.','પાસવર્ડ ઓછામાં ઓછા 8 અક્ષરનો હોવો જોઈએ.'));return}
+  if(a!==b){setMsg('passwordMsg',t('The two passwords do not match.','બંને પાસવર્ડ સરખા નથી.'));return}
+  withBusy(pform.querySelector('button[type=submit]'),async()=>{
+   setMsg('passwordMsg','');
+   const {error}=await supabase.auth.updateUser({password:a});
+   if(error){setMsg('passwordMsg',error.message||t('Could not change the password. Please sign in again and retry.','પાસવર્ડ બદલી શકાયો નથી. ફરી સાઇન ઇન કરી પ્રયાસ કરો.'));return}
+   pform.reset();setMsg('appMsg',t('Password changed. Use the new password next time you sign in.','પાસવર્ડ બદલાયો. આગળથી નવો પાસવર્ડ વાપરો.'));
+  });
+ });
 }
 
 async function renderHouses(c){

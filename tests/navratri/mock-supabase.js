@@ -118,7 +118,7 @@ export function createClient() {
     },
     auth: {
       onAuthStateChange(cb) { setTimeout(() => cb('SIGNED_IN', session), 0); return { data: { subscription: { unsubscribe() {} } } }; },
-      signInWithPassword: async () => ({ error: null }), signOut: async () => ({}), getSession: async () => ({ data: { session } }),
+      signInWithPassword: async () => ({ error: null }), updateUser: async u => { window.__calls.push('auth.updateUser'); window.__lastUpdateUser = u; return u.password && u.password.length < 8 ? { error: { message: 'Password should be at least 8 characters.' } } : { data: { user: {} }, error: null }; }, signOut: async () => ({}), getSession: async () => ({ data: { session } }),
     },
   };
 }
