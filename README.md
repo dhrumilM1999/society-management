@@ -5,7 +5,8 @@ A static, responsive resident portal for **Sonalpark Society Gate-2**, serving h
 ## Latest project status — 12 October 2026
 
 ### Done
-- **Programmes & expense sharing (13 Oct 2026):** admins create a programme, add its expenses, choose how the cost is split (all houses equally / only attending houses equally / per person attended), enter attendance with a live split preview, then **Finalize**. Finalizing saves every house's share in one all-or-nothing database function; expenses are locked afterwards and **Reopen** is available until a payment is recorded. Each house's share can be marked paid (and undone) with Call / WhatsApp / SMS reminders. Residents see only their own house share. Needs `docs/migrations/2026-10-13-programmes.sql` (the screen shows a setup message until it is run). The SQL is tested on a real Postgres engine (`tests/programmes/sql-test.mjs`: split maths, rounding, RLS for admin / resident / anonymous, payments, reopen).
+- **Refunds fixed (15 Oct 2026):** the app now records overpayment refunds in production's own `navratri_refunds` table and subtracts them from what a house has paid (previously it wrote to a column that does not exist, so refunds failed).
+- **Programmes & expense sharing (13 Oct 2026):** admins create a programme, add its expenses, choose how the cost is split (all houses equally / only attending houses equally / per person attended), enter attendance with a live split preview, then **Finalize**. Finalizing saves every house's share in one all-or-nothing database function; expenses are locked afterwards and **Reopen** is available until a payment is recorded. Each house's share can be marked paid (and undone) with Call / WhatsApp / SMS reminders. Residents see only their own house share. **Applied to production on 15 Oct 2026** from `docs/migrations/2026-10-13-programmes.sql` (new `prog_*` tables + functions only; nothing existing was changed; verified with a rolled-back dry run as admin and resident). The SQL is tested on a real Postgres engine (`tests/programmes/sql-test.mjs`: split maths, rounding, RLS for admin / resident / anonymous, payments, reopen).
 - **UI redesign (12 Oct 2026, mobile-first):** new design system using the emblem's green/navy/gold; bottom tab bar with a "More" sheet on phones and a left sidebar on screens ≥900px; login page reordered so sign-in is first; Navratri split into Houses / Tokens / Expenses tabs; house member entry uses a large +/– stepper; toast messages replace the inline status line. Data logic is unchanged and `tests/navratri/e2e.mjs` covers the new layout.
 - Production Supabase project is connected; all 19 houses (31–49) exist.
 - Admin login has been confirmed by the owner; house-management and house-number login code is committed.
@@ -379,7 +380,7 @@ The public directory is secondary utility, not the main product entry point. Sig
 
 ## Go-live SQL order (run in the Supabase SQL editor; test project first, then production)
 1. *(Refunds need no SQL: production already has the `navratri_refunds` table, which the app now uses.)*
-2. `docs/migrations/2026-10-13-programmes.sql` — programmes & expense sharing.
+2. `docs/migrations/2026-10-13-programmes.sql` — programmes & expense sharing (**already applied to production**; only needed for any new project).
 3. Create the Navratri season once in the app, then `docs/seed/navratri-2026-member-counts.sql` — real member counts (check readings for houses 39 and 43 first).
 4. `docs/seed/test-project-cleanup.sql` — **test project only**, removes synthetic festival data.
 

@@ -8,16 +8,31 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
 const db = new PGlite();
 const ADMIN = '00000000-0000-0000-0000-0000000000a1', R33 = '00000000-0000-0000-0000-000000000033', R34 = '00000000-0000-0000-0000-000000000034';
 
-// Minimal stand-ins for Supabase's own objects
+// Stand-ins for Supabase's own objects, copied from how production is built (app_private.is_admin etc.)
 await db.exec(`
   create schema auth;
   create table auth.users (id uuid primary key);
   create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub', true), '')::uuid $$;
   create role anon; create role authenticated;
-  create table public.profiles (id uuid primary key references auth.users(id), display_name text, role text not null, house_number int);
+  create schema app_private;
+  create type public.account_role as enum ('admin', 'resident');
+  create table public.houses (house_number integer primary key check (house_number between 31 and 49), is_active boolean not null default true);
+  insert into public.houses (house_number) select generate_series(31, 49);
+  create table public.profiles (id uuid primary key references auth.users(id), display_name text, role public.account_role not null default 'resident', house_number integer unique references public.houses(house_number));
   alter table public.profiles enable row level security;
+  create table public.audit_log (id bigint generated always as identity primary key, actor_id uuid references public.profiles(id), action text not null, entity_type text not null, entity_id uuid, details jsonb not null default '{}'::jsonb, created_at timestamptz not null default now());
+  alter table public.audit_log enable row level security;
+  grant select on public.audit_log to authenticated;
+  grant select on public.profiles, public.houses to authenticated;
+  create function app_private.is_admin() returns boolean language sql stable security definer set search_path to '' as $$
+    select exists (select 1 from public.profiles p where p.id = (select auth.uid()) and p.role = 'admin') $$;
+  create function app_private.is_current_resident_of(p_house_number integer) returns boolean language sql stable security definer set search_path to '' as $$
+    select exists (select 1 from public.profiles p where p.id = (select auth.uid()) and p.role = 'resident' and p.house_number = p_house_number) $$;
   grant usage on schema public, auth to anon, authenticated;
+  create policy audit_read_admin_only on public.audit_log for select to authenticated using ((select app_private.is_admin()));
+  grant usage on schema app_private to authenticated;
   grant execute on function auth.uid() to anon, authenticated;
+  grant execute on function app_private.is_admin(), app_private.is_current_resident_of(integer) to authenticated;
   insert into auth.users values ('${ADMIN}'), ('${R33}'), ('${R34}');
   insert into public.profiles values ('${ADMIN}', 'Admin', 'admin', null), ('${R33}', 'R33', 'resident', 33), ('${R34}', 'R34', 'resident', 34);
 `);
@@ -108,6 +123,12 @@ await as(ADMIN, () => q(`select public.prog_reopen($1)`, [p1]));
 ok((await q(`select status from public.prog_programmes where id = $1`, [p1]))[0].status === 'draft' && (await shares(p1)).length === 0, 'reopen returns to draft and clears shares');
 await addExp(p1, 5000); await finalize(p1);
 ok((await shares(p1)).reduce((n, x) => n + x.s, 0) === 15000, 'after reopening, a corrected expense list re-finalizes to the new total (15000)');
+
+// ---------- audit trail ----------
+const aud = (await q(`select action from public.audit_log order by id`)).map(x => x.action);
+ok(aud.includes('programme_finalized') && aud.includes('programme_share_paid') && aud.includes('programme_share_payment_reversed') && aud.includes('programme_reopened'), 'finalize, payment, reversal and reopen are all written to the audit log');
+ok((await as(R33, () => q(`select count(*)::int c from public.audit_log`)))[0].c === 0, 'residents cannot read the audit log');
+ok((await as(ADMIN, () => q(`select count(*)::int c from public.audit_log`)))[0].c >= 4, 'admins can read the audit log');
 
 // ---------- constraints ----------
 ok((await as(ADMIN, () => fails_(() => q(`insert into public.prog_attendance values ($1, 55, 1)`, [p4])))) !== null, 'house numbers outside 31-49 are rejected');
