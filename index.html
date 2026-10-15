@@ -662,9 +662,10 @@ async function overviewTop(){
    if(hh.error)throw hh.error;
    const ids=hh.data.map(h=>h.id);
    const today=new Date().toLocaleDateString('en-CA'),d=today<season.starts_on?season.starts_on:today>season.ends_on?season.ends_on:today;
-   const [cr,tk]=await Promise.all([ids.length?supabase.from('navratri_contributions').select('household_id,amount_paise,entry_type').in('household_id',ids):Promise.resolve({data:[],error:null}),supabase.from('navratri_tokens').select('house_number,token_count,status').eq('season_id',season.id).eq('token_date',d)]);
+   const [cr,tk,rf]=await Promise.all([ids.length?supabase.from('navratri_contributions').select('household_id,amount_paise').in('household_id',ids):Promise.resolve({data:[],error:null}),supabase.from('navratri_tokens').select('house_number,token_count,status').eq('season_id',season.id).eq('token_date',d),ids.length?supabase.from('navratri_refunds').select('household_id,amount_paise').in('household_id',ids):Promise.resolve({data:[],error:null})]);
    if(cr.error)throw cr.error;if(tk.error)throw tk.error;
-   const paidOf=h=>cr.data.filter(x=>x.household_id===h.id).reduce((n,x)=>n+(x.entry_type==='refund'?-1:1)*Number(x.amount_paise),0);
+   const refundsOf=rf.error?[]:rf.data;
+   const paidOf=h=>cr.data.filter(x=>x.household_id===h.id).reduce((n,x)=>n+Number(x.amount_paise),0)-refundsOf.filter(x=>x.household_id===h.id).reduce((n,x)=>n+Number(x.amount_paise),0);
    const rows=hh.data.map(h=>({n:Number(h.house_number),members:Number(h.participant_count)||0,due:Number(h.amount_due_paise)||0,paid:paidOf(h)}));
    const members=rows.reduce((n,x)=>n+x.members,0),collected=rows.reduce((n,x)=>n+x.paid,0),pending=rows.reduce((n,x)=>n+Math.max(x.due-x.paid,0),0),unpaid=rows.filter(x=>x.members>0&&x.paid<x.due).length;
    const received=tk.data.filter(x=>x.status==='received').reduce((n,x)=>n+Number(x.token_count||0),0);
@@ -1021,17 +1022,20 @@ async function renderNavratri(c){
  const selectedDate=clampDate(navratriSelectedDate||localToday(),season.starts_on,season.ends_on);
  navratriSelectedDate=selectedDate;
  const empty0=Promise.resolve({data:[],error:null});
- const [contribRes,tokenRes,expenseRes,peopleRes]=await Promise.all([
+ const [contribRes,tokenRes,expenseRes,peopleRes,refundRes]=await Promise.all([
   householdIds.length?supabase.from('navratri_contributions').select('*').in('household_id',householdIds).order('paid_on',{ascending:false}):empty0,
   supabase.from('navratri_tokens').select('*').eq('season_id',season.id).eq('token_date',selectedDate).order('house_number'),
   admin?supabase.from('navratri_expenses').select('*').eq('season_id',season.id).order('spent_on',{ascending:false}).limit(200):empty0,
-  admin?supabase.from('profiles').select('house_number,display_name,contact_phone,preferred_language').eq('role','resident'):empty0
+  admin?supabase.from('profiles').select('house_number,display_name,contact_phone,preferred_language').eq('role','resident'):empty0,
+  householdIds.length?supabase.from('navratri_refunds').select('*').in('household_id',householdIds):empty0
  ]);
  for(const x of [contribRes,tokenRes,expenseRes])if(x.error)throw x.error;
  // The person may have switched tabs while we were loading; don't paint over the other view.
  if(activeView!=='navratri')return;
 
- const contributions=contribRes.data, tokens=tokenRes.data, expenses=expenseRes.data;
+ // Refunds live in their own table; they are shown in the payment history and subtracted from what a house has paid.
+ const refunds=(refundRes.error?[]:refundRes.data).map(r=>({id:r.id,household_id:r.household_id,amount_paise:r.amount_paise,paid_on:r.refunded_on,payment_method:r.refund_method,reference_note:r.reference_note,entry_type:'refund'}));
+ const contributions=[...contribRes.data,...refunds].sort((a,b)=>String(b.paid_on).localeCompare(String(a.paid_on))), tokens=tokenRes.data, expenses=expenseRes.data;
  const ratePaise=Number(households[0]?.contribution_per_person_paise??NAVRATRI_DEFAULT_RATE_PAISE);
  const houses=households.map(h=>{
   const due=Number(h.amount_due_paise)||0, members=Math.max(0,Number(h.participant_count)||0);
@@ -1225,8 +1229,8 @@ async function renderNavratri(c){
   if(!sheetHouse||!amount||amount>over){setMsg('refundMsg',t('Enter an amount up to ','આટલી રકમ સુધી દાખલ કરો: ')+money(over));return}
   if(!confirm(t('Return ','પરત આપવા: ')+money(amount)+t(' to house ',' ઘર ')+sheetHouse.n+'?'))return;
   withBusy(form.querySelector('button[type=submit]'),async()=>{
-   const {error}=await supabase.from('navratri_contributions').insert({household_id:sheetHouse.h.id,amount_paise:amount,payment_method:fd.get('method'),entry_type:'refund',reference_note:'Refund of overpayment',received_by:profile.id});
-   if(error){setMsg('refundMsg',/entry_type/.test(error.message||'')?t('Refunds need the database update (docs/migrations). Ask the developer.','પરત રકમ માટે ડેટાબેઝ અપડેટ જરૂરી છે.'):error.message);return}
+   const {error}=await supabase.from('navratri_refunds').insert({household_id:sheetHouse.h.id,amount_paise:amount,refund_method:fd.get('method'),reference_note:'Refund of overpayment',refunded_by:profile.id});
+   if(error){setMsg('refundMsg',error.message);return}
    closeSheet();await rerender();setMsg('appMsg',t('Refund recorded for house ','પરત રકમ નોંધાઈ, ઘર ')+sheetHouse.n+': '+money(amount));
   });
  });

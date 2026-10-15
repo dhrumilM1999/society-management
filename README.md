@@ -378,7 +378,7 @@ The public directory is secondary utility, not the main product entry point. Sig
 
 
 ## Go-live SQL order (run in the Supabase SQL editor; test project first, then production)
-1. `docs/migrations/2026-10-12-navratri-refunds.sql` — overpayment refunds.
+1. *(Refunds need no SQL: production already has the `navratri_refunds` table, which the app now uses.)*
 2. `docs/migrations/2026-10-13-programmes.sql` — programmes & expense sharing.
 3. Create the Navratri season once in the app, then `docs/seed/navratri-2026-member-counts.sql` — real member counts (check readings for houses 39 and 43 first).
 4. `docs/seed/test-project-cleanup.sql` — **test project only**, removes synthetic festival data.

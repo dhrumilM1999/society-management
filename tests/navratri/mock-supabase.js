@@ -8,7 +8,7 @@ const db = window.__db = {
     { id: 'res-33', display_name: 'House 33', role: 'resident', house_number: 33, preferred_language: 'en', contact_phone: '9876543210' },
   ],
   houses: Array.from({ length: 19 }, (_, i) => ({ house_number: 31 + i, is_active: true })),
-  navratri_seasons: [], navratri_households: [], navratri_contributions: [], navratri_tokens: [], navratri_expenses: [],
+  navratri_seasons: [], navratri_households: [], navratri_contributions: [], navratri_refunds: [], navratri_tokens: [], navratri_expenses: [],
   prog_programmes: [], prog_expenses: [], prog_attendance: [], prog_shares: [],
   notices: [], meetings: [], payment_submissions: [], maintenance_charges: [], fund_ledger: [], programmes: [],
 };
@@ -20,7 +20,7 @@ const computed = (table, r) => table === 'navratri_households'
 function visible(table, rows) {
   if (role === 'admin') return rows;
   if (table === 'navratri_households') return rows.filter(r => r.house_number === 33);
-  if (table === 'navratri_contributions') { const ids = db.navratri_households.filter(h => h.house_number === 33).map(h => h.id); return rows.filter(r => ids.includes(r.household_id)); }
+  if (table === 'navratri_contributions' || table === 'navratri_refunds') { const ids = db.navratri_households.filter(h => h.house_number === 33).map(h => h.id); return rows.filter(r => ids.includes(r.household_id)); }
   if (table === 'navratri_tokens') return rows.filter(r => r.house_number === 33);
   if (table === 'navratri_expenses') throw new Error('permission denied for navratri_expenses');
   // Simulates the prog_* RLS policies: residents see finalized programmes and only their own house rows.

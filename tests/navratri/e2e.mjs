@@ -67,8 +67,9 @@ await seg(a, 'houses'); await a.click('[data-house-edit="36"]'); await a.waitFor
 ok(await a.locator('#refundBox').isVisible(), 'overpaid house shows the refund box');
 const refundAmt = await a.inputValue('#refundAmount');
 await a.click('#refundForm button[type=submit]'); await settle(a);
-const refunds = (await db(a, 'navratri_contributions')).filter(x => x.entry_type === 'refund');
-ok(refunds.length === 1 && refunds[0].amount_paise === Number(refundAmt) * 100, 'refund recorded for exactly the overpaid amount (₹' + refundAmt + ')');
+const refunds = await db(a, 'navratri_refunds');
+ok(refunds.length === 1 && refunds[0].amount_paise === Number(refundAmt) * 100 && refunds[0].refund_method === 'cash' && refunds[0].refunded_by === 'admin-1', 'refund saved in navratri_refunds for exactly the overpaid amount (₹' + refundAmt + ')');
+ok((await db(a, 'navratri_contributions')).every(x => x.entry_type === undefined), 'payments table is untouched by a refund');
 ok((await a.locator('[data-house-edit="36"] .house-payment-state').innerText()).includes('Paid'), 'house 36 shows Paid after refund');
 await a.click('[data-house-edit="36"]'); await a.waitForTimeout(150);
 ok(!(await a.locator('#refundBox').isVisible()), 'refund box hidden once nothing is overpaid');
