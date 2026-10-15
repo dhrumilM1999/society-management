@@ -1,15 +1,17 @@
 // In-memory stand-in for @supabase/supabase-js, enough for the Navratri view.
+const qs = new URLSearchParams(location.search);
 const role = new URLSearchParams(location.search).get('role') || 'admin';
 const today = new URLSearchParams(location.search).get('today');
 const uid = role === 'admin' ? 'admin-1' : 'res-33';
 const db = window.__db = {
   profiles: [
-    { id: 'admin-1', display_name: 'Admin', role: 'admin', house_number: null, preferred_language: 'en', contact_phone: null },
-    { id: 'res-33', display_name: 'House 33', role: 'resident', house_number: 33, preferred_language: 'en', contact_phone: '9876543210' },
+    { id: 'admin-1', display_name: 'Admin', role: 'admin', is_super: new URLSearchParams(location.search).get('super') !== '0', is_active: true, house_number: null, preferred_language: 'en', contact_phone: null },
+    { id: 'admin-2', display_name: 'Second Admin', role: 'admin', is_super: false, is_active: true, house_number: null, preferred_language: 'gu', contact_phone: '9811111111' },
+    { id: 'res-33', display_name: 'House 33', role: 'resident', is_active: true, house_number: 33, preferred_language: 'en', contact_phone: '9876543210' },
   ],
   houses: Array.from({ length: 19 }, (_, i) => ({ house_number: 31 + i, is_active: true })),
   navratri_seasons: [], navratri_households: [], navratri_contributions: [], navratri_refunds: [], navratri_tokens: [], navratri_expenses: [],
-  prog_programmes: [], prog_expenses: [], prog_attendance: [], prog_shares: [],
+  useful_contacts: [], prog_programmes: [], prog_expenses: [], prog_attendance: [], prog_shares: [],
   notices: [], meetings: [], payment_submissions: [], maintenance_charges: [], fund_ledger: [], programmes: [],
 };
 window.__calls = [];
@@ -29,11 +31,12 @@ function visible(table, rows) {
   if (table === 'prog_expenses') return rows.filter(r => fin(r.programme_id));
   if (table === 'prog_attendance') return rows.filter(r => r.house_number === 33 && fin(r.programme_id));
   if (table === 'prog_shares') return rows.filter(r => r.house_number === 33);
+  if (table === 'useful_contacts') return rows.filter(r => r.is_active !== false);
   return rows;
 }
 class Q {
   constructor(table) { this.table = table; this.op = 'select'; this.filters = []; this.sorts = []; this.lim = null; this.ret = false; this.one = false; }
-  select() { if (this.op !== 'select') this.ret = true; return this; }
+  select(cols) { this.cols = cols; if (this.op !== 'select') this.ret = true; return this; }
   insert(v) { this.op = 'insert'; this.payload = v; return this; }
   upsert(v, o) { this.op = 'upsert'; this.payload = v; this.opts = o; return this; }
   update(v) { this.op = 'update'; this.payload = v; return this; }
@@ -49,8 +52,10 @@ class Q {
   then(res, rej) { return new Promise(r => setTimeout(r, 30)).then(() => this.run()).then(res, rej); }
   run() {
     const T = db[this.table]; window.__calls.push(this.op + ' ' + this.table);
+    if (qs.get('nosuper') && this.table === 'profiles' && this.op === 'select' && /is_super|is_active/.test(this.cols || '')) return { data: null, error: { code: '42703', message: 'column profiles.is_super does not exist' } };
+    if (qs.get('contactsmissing') && this.table === 'useful_contacts') return { data: null, error: { code: 'PGRST205', message: "Could not find the table 'public.useful_contacts' in the schema cache" } };
     if (new URLSearchParams(location.search).get('progmissing') && this.table.startsWith('prog_')) return { data: null, error: { code: 'PGRST205', message: "Could not find the table 'public." + this.table + "' in the schema cache" } };
-    if (role !== 'admin' && this.op !== 'select' && this.table.startsWith('prog_')) return { data: null, error: { message: 'RLS: admin only' } };
+    if (role !== 'admin' && this.op !== 'select' && (this.table.startsWith('prog_') || this.table === 'useful_contacts')) return { data: null, error: { message: 'RLS: admin only' } };
     if (role !== 'admin' && this.op !== 'select' && this.table.startsWith('navratri')) return { data: null, error: { message: 'RLS: admin only' } };
     const match = r => this.filters.every(f => f(r));
     if (this.op === 'insert' || this.op === 'upsert') {
@@ -85,6 +90,16 @@ export function createClient() {
       await new Promise(r => setTimeout(r, 30));
       window.__calls.push('rpc ' + name);
       const err = message => ({ data: null, error: { message } });
+      if (name === 'set_my_member_count') {
+        if (a.p_count == null || a.p_count < 0 || a.p_count > 100) return err('Enter a number of members from 0 to 100.');
+        if (role !== 'resident') return err('Only a resident can update their own house members.');
+        if (new URLSearchParams(location.search).get('norpc')) return { data: null, error: { code: 'PGRST202', message: 'Could not find the function public.set_my_member_count in the schema cache' } };
+        const season = db.navratri_seasons.find(x => x.status === 'active'); if (!season) return err('There is no active festival right now.');
+        const hh = db.navratri_households.find(h => h.season_id === season.id && h.house_number === 33); if (!hh) return err('Your house is not part of this festival yet. Please ask the administrator.');
+        if (db.navratri_contributions.some(c => c.household_id === hh.id) || db.navratri_refunds.some(r => r.household_id === hh.id)) return err('A payment is already recorded for your house. Please ask the administrator to change the members.');
+        if (db.navratri_tokens.some(t => t.season_id === season.id && t.house_number === 33)) return err('Tokens have already been given to your house. Please ask the administrator to change the members.');
+        hh.participant_count = a.p_count; return { data: { house_number: 33, participant_count: a.p_count }, error: null };
+      }
       if (role !== 'admin') return err('Only an administrator can do that.');
       const prog = db.prog_programmes.find(p => p.id === a.p_programme_id);
       if (!prog) return err('Programme not found.');
@@ -129,7 +144,10 @@ if (new URLSearchParams(location.search).get('seed')) {
   for (let n = 31; n <= 49; n++) db.prog_shares.push({ programme_id: 'pg1', house_number: n, share_paise: 10000, paid_paise: n === 34 ? 10000 : 0 });
   db.navratri_seasons.push({ id: 's1', title: 'TEST Navratri', starts_on: '2026-10-17', ends_on: '2026-10-25', status: 'active' });
   for (let n = 31; n <= 49; n++) db.navratri_households.push({ id: 'h' + n, season_id: 's1', house_number: n, participant_count: n === 33 ? 2 : 0, contribution_per_person_paise: 50000 });
-  db.navratri_contributions.push({ id: 'c1', household_id: 'h33', amount_paise: 50000, paid_on: '2026-10-12', payment_method: 'cash' });
-  db.navratri_tokens.push({ id: 't1', season_id: 's1', token_date: '2026-10-17', house_number: 33, member_label: 'Member 1', token_count: 1, status: 'pending' });
+  db.useful_contacts.push({ id: 'uc1', category: 'plumber', name: 'Ramesh Plumber', phone: '98765 00001', note: 'After 5 pm', is_active: true, sort_order: 0 },
+    { id: 'uc2', category: 'election', name: 'Ward Election Office', phone: '0281 2222222', note: null, is_active: true, sort_order: 0 },
+    { id: 'uc3', category: 'mistri', name: 'Hidden Mistri', phone: '98765 00003', note: null, is_active: false, sort_order: 0 });
+  if (!qs.get('nopay')) db.navratri_contributions.push({ id: 'c1', household_id: 'h33', amount_paise: 50000, paid_on: '2026-10-12', payment_method: 'cash' });
+  if (!qs.get('nopay')) db.navratri_tokens.push({ id: 't1', season_id: 's1', token_date: '2026-10-17', house_number: 33, member_label: 'Member 1', token_count: 1, status: 'pending' });
   db.navratri_expenses.push({ id: 'e1', season_id: 's1', spent_on: '2026-10-12', category: 'snacks', description: 'Tea', amount_paise: 10000, paid_from: 'navratri_contributions' });
 }

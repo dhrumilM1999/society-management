@@ -5,6 +5,7 @@ A static, responsive resident portal for **Sonalpark Society Gate-2**, serving h
 ## Latest project status — 12 October 2026
 
 ### Done
+- **Roles, contacts, member self-service (15 Oct 2026) — built, awaiting approval to switch on:** super admin / admin / user roles, a shared *Useful contacts* list (plumber, mistri, electrician, election office…), *Team & roles* page for the super admin, and residents setting their own festival members. The website part is live and degrades gracefully; the database migration and the `manage-admins` Edge Function are tested but **not yet applied/deployed** — see `docs/ROLES_PLAN.md`.
 - **Refunds fixed (15 Oct 2026):** the app now records overpayment refunds in production's own `navratri_refunds` table and subtracts them from what a house has paid (previously it wrote to a column that does not exist, so refunds failed).
 - **Programmes & expense sharing (13 Oct 2026):** admins create a programme, add its expenses, choose how the cost is split (all houses equally / only attending houses equally / per person attended), enter attendance with a live split preview, then **Finalize**. Finalizing saves every house's share in one all-or-nothing database function; expenses are locked afterwards and **Reopen** is available until a payment is recorded. Each house's share can be marked paid (and undone) with Call / WhatsApp / SMS reminders. Residents see only their own house share. **Applied to production on 15 Oct 2026** from `docs/migrations/2026-10-13-programmes.sql` (new `prog_*` tables + functions only; nothing existing was changed; verified with a rolled-back dry run as admin and resident). The SQL is tested on a real Postgres engine (`tests/programmes/sql-test.mjs`: split maths, rounding, RLS for admin / resident / anonymous, payments, reopen).
 - **UI redesign (12 Oct 2026, mobile-first):** new design system using the emblem's green/navy/gold; bottom tab bar with a "More" sheet on phones and a left sidebar on screens ≥900px; login page reordered so sign-in is first; Navratri split into Houses / Tokens / Expenses tabs; house member entry uses a large +/– stepper; toast messages replace the inline status line. Data logic is unchanged and `tests/navratri/e2e.mjs` covers the new layout.
@@ -389,4 +390,6 @@ The public directory is secondary utility, not the main product entry point. Sig
 npm i --no-save playwright @electric-sql/pglite && npx playwright install chromium
 node tests/navratri/e2e.mjs index.html /tmp     # browser flows against a mock database
 node tests/programmes/sql-test.mjs              # programme SQL on an in-memory Postgres
+node tests/roles/sql-test.mjs                   # roles/contacts SQL on a replica of production's rules
+node tests/roles/edge-test.mjs                  # manage-admins Edge Function (fake Supabase)
 ```

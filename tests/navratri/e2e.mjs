@@ -336,6 +336,93 @@ ok(await ac.inputValue('#acPw1') === '', 'password fields are cleared after succ
 ok(!(await ac.evaluate(() => document.documentElement.scrollWidth > innerWidth)), 'no horizontal overflow on My account');
 ok(ac.errors.length === 0, 'my account: no console errors ' + JSON.stringify(ac.errors));
 await ac.screenshot({ path: out + '/phone-account.png', fullPage: true });
+// ---------- Roles: contacts, team, member count ----------
+const ct = await open('?role=resident&seed=1');
+await ct.click('#moreBtn'); await ct.click('#moreSheet [data-view="contacts"]'); await settle(ct);
+const ctt = await ct.locator('#viewContent').innerText();
+ok(ctt.includes('Ramesh Plumber') && ctt.includes('Ward Election Office') && !ctt.includes('Hidden Mistri'), 'resident sees active shared contacts, not hidden ones');
+ok(await ct.locator('.contact-card a[href="tel:+919876500001"]').count() === 1 && await ct.locator('.contact-card a[href="https://wa.me/919876500001"]').count() === 1, 'each contact has Call and WhatsApp links');
+ok(await ct.locator('[data-contact-add], [data-contact-edit]').count() === 0, 'resident cannot add or edit contacts');
+await ct.fill('#contactSearch', 'elect');
+ok(await ct.locator('.contact-card:not([hidden])').count() === 1, 'search narrows the list (elect -> Election Office)');
+await ct.fill('#contactSearch', 'zzz');
+ok(!(await ct.locator('#contactNone').getAttribute('class')).includes('hidden'), 'search shows a message when nothing matches');
+ok(ct.errors.length === 0, 'contacts: no console errors ' + JSON.stringify(ct.errors));
+await ct.screenshot({ path: out + '/phone-contacts.png', fullPage: true });
+ok(await ct.locator('.super-only').first().isHidden(), 'residents never see the Team & roles entry');
+
+const ca = await open('?role=admin&super=0&seed=1');
+await ca.click('#moreBtn'); await ca.click('#moreSheet [data-view="contacts"]'); await settle(ca);
+ok((await ca.locator('#viewContent').innerText()).includes('Hidden Mistri'), 'admin also sees hidden contacts');
+await ca.click('[data-contact-add]'); await ca.waitForTimeout(150);
+await ca.click('#contactForm button[type=submit]');
+ok((await text(ca, '#csMsg')).includes('name'), 'a contact needs a name');
+await ca.fill('#csName', 'Dr Shah'); await ca.fill('#csPhone', '12'); await ca.click('#contactForm button[type=submit]');
+ok((await text(ca, '#csMsg')).includes('phone'), 'a contact needs a valid phone number');
+await ca.click('#contactForm .mobile-select-trigger'); await ca.click('.mobile-select-option:has-text("Doctor")');
+await ca.fill('#csPhone', '98250 11111'); await ca.fill('#csNote', 'Clinic 9-1'); await ca.click('#contactForm button[type=submit]'); await settle(ca);
+const savedC = (await db(ca, 'useful_contacts')).find(x => x.name === 'Dr Shah');
+ok(savedC && savedC.category === 'doctor' && savedC.phone === '98250 11111' && savedC.created_by === 'admin-1' && savedC.is_active === true, 'admin adds a contact (category, phone, note, created_by)');
+await ca.click('[data-contact-edit="uc1"]'); await ca.waitForTimeout(150);
+ok(await ca.inputValue('#csName') === 'Ramesh Plumber', 'edit opens with the saved details');
+await ca.click('#csDelete'); await settle(ca);
+ok(!(await db(ca, 'useful_contacts')).some(x => x.id === 'uc1'), 'admin can remove a contact');
+ok(await ca.locator('.super-only').first().isHidden(), 'a normal admin does not see Team & roles');
+ok(ca.errors.length === 0, 'admin contacts: no console errors ' + JSON.stringify(ca.errors));
+
+const cm = await open('?role=admin&seed=1&contactsmissing=1');
+await cm.click('#moreBtn'); await cm.click('#moreSheet [data-view="contacts"]'); await settle(cm);
+ok((await cm.locator('#viewContent').innerText()).includes('not switched on yet'), 'missing contacts table shows a friendly message');
+
+const tm = await open('?role=admin&seed=1');
+const tcalls = [];
+await tm.route('**/functions/v1/manage-admins', r => { const b = JSON.parse(r.request().postData()); tcalls.push(b); return r.fulfill({ contentType: 'application/json', headers: { 'access-control-allow-origin': '*' }, body: JSON.stringify(b.action === 'create_admin' && b.email === 'dup@x.co' ? { error: 'Could not create this admin login. The email may already be in use.' } : { ok: true, message: 'Done: ' + b.action }) }); });
+await tm.click('#moreBtn'); await tm.click('#moreSheet [data-view="team"]'); await settle(tm);
+ok(await tm.locator('.team-row').count() === 2, 'super admin sees the team (2 admins)');
+ok((await tm.locator('.team-row').first().innerText()).includes('you') && await tm.locator('.team-row').first().locator('[data-team-reset]').count() === 0, 'own row has no self-service buttons');
+await tm.click('#teamForm button[type=submit]');
+ok((await text(tm, '#teamMsg')).includes('email'), 'new admin needs a valid email');
+await tm.fill('#tmEmail', 'new@x.co'); await tm.fill('#tmName', 'Nina'); await tm.fill('#tmPass', 'short'); await tm.click('#teamForm button[type=submit]');
+ok((await text(tm, '#teamMsg')).includes('8 characters') && tcalls.length === 0, 'short password never reaches the server');
+await tm.fill('#tmPass', 'LongEnough9'); await tm.click('#teamForm [data-val="en"]'); await tm.click('#teamForm button[type=submit]'); await settle(tm);
+ok(tcalls[0] && tcalls[0].action === 'create_admin' && tcalls[0].email === 'new@x.co' && tcalls[0].preferred_language === 'en' && tcalls[0].password === 'LongEnough9', 'create-admin request is correct');
+await tm.fill('#tmEmail', 'dup@x.co'); await tm.fill('#tmName', 'Dup'); await tm.fill('#tmPass', 'LongEnough9'); await tm.click('#teamForm button[type=submit]'); await settle(tm);
+ok((await text(tm, '#teamMsg')).includes('already be in use'), 'server errors are shown on the form');
+await tm.click('[data-team-active="admin-2:0"]'); await settle(tm);
+ok(tcalls.at(-1).action === 'set_active' && tcalls.at(-1).user_id === 'admin-2' && tcalls.at(-1).active === false, 'deactivate sends the right request (after a confirmation)');
+await tm.click('[data-team-super="admin-2:1"]'); await settle(tm);
+ok(tcalls.at(-1).action === 'set_super' && tcalls.at(-1).is_super === true, 'make super sends the right request');
+await tm.click('[data-team-reset="admin-2"]'); await tm.waitForTimeout(150);
+await tm.fill('#tpPass', 'x'); await tm.click('#teamPwForm button[type=submit]');
+ok((await text(tm, '#tpMsg')).includes('8 characters'), 'reset password needs 8+ characters');
+await tm.fill('#tpPass', 'BrandNew123'); await tm.click('#teamPwForm button[type=submit]'); await settle(tm);
+ok(tcalls.at(-1).action === 'reset_password' && tcalls.at(-1).password === 'BrandNew123', 'reset password sends the right request');
+ok(!(await tm.evaluate(() => document.documentElement.scrollWidth > innerWidth)), 'no horizontal overflow on Team');
+await tm.screenshot({ path: out + '/phone-team.png', fullPage: true });
+ok(tm.errors.length === 0, 'team: no console errors ' + JSON.stringify(tm.errors));
+
+// a database without the role columns yet must still work
+const ns = await open('?role=admin&seed=1&nosuper=1');
+ok(await ns.locator('#app').isVisible() && await ns.locator('.super-only').first().isHidden(), 'app still boots when the database has no role columns (Team hidden)');
+
+// resident sets own member count
+const mc = await open('?role=resident&seed=1&nopay=1');
+await mc.click('#moreBtn'); await mc.click('#moreSheet [data-view="account"]'); await settle(mc);
+ok(await mc.locator('#membersForm').count() === 1 && await mc.inputValue('#msCount') === '2', 'resident sees their festival members (2)');
+await mc.click('[data-ms="1"]'); await mc.click('[data-ms="1"]');
+ok((await text(mc, '#msDue')).includes('2,000'), 'contribution updates live (4 x Rs 500)');
+await mc.click('#membersForm button[type=submit]'); await settle(mc);
+ok((await db(mc, 'navratri_households')).find(h => h.house_number === 33).participant_count === 4, 'resident saves their own member count');
+const lk = await open('?role=resident&seed=1');
+await lk.click('#moreBtn'); await lk.click('#moreSheet [data-view="account"]'); await settle(lk);
+ok(await lk.locator('#msCount').isDisabled() && (await lk.locator('#membersForm').innerText()).includes('only the administrator'), 'once a payment exists, the resident can no longer change members');
+const nr = await open('?role=resident&seed=1&nopay=1&norpc=1');
+await nr.click('#moreBtn'); await nr.click('#moreSheet [data-view="account"]'); await settle(nr);
+await nr.click('#membersForm button[type=submit]'); await settle(nr);
+ok((await text(nr, '#membersMsg')).includes('not switched on yet'), 'if the database function is missing, the resident sees a friendly message');
+const ad = await open('?role=admin&seed=1');
+await ad.click('#moreBtn'); await ad.click('#moreSheet [data-view="account"]'); await settle(ad);
+ok(await ad.locator('#membersForm').count() === 0 && (await ad.locator('.user-card').first().innerText()).includes('Super admin'), 'admins have no member form; a super admin is labelled as such');
 const d = await open('?role=admin&seed=1', 1280);
 ok(await d.locator('.sidebar').isVisible() && !(await d.locator('.tabbar').isVisible()), 'desktop shows the left sidebar, not the tab bar');
 await d.screenshot({ path: out + '/desktop-navratri.png', fullPage: true });

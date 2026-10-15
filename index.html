@@ -415,6 +415,15 @@ body.modal-open{overflow:hidden}
 .att-step input{width:46px;height:38px;text-align:center;border:1px solid #cbd5e1;border-radius:10px;font-size:16px;font-weight:700;padding:0;min-width:0}
 .programme-card.is-open{border-color:#93b4f5}
 @media(min-width:600px){.att-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.prog-top .btn{width:auto}}
+/* contacts and team */
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.contact-card{display:grid;gap:10px;padding:14px;border:1px solid var(--line);border-radius:var(--r);background:#fff;box-shadow:var(--shadow)}
+.contact-card.is-off{opacity:.65;background:#f8fafc}
+.cc-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.cc-head strong{color:var(--ink);font-size:16px;overflow-wrap:anywhere}
+.contact-card[hidden],.contact-group[hidden]{display:none}
+.team-row{gap:10px}
+.team-row .wait-open{align-items:center}
 /* ---------- Custom select (bottom sheet on phones) ---------- */
 .mobile-select{position:relative;width:100%;min-width:0}
 .mobile-select .native-select-source{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important;clip-path:inset(50%)!important;overflow:hidden!important}
@@ -507,6 +516,7 @@ body.modal-open{overflow:hidden}
 <symbol id="i-chev-l" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
 <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></symbol>
 <symbol id="i-user" viewBox="0 0 24 24"><path d="M12 12a4 4 0 100-8 4 4 0 000 8zM4 21a8 8 0 0116 0"/></symbol>
+<symbol id="i-team" viewBox="0 0 24 24"><path d="M9 11a3 3 0 100-6 3 3 0 000 6zM3 20a6 6 0 0112 0M16 11a3 3 0 100-6M21 20a6 6 0 00-4-5.6"/></symbol>
 <symbol id="i-logout" viewBox="0 0 24 24"><path d="M15 4h4a1 1 0 011 1v14a1 1 0 01-1 1h-4M10 8l-4 4 4 4M6 12h11"/></symbol>
 </defs></svg>
 
@@ -533,10 +543,12 @@ body.modal-open{overflow:hidden}
 <button data-view="notices"><svg class="ic"><use href="#i-bell"/></svg><span data-en="Notices & meetings" data-gu="નોટિસ અને મિટિંગ">Notices & meetings</span></button>
 <button data-view="funds"><svg class="ic"><use href="#i-chart"/></svg><span data-en="Fund records" data-gu="ફંડ રેકોર્ડ">Fund records</span></button>
 <button data-view="programmes"><svg class="ic"><use href="#i-cal"/></svg><span data-en="Programmes" data-gu="કાર્યક્રમો">Programmes</span></button>
+<button data-view="contacts"><svg class="ic"><use href="#i-phone"/></svg><span data-en="Useful contacts" data-gu="ઉપયોગી નંબર">Useful contacts</span></button>
 <button data-view="account"><svg class="ic"><use href="#i-user"/></svg><span data-en="My account" data-gu="મારું એકાઉન્ટ">My account</span></button>
 <div class="side-label admin-only hidden" data-en="Admin" data-gu="એડમિન">Admin</div>
 <button class="admin-only hidden" data-view="houses"><svg class="ic"><use href="#i-houses"/></svg><span data-en="Manage houses" data-gu="ઘર વ્યવસ્થાપન">Manage houses</span></button>
 <button class="admin-only hidden" data-view="admin"><svg class="ic"><use href="#i-shield"/></svg><span data-en="Admin review" data-gu="એડમિન સમીક્ષા">Admin review</span></button>
+<button class="super-only hidden" data-view="team"><svg class="ic"><use href="#i-team"/></svg><span data-en="Team & roles" data-gu="ટીમ અને ભૂમિકા">Team & roles</span></button>
 </nav>
 <div class="side-foot"><button class="btn lang-btn" type="button">ગુજરાતી</button><button class="btn sign-out-btn" type="button"><svg class="ic"><use href="#i-logout"/></svg><span data-en="Sign out" data-gu="સાઇન આઉટ">Sign out</span></button></div>
 </aside>
@@ -564,10 +576,12 @@ body.modal-open{overflow:hidden}
 <div class="user-card"><div class="avatar js-avatar">S</div><div><strong class="js-user-name">Welcome</strong><small class="js-user-sub"></small></div></div>
 <div class="more-list">
 <button class="more-item" data-view="funds"><svg class="ic"><use href="#i-chart"/></svg><span data-en="Fund records" data-gu="ફંડ રેકોર્ડ">Fund records</span></button>
+<button class="more-item" data-view="contacts"><svg class="ic"><use href="#i-phone"/></svg><span data-en="Useful contacts" data-gu="ઉપયોગી નંબર">Useful contacts</span></button>
 <button class="more-item" data-view="account"><svg class="ic"><use href="#i-user"/></svg><span data-en="My account" data-gu="મારું એકાઉન્ટ">My account</span></button>
 <button class="more-item" data-view="programmes"><svg class="ic"><use href="#i-cal"/></svg><span data-en="Programmes" data-gu="કાર્યક્રમો">Programmes</span></button>
 <button class="more-item admin-only hidden" data-view="houses"><svg class="ic"><use href="#i-houses"/></svg><span data-en="Manage houses" data-gu="ઘર વ્યવસ્થાપન">Manage houses</span></button>
 <button class="more-item admin-only hidden" data-view="admin"><svg class="ic"><use href="#i-shield"/></svg><span data-en="Admin review" data-gu="એડમિન સમીક્ષા">Admin review</span></button>
+<button class="more-item super-only hidden" data-view="team"><svg class="ic"><use href="#i-team"/></svg><span data-en="Team & roles" data-gu="ટીમ અને ભૂમિકા">Team & roles</span></button>
 </div>
 <div class="sheet-actions"><button class="btn lang-btn" type="button">ગુજરાતી</button><button class="btn sign-out-btn" type="button"><svg class="ic"><use href="#i-logout"/></svg><span data-en="Sign out" data-gu="સાઇન આઉટ">Sign out</span></button></div>
 </div></div>
@@ -597,7 +611,7 @@ $('app').addEventListener('click',e=>{
  const g=e.target.closest('[data-go]');
  if(g){activeView=g.dataset.go;if(g.dataset.seg)navratriSeg=g.dataset.seg;if(g.dataset.today)navratriSelectedDate=null;closeMore();window.scrollTo({top:0});renderView();return}
  const b=e.target.closest('button[data-view]');if(!b)return;activeView=b.dataset.view;closeMore();window.scrollTo({top:0});renderView()});
-const MORE_VIEWS=['funds','programmes','account','houses','admin'];
+const MORE_VIEWS=['funds','programmes','contacts','account','houses','admin','team'];
 function openMore(){$('moreSheet').hidden=false;document.body.classList.add('modal-open')}
 function closeMore(){$('moreSheet').hidden=true;if($('householdModal')?.hidden!==false)document.body.classList.remove('modal-open')}
 $('moreBtn').addEventListener('click',openMore);$('moreClose').addEventListener('click',closeMore);
@@ -605,9 +619,11 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('moreSheet').hid
 supabase.auth.onAuthStateChange((_event,s)=>{session=s;setTimeout(()=>boot(),0)});
 async function loadPublicHouses(){const {data,error}=await supabase.from('houses').select('house_number,is_active').order('house_number');if(error){$('publicHouseList').textContent='Directory unavailable';return}$('publicHouseList').innerHTML=data.map(h=>'<div class="house-chip"><strong>'+h.house_number+'</strong><span>'+(h.is_active?'Active':'Inactive')+'</span></div>').join('')}loadPublicHouses();
 async function boot(){if(!session){$('public').classList.remove('hidden');$('app').classList.add('hidden');profile=null;return}
-$('public').classList.add('hidden');$('app').classList.remove('hidden');const {data,error}=await supabase.from('profiles').select('id,display_name,role,house_number,preferred_language').eq('id',session.user.id).maybeSingle();
+$('public').classList.add('hidden');$('app').classList.remove('hidden');let {data,error}=await supabase.from('profiles').select('id,display_name,role,house_number,preferred_language,is_super,is_active').eq('id',session.user.id).maybeSingle();
+if(error){const old=await supabase.from('profiles').select('id,display_name,role,house_number,preferred_language').eq('id',session.user.id).maybeSingle();data=old.data;error=old.error}
+if(!error&&data&&data.is_active===false){$('viewContent').innerHTML='<div class="panel"><h3>'+t('This account is switched off','આ એકાઉન્ટ બંધ કરેલું છે')+'</h3><p class="muted">'+t('Please contact the society administrator.','કૃપા કરી સોસાયટી એડમિનનો સંપર્ક કરો.')+'</p></div>';return}
 if(error||!data){$('viewContent').innerHTML='<div class="panel"><h3>'+t('Your profile is not set up yet','તમારી પ્રોફાઇલ હજી સેટ થઈ નથી')+'</h3><p class="muted">'+t('Ask the society administrator to assign your account to a house (31–49) or administrator role.','તમારા એકાઉન્ટને ઘર (31–49) અથવા એડમિન ભૂમિકા આપવા સોસાયટી એડમિનને કહો.')+'</p></div>';return}
-profile=data;lang=data.preferred_language||lang;applyLang();document.querySelectorAll('.admin-only').forEach(el=>el.classList.toggle('hidden',profile.role!=='admin'));document.querySelectorAll('.js-user-name').forEach(el=>el.textContent=profile.display_name);document.querySelectorAll('.js-avatar').forEach(el=>el.textContent=(profile.role==='admin'?'A':String(profile.house_number??'?')));document.querySelectorAll('.js-user-sub').forEach(el=>el.textContent=profile.role==='admin'?t('Administrator access','એડમિન પ્રવેશ'):t('House no. ','ઘર નં. ')+profile.house_number);await loadView()}
+profile=data;profile.is_super=data.role==='admin'&&data.is_super===true;lang=data.preferred_language||lang;applyLang();document.querySelectorAll('.admin-only').forEach(el=>el.classList.toggle('hidden',profile.role!=='admin'));document.querySelectorAll('.super-only').forEach(el=>el.classList.toggle('hidden',!profile.is_super));document.querySelectorAll('.js-user-name').forEach(el=>el.textContent=profile.display_name);document.querySelectorAll('.js-avatar').forEach(el=>el.textContent=(profile.role==='admin'?'A':String(profile.house_number??'?')));document.querySelectorAll('.js-user-sub').forEach(el=>el.textContent=profile.role==='admin'?(profile.is_super?t('Super admin','સુપર એડમિન'):t('Administrator access','એડમિન પ્રવેશ')):t('House no. ','ઘર નં. ')+profile.house_number);await loadView()}
 async function loadView(){cache={};await renderView()}
 function heading(title,desc){$('viewTitle').textContent=title;$('viewDesc').textContent=desc||'';$('viewEyebrow').textContent='Sonalpark Society Gate-2 · '+(profile?.house_number??t('Admin','એડમિન'))}
 function empty(text){return '<div class="empty">'+escapeHtml(text)+'</div>'}
@@ -625,6 +641,8 @@ else if(activeView==='payments'){heading(t('Payments','પેમેન્ટ'),t
 else if(activeView==='funds'){heading(t('Fund records','ફંડ રેકોર્ડ'),t('Posted entries only; pending payment claims are excluded.','મંજૂર થયેલી એન્ટ્રીઓ જ; બાકી પેમેન્ટનો સમાવેશ નથી.'));const {data,error}=await supabase.from('fund_ledger').select('id,fund,house_number,amount_paise,entry_type,description,posted_at').order('posted_at',{ascending:false}).limit(100);if(error)throw error;const funds=['maintenance','festival','general'];c.innerHTML='<div class="grid">'+funds.map(f=>'<div class="metric"><small>'+t(f,({maintenance:'મેન્ટેનન્સ',festival:'તહેવાર',general:'જનરલ'})[f])+'</small><strong>'+money(data.filter(x=>x.fund===f).reduce((s,x)=>s+Number(x.amount_paise),0))+'</strong><span>'+t('Visible posted balance','દેખાતું બેલેન્સ')+'</span></div>').join('')+'</div><div class="noticebar">'+t('Residents see their house-specific ledger entries. Admins see society-wide entries. A visible resident total may not represent the entire society fund balance.','રહેવાસીઓ પોતાનાં ઘરનાં લેજર જુએ છે. એડમિન સોસાયટીની બધી એન્ટ્રીઓ જુએ છે. રહેવાસીનું બેલેન્સ સમગ્ર ફંડનું બેલેન્સ ન પણ હોય.')+'</div><div class="list">'+(data.map(x=>item(money(x.amount_paise)+' · '+t(x.fund,x.fund),x.description,(x.house_number?'House '+x.house_number+' · ':'')+date(x.posted_at),x.entry_type)).join('')||empty(t('No confirmed ledger entries yet.','હજી લેજર એન્ટ્રી નથી.')) )+'</div>'}
 else if(activeView==='programmes'){await renderProgrammes(c)}
 else if(activeView==='account'){await renderAccount(c)}
+else if(activeView==='contacts'){await renderContacts(c)}
+else if(activeView==='team'&&profile.is_super){await renderTeam(c)}
 else if(activeView==='admin'&&profile.role==='admin'){heading(t('Admin review','એડમિન સમીક્ષા'),t('Review payment submissions and publish community updates.','પેમેન્ટ સમીક્ષા કરો અને સોસાયટી અપડેટ પ્રકાશિત કરો.'));const {data:payments,error}=await supabase.from('payment_submissions').select('id,house_number,amount_paise,fund,payment_date,reference_note,created_at,submitted_by').eq('status','pending').order('created_at');if(error)throw error;c.innerHTML='<div class="panel"><h3>'+t('Pending payment submissions','બાકી પેમેન્ટ સબમિશન')+'</h3><div class="list">'+(payments.map(x=>'<article class="item"><div class="itemtop"><div><h3>'+money(x.amount_paise)+' · '+t(x.fund,x.fund)+'</h3><div class="tiny">House '+x.house_number+' · '+date(x.payment_date)+' · '+date(x.created_at)+'</div><p>'+escapeHtml(x.reference_note||'—')+'</p></div><span class="tag">Pending</span></div><div class="row" style="margin-top:12px"><button class="btn primary" data-approve="'+x.id+'">'+t('Confirm payment','પેમેન્ટ મંજૂર કરો')+'</button><button class="btn" data-reject="'+x.id+'">'+t('Reject','નકારો')+'</button></div></article>').join('')||empty(t('No payments awaiting review.','સમીક્ષા માટે પેમેન્ટ નથી.')) )+'</div></div><div class="panel" style="margin-top:16px"><h3>'+t('Publish a notice','નોટિસ પ્રકાશિત કરો')+'</h3><form id="noticeForm"><div class="field"><label>'+t('Title (English)','શીર્ષક (અંગ્રેજી)')+'</label><input name="title_en" type="text" required maxlength="180"></div><div class="field"><label>'+t('Message (English)','સંદેશ (અંગ્રેજી)')+'</label><textarea name="body_en" required rows="3"></textarea></div><div class="field"><label>'+t('Title (Gujarati)','શીર્ષક (ગુજરાતી)')+'</label><input name="title_gu" type="text" maxlength="180"></div><div class="field"><label>'+t('Message (Gujarati)','સંદેશ (ગુજરાતી)')+'</label><textarea name="body_gu" rows="3"></textarea></div><button class="btn primary" type="submit">'+t('Publish notice','નોટિસ પ્રકાશિત કરો')+'</button><div class="msg" id="noticeMsg"></div></form></div>';c.querySelectorAll('[data-approve]').forEach(b=>b.addEventListener('click',()=>reviewPayment(b.dataset.approve,true)));c.querySelectorAll('[data-reject]').forEach(b=>b.addEventListener('click',()=>reviewPayment(b.dataset.reject,false)));$('noticeForm').addEventListener('submit',publishNotice)}
 else{heading(t('Not available','ઉપલબ્ધ નથી'),'');c.innerHTML=empty(t('This section is only available to administrators.','આ વિભાગ ફક્ત એડમિન માટે છે.'))}
 }catch(err){console.error(err);c.innerHTML='<div class="panel"><h3>'+t('Could not load this section','આ વિભાગ લોડ થઈ શક્યો નથી')+'</h3><p class="muted">'+t('Please refresh. If the problem continues, ask the administrator to check your account permissions.','રિફ્રેશ કરો. સમસ્યા રહે તો એડમિનને પરવાનગી તપાસવા કહો.')+'</p></div>'}}
@@ -850,6 +868,114 @@ async function renderProgrammes(c){
  c.querySelectorAll('[data-prog-reopen]').forEach(b=>b.addEventListener('click',()=>{if(!confirm(t('Reopen this programme? The shares are cleared and you can correct the expenses, then finalize again.','આ કાર્યક્રમ ફરી ખોલવો? હિસ્સા ભૂંસાશે, ખર્ચ સુધારી ફરી પૂર્ણ કરી શકશો.')))return;withBusy(b,async()=>{const {error}=await supabase.rpc('prog_reopen',{p_programme_id:b.dataset.progReopen});if(error){setMsg('appMsg',error.message);return}progOpen=b.dataset.progReopen;await rerender()})}));
 }
 
+
+/* ---------- Useful contacts: plumber, mistri, electrician, election office ... shared by the admins with everyone ---------- */
+function contactCats(){return [['plumber',t('Plumber','પ્લમ્બર')],['electrician',t('Electrician','ઇલેક્ટ્રિશિયન')],['mistri',t('Mistri / Mason','મિસ્ત્રી')],['carpenter',t('Carpenter','સુથાર')],['painter',t('Painter','પેઇન્ટર')],['doctor',t('Doctor','ડૉક્ટર')],['ambulance',t('Ambulance','એમ્બ્યુલન્સ')],['police',t('Police','પોલીસ')],['fire',t('Fire brigade','ફાયર બ્રિગેડ')],['election',t('Election office','ચૂંટણી કચેરી')],['society_office',t('Society office','સોસાયટી ઓફિસ')],['other',t('Other','અન્ય')]]}
+const dbMissing=(e,name)=>new RegExp('PGRST205|PGRST202|42P01|42883|schema cache|could not find the function|'+name,'i').test(String(e?.code||'')+' '+String(e?.message||''));
+async function renderContacts(c){
+ const admin=profile.role==='admin',cats=contactCats(),catName=k=>(cats.find(x=>x[0]===k)||[k,k])[1];
+ heading(t('Useful contacts','ઉપયોગી નંબર'),t('Plumber, mistri, electrician, election office and more — tap to call.','પ્લમ્બર, મિસ્ત્રી, ઇલેક્ટ્રિશિયન, ચૂંટણી કચેરી અને વધુ — કૉલ માટે ટેપ કરો.'));
+ const r=await supabase.from('useful_contacts').select('*').order('sort_order',{ascending:true}).order('name',{ascending:true}).limit(500);
+ if(r.error){
+  if(dbMissing(r.error,'useful_contacts')){c.innerHTML='<div class="panel"><h3>'+t('Contacts are not switched on yet','નંબર સૂચિ હજી શરૂ થઈ નથી')+'</h3><p class="muted">'+(admin?t('This needs a one-time database update. It is prepared and waiting for your approval.','આ માટે એક વખતનું ડેટાબેઝ અપડેટ જોઈએ. તે તૈયાર છે અને તમારી મંજૂરીની રાહ જુએ છે.'):t('Please check again soon.','થોડા સમય પછી ફરી જુઓ.'))+'</p></div>';return}
+  throw r.error;
+ }
+ if(activeView!=='contacts')return;
+ const list=r.data;
+ const card=x=>{const ph=phoneIntl(x.phone);return '<article class="contact-card'+(x.is_active?'':' is-off')+'" data-search="'+escapeHtml((x.name+' '+catName(x.category)+' '+(x.note||'')+' '+x.phone).toLowerCase())+'"><div class="cc-head"><div><strong>'+escapeHtml(x.name)+'</strong><div class="tiny">'+escapeHtml(x.phone)+(x.note?' · '+escapeHtml(x.note):'')+'</div></div>'+(x.is_active?'':'<span class="tag tag-off">'+t('Hidden','છુપાવેલ')+'</span>')+'</div><div class="act-row">'+progLink('act-call act-wide','phone',t('Call','કૉલ'),'tel:'+(ph?'+'+ph:escapeHtml(x.phone)))+(ph?progLink('act-wa','chat','WhatsApp','https://wa.me/'+ph,true):'')+(admin?progIcon('','edit',t('Edit','ફેરફાર'),'data-contact-edit="'+escapeHtml(x.id)+'"'):'')+'</div></article>'};
+ const groups=cats.map(([k,l])=>[k,l,list.filter(x=>x.category===k)]).filter(g=>g[2].length);
+ c.innerHTML=(admin?'<div class="prog-top"><button type="button" class="btn primary" data-contact-add>+ '+t('Add contact','નંબર ઉમેરો')+'</button></div>':'')
+  +'<div class="field" style="margin-top:0"><label class="sr-only" for="contactSearch">'+t('Search','શોધો')+'</label><input id="contactSearch" type="search" autocomplete="off" placeholder="'+t('Search name or work, e.g. plumber','નામ કે કામ શોધો, દા.ત. પ્લમ્બર')+'"></div>'
+  +(groups.map(([k,l,items])=>'<section class="contact-group" data-group-name="'+k+'"><h3 class="subhead">'+l+' <span class="tag">'+items.length+'</span></h3><div class="list">'+items.map(card).join('')+'</div></section>').join('')||empty(admin?t('No contacts yet. Tap “Add contact”.','હજી કોઈ નંબર નથી. “નંબર ઉમેરો” દબાવો.'):t('No contacts have been shared yet.','હજી કોઈ નંબર શેર થયો નથી.')))
+  +'<div class="empty hidden" id="contactNone">'+t('Nothing matches your search.','શોધ સાથે કંઈ મળતું નથી.')+'</div>'
+  +(admin?'<div class="household-modal" id="contactSheet" hidden><button type="button" class="household-modal-backdrop" data-cs-close aria-label="'+t('Close','બંધ કરો')+'"></button><section class="household-modal-sheet" role="dialog" aria-modal="true" aria-labelledby="csTitle"><div class="modal-grabber"></div><div class="modal-head"><h3 id="csTitle"></h3><button type="button" class="btn" data-cs-close>'+t('Close','બંધ કરો')+'</button></div>'
+   +'<form id="contactForm" novalidate><input type="hidden" name="id"><div class="field"><label>'+t('Work / type','કામ / પ્રકાર')+'</label><select name="category">'+cats.map(([k,l])=>'<option value="'+k+'">'+l+'</option>').join('')+'</select></div>'
+   +'<div class="field"><label for="csName">'+t('Name','નામ')+' *</label><input id="csName" name="name" type="text" maxlength="120" autocomplete="off"></div>'
+   +'<div class="field"><label for="csPhone">'+t('Mobile / phone','મોબાઇલ / ફોન')+' *</label><input id="csPhone" name="phone" type="tel" inputmode="tel" maxlength="30" autocomplete="off" placeholder="98XXXXXXXX"></div>'
+   +'<div class="field"><label for="csNote">'+t('Note (optional)','નોંધ (વૈકલ્પિક)')+'</label><input id="csNote" name="note" type="text" maxlength="300" autocomplete="off" placeholder="'+t('e.g. available after 5 pm','દા.ત. સાંજે 5 પછી મળશે')+'"></div>'
+   +'<label class="switch-row" for="csActive"><span><strong>'+t('Show to everyone','બધાને બતાવો')+'</strong><small>'+t('Turn off to hide it without deleting.','કાઢ્યા વિના છુપાવવા બંધ કરો.')+'</small></span><input id="csActive" name="is_active" type="checkbox" checked></label>'
+   +'<button class="btn primary" type="submit">'+t('Save contact','નંબર સાચવો')+'</button><button type="button" class="btn token-undo-btn" id="csDelete" hidden style="margin-top:8px;width:100%">'+t('Remove this contact','આ નંબર કાઢો')+'</button><div id="csMsg" class="msg" role="alert"></div></form></section></div>':'');
+ // live search across all groups
+ $('contactSearch').addEventListener('input',e=>{const v=e.target.value.trim().toLowerCase();let shown=0;c.querySelectorAll('.contact-card').forEach(el=>{const hit=!v||el.dataset.search.includes(v);el.hidden=!hit;if(hit)shown++});c.querySelectorAll('.contact-group').forEach(g=>{g.hidden=![...g.querySelectorAll('.contact-card')].some(el=>!el.hidden)});$('contactNone').classList.toggle('hidden',!(v&&shown===0))});
+ if(!admin)return;
+ const sheet=$('contactSheet'),form=$('contactForm');
+ const close=()=>{sheet.hidden=true;document.body.classList.remove('modal-open')};
+ const open=x=>{$('csTitle').textContent=x?t('Edit contact','નંબર ફેરફાર'):t('Add contact','નંબર ઉમેરો');form.elements.id.value=x?.id||'';form.elements.category.value=x?.category||'plumber';form.elements.category.dispatchEvent(new Event('change',{bubbles:true}));form.elements.name.value=x?.name||'';form.elements.phone.value=x?.phone||'';form.elements.note.value=x?.note||'';form.elements.is_active.checked=x?x.is_active!==false:true;$('csDelete').hidden=!x;setMsg('csMsg','');sheet.hidden=false;document.body.classList.add('modal-open');form.elements.name.focus({preventScroll:true})};
+ sheet.querySelectorAll('[data-cs-close]').forEach(b=>b.addEventListener('click',close));
+ c.querySelector('[data-contact-add]').addEventListener('click',()=>open(null));
+ c.querySelectorAll('[data-contact-edit]').forEach(b=>b.addEventListener('click',()=>open(list.find(x=>String(x.id)===b.dataset.contactEdit))));
+ const rerender=()=>renderContacts(c).catch(err=>{console.error(err);setMsg('appMsg',t('Could not refresh contacts. Tap Refresh.','નંબર રિફ્રેશ થયા નથી. રિફ્રેશ દબાવો.'))});
+ form.addEventListener('submit',e=>{e.preventDefault();const fd=new FormData(form),name=String(fd.get('name')||'').trim(),phone=String(fd.get('phone')||'').trim(),id=String(fd.get('id')||'');
+  if(name.length<2){setMsg('csMsg',t('Enter a name.','નામ લખો.'));return}
+  if(phone.replace(/\D/g,'').length<5){setMsg('csMsg',t('Enter a valid phone number.','યોગ્ય ફોન નંબર લખો.'));return}
+  const row={category:fd.get('category'),name,phone,note:String(fd.get('note')||'').trim()||null,is_active:fd.get('is_active')==='on'};
+  withBusy(form.querySelector('button[type=submit]'),async()=>{
+   const {error}=id?await supabase.from('useful_contacts').update({...row,updated_at:new Date().toISOString()}).eq('id',id):await supabase.from('useful_contacts').insert({...row,created_by:profile.id});
+   if(error){setMsg('csMsg',error.message);return}
+   close();await rerender();setMsg('appMsg',t('Contact saved.','નંબર સાચવ્યો.'));
+  });
+ });
+ $('csDelete').addEventListener('click',e=>{const id=form.elements.id.value;if(!id||!confirm(t('Remove this contact for everyone?','આ નંબર બધા માટે કાઢવો છે?')))return;withBusy(e.currentTarget,async()=>{const {error}=await supabase.from('useful_contacts').delete().eq('id',id);if(error){setMsg('csMsg',error.message);return}close();await rerender();setMsg('appMsg',t('Contact removed.','નંબર કાઢ્યો.'))})});
+}
+
+/* ---------- Team & roles (super admin only). Server work is done by the manage-admins Edge Function. ---------- */
+async function callTeam(payload){
+ const {data:{session:s}}=await supabase.auth.getSession();if(!s)throw new Error(t('Sign in again.','ફરી સાઇન ઇન કરો.'));
+ let res;try{res=await fetch(SUPABASE_URL+'/functions/v1/manage-admins',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+s.access_token,'apikey':SUPABASE_PUBLISHABLE_KEY},body:JSON.stringify(payload)})}catch{throw new Error(t('No connection. Please try again.','કનેક્શન નથી. ફરી પ્રયાસ કરો.'))}
+ if(res.status===404)throw new Error(t('Team management is not switched on yet. It is prepared and waiting for approval.','ટીમ વ્યવસ્થાપન હજી શરૂ થયું નથી. તે તૈયાર છે અને મંજૂરીની રાહ જુએ છે.'));
+ const out=await res.json().catch(()=>({}));
+ if(!res.ok||!out.ok)throw new Error(out.error||t('Could not complete this. Please try again.','આ પૂર્ણ થઈ શક્યું નથી. ફરી પ્રયાસ કરો.'));
+ return out;
+}
+async function renderTeam(c){
+ heading(t('Team & roles','ટીમ અને ભૂમિકા'),t('Add admins, switch them off, and choose who is a super admin.','એડમિન ઉમેરો, બંધ કરો, અને સુપર એડમિન નક્કી કરો.'));
+ const r=await supabase.from('profiles').select('id,display_name,role,is_super,is_active,contact_phone,preferred_language,created_at').eq('role','admin').order('created_at',{ascending:true});
+ if(r.error)throw r.error;
+ if(activeView!=='team')return;
+ const me=profile.id;
+ const roleTag=x=>x.is_active===false?'<span class="tag tag-off">'+t('Deactivated','બંધ')+'</span>':x.is_super?'<span class="tag">'+t('Super admin','સુપર એડમિન')+'</span>':'<span class="tag tag-ok">'+t('Admin','એડમિન')+'</span>';
+ const rows=r.data.map(x=>'<article class="wait-row team-row"><div class="wait-open"><span class="hd-num sm">'+escapeHtml((x.display_name||'?').trim().charAt(0).toUpperCase())+'</span><span class="wait-info"><strong>'+escapeHtml(x.display_name)+(x.id===me?' <span class="tiny">('+t('you','તમે')+')</span>':'')+'</strong><span class="tiny">'+escapeHtml(x.contact_phone||t('No phone','ફોન નથી'))+'</span></span>'+roleTag(x)+'</div>'
+  +(x.id===me?'<div class="tiny">'+t('Change your own password under My account.','તમારો પાસવર્ડ “મારું એકાઉન્ટ” માં બદલો.')+'</div>':'<div class="act-row">'+progIcon('','edit',t('Reset password','પાસવર્ડ રીસેટ'),'data-team-reset="'+escapeHtml(x.id)+'"')+(x.is_active===false?progIcon('act-yes','check',t('Reactivate','ફરી ચાલુ'),'data-team-active="'+escapeHtml(x.id)+':1"'):(x.is_super?'':progIcon('act-no','x',t('Deactivate','બંધ કરો'),'data-team-active="'+escapeHtml(x.id)+':0"')))+(x.is_active===false?'':progIcon('',x.is_super?'x':'shield',x.is_super?t('Remove super','સુપર હટાવો'):t('Make super','સુપર બનાવો'),'data-team-super="'+escapeHtml(x.id)+':'+(x.is_super?'0':'1')+'"'))+'</div>')+'</article>').join('');
+ c.innerHTML='<div class="noticebar">'+t('Admins can run the society day to day. Only super admins can add or switch off admins, reset passwords and delete records for good.','એડમિન રોજિંદું કામ સંભાળે. એડમિન ઉમેરવા/બંધ કરવા, પાસવર્ડ રીસેટ અને કાયમી ડિલીટ ફક્ત સુપર એડમિન કરી શકે.')+'</div>'
+  +'<div class="list">'+rows+'</div>'
+  +'<div class="panel" style="margin-top:16px"><h3>'+t('Add an admin','નવો એડમિન ઉમેરો')+'</h3><form id="teamForm" novalidate>'
+  +'<div class="field"><label for="tmEmail">'+t('Email (used to sign in)','ઇમેઇલ (સાઇન ઇન માટે)')+' *</label><input id="tmEmail" name="email" type="email" inputmode="email" autocomplete="off" autocapitalize="none" maxlength="160"></div>'
+  +'<div class="field"><label for="tmName">'+t('Name','નામ')+' *</label><input id="tmName" name="display_name" type="text" autocomplete="off" maxlength="120"></div>'
+  +'<div class="field"><label for="tmPhone">'+t('Mobile number','મોબાઇલ નંબર')+'</label><input id="tmPhone" name="contact_phone" type="tel" inputmode="tel" autocomplete="off" maxlength="30"></div>'
+  +'<div class="field"><label>'+t('Language','ભાષા')+'</label>'+progChips('preferred_language',[['gu','ગુજરાતી'],['en','English']],'gu')+'<input type="hidden" name="preferred_language" value="gu"></div>'
+  +'<div class="field"><label for="tmPass">'+t('Temporary password','કામચલાઉ પાસવર્ડ')+' *</label><div class="pw-row"><input id="tmPass" name="password" type="password" autocomplete="new-password" minlength="8" maxlength="72" placeholder="'+t('At least 8 characters','ઓછામાં ઓછા 8 અક્ષર')+'"><button type="button" class="btn" id="tmPassToggle">'+t('Show','બતાવો')+'</button></div><div class="form-hint">'+t('Share it privately. They can change it under My account.','ખાનગી રીતે આપો. તેઓ “મારું એકાઉન્ટ” માં બદલી શકશે.')+'</div></div>'
+  +'<button class="btn primary" type="submit">'+t('Create admin','એડમિન બનાવો')+'</button><div id="teamMsg" class="msg" role="alert"></div></form></div>'
+  +'<div class="household-modal" id="teamPwSheet" hidden><button type="button" class="household-modal-backdrop" data-tp-close aria-label="'+t('Close','બંધ કરો')+'"></button><section class="household-modal-sheet" role="dialog" aria-modal="true"><div class="modal-grabber"></div><div class="modal-head"><h3>'+t('Reset password','પાસવર્ડ રીસેટ')+'</h3><button type="button" class="btn" data-tp-close>'+t('Close','બંધ કરો')+'</button></div><form id="teamPwForm" novalidate><input type="hidden" name="user_id"><div class="field"><label for="tpPass">'+t('New temporary password','નવો કામચલાઉ પાસવર્ડ')+'</label><input id="tpPass" name="password" type="password" autocomplete="new-password" minlength="8" maxlength="72"></div><button class="btn primary" type="submit">'+t('Reset password','પાસવર્ડ રીસેટ')+'</button><div id="tpMsg" class="msg" role="alert"></div></form></section></div>';
+ bindChips(c);
+ const rerender=()=>renderTeam(c).catch(err=>{console.error(err);setMsg('appMsg',t('Could not refresh the team. Tap Refresh.','ટીમ રિફ્રેશ થઈ નથી. રિફ્રેશ દબાવો.'))});
+ const name=id=>(r.data.find(x=>x.id===id)||{}).display_name||'';
+ $('tmPassToggle').addEventListener('click',e=>{const f=$('tmPass'),show=f.type==='password';f.type=show?'text':'password';e.currentTarget.textContent=show?t('Hide','છુપાવો'):t('Show','બતાવો')});
+ const form=$('teamForm');
+ form.querySelector('[data-group="preferred_language"]').addEventListener('click',e=>{const b=e.target.closest('[data-val]');if(b)form.elements.preferred_language.value=b.dataset.val});
+ form.addEventListener('submit',e=>{e.preventDefault();const fd=new FormData(form),email=String(fd.get('email')||'').trim(),nm=String(fd.get('display_name')||'').trim(),pw=String(fd.get('password')||'');
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){setMsg('teamMsg',t('Enter a valid email address.','યોગ્ય ઇમેઇલ લખો.'));return}
+  if(nm.length<2){setMsg('teamMsg',t('Enter the name.','નામ લખો.'));return}
+  if(pw.length<8){setMsg('teamMsg',t('Password must be at least 8 characters.','પાસવર્ડ ઓછામાં ઓછા 8 અક્ષરનો હોવો જોઈએ.'));return}
+  withBusy(form.querySelector('button[type=submit]'),async()=>{setMsg('teamMsg','');try{const out=await callTeam({action:'create_admin',email,display_name:nm,contact_phone:String(fd.get('contact_phone')||'').trim(),password:pw,preferred_language:fd.get('preferred_language')});await rerender();setMsg('appMsg',out.message)}catch(err){setMsg('teamMsg',err.message)}});
+ });
+ c.querySelectorAll('[data-team-active]').forEach(b=>b.addEventListener('click',()=>{const [id,flag]=b.dataset.teamActive.split(':'),on=flag==='1';
+  if(!confirm(on?t('Reactivate ','ફરી ચાલુ કરો: ')+name(id)+'?':t('Deactivate ','બંધ કરો: ')+name(id)+t('? They will lose all admin access and cannot sign in.','? તેમનો બધો એડમિન પ્રવેશ જશે અને સાઇન ઇન નહીં કરી શકે.')))return;
+  withBusy(b,async()=>{try{const out=await callTeam({action:'set_active',user_id:id,active:on});await rerender();setMsg('appMsg',out.message)}catch(err){setMsg('appMsg',err.message)}});
+ }));
+ c.querySelectorAll('[data-team-super]').forEach(b=>b.addEventListener('click',()=>{const [id,flag]=b.dataset.teamSuper.split(':'),on=flag==='1';
+  if(!confirm(on?t('Make ','બનાવો: ')+name(id)+t(' a super admin? They will be able to add and switch off admins and delete records for good.',' સુપર એડમિન? તેઓ એડમિન ઉમેરી/બંધ કરી શકશે અને કાયમી ડિલીટ કરી શકશે.'):t('Remove super-admin status from ','સુપર એડમિન હટાવો: ')+name(id)+'?'))return;
+  withBusy(b,async()=>{try{const out=await callTeam({action:'set_super',user_id:id,is_super:on});await rerender();setMsg('appMsg',out.message)}catch(err){setMsg('appMsg',err.message)}});
+ }));
+ const sheet=$('teamPwSheet'),pform=$('teamPwForm');
+ const close=()=>{sheet.hidden=true;document.body.classList.remove('modal-open')};
+ sheet.querySelectorAll('[data-tp-close]').forEach(b=>b.addEventListener('click',close));
+ c.querySelectorAll('[data-team-reset]').forEach(b=>b.addEventListener('click',()=>{pform.elements.user_id.value=b.dataset.teamReset;pform.elements.password.value='';setMsg('tpMsg','');sheet.hidden=false;document.body.classList.add('modal-open');pform.elements.password.focus({preventScroll:true})}));
+ pform.addEventListener('submit',e=>{e.preventDefault();const pw=pform.elements.password.value;
+  if(pw.length<8){setMsg('tpMsg',t('Password must be at least 8 characters.','પાસવર્ડ ઓછામાં ઓછા 8 અક્ષરનો હોવો જોઈએ.'));return}
+  withBusy(pform.querySelector('button[type=submit]'),async()=>{try{const out=await callTeam({action:'reset_password',user_id:pform.elements.user_id.value,password:pw});close();setMsg('appMsg',out.message)}catch(err){setMsg('tpMsg',err.message)}});
+ });
+}
+
 /* ---------- My account: every signed-in user manages their own details and password ---------- */
 async function renderAccount(c){
  heading(t('My account','મારું એકાઉન્ટ'),t('Your contact details and password.','તમારી સંપર્ક વિગત અને પાસવર્ડ.'));
@@ -859,7 +985,7 @@ async function renderAccount(c){
  if(res.error){phoneOk=false;res=await supabase.from('profiles').select('display_name,preferred_language,role,house_number').eq('id',session.user.id).maybeSingle()}
  if(res.error||!res.data)throw res.error||new Error('profile');
  const me=res.data,admin=me.role==='admin';
- c.innerHTML='<div class="panel"><div class="user-card"><div class="avatar">'+escapeHtml(admin?'A':String(me.house_number??'?'))+'</div><div><strong>'+escapeHtml(me.display_name)+'</strong><small>'+(admin?t('Administrator','એડમિન'):t('House no. ','ઘર નં. ')+escapeHtml(me.house_number))+'</small></div></div>'
+ c.innerHTML='<div class="panel"><div class="user-card"><div class="avatar">'+escapeHtml(admin?'A':String(me.house_number??'?'))+'</div><div><strong>'+escapeHtml(me.display_name)+'</strong><small>'+(admin?(profile.is_super?t('Super admin','સુપર એડમિન'):t('Administrator','એડમિન')):t('House no. ','ઘર નં. ')+escapeHtml(me.house_number))+'</small></div></div>'
   +'<p class="tiny" style="margin-top:10px">'+t('Your house number and role can only be changed by an administrator.','તમારો ઘર નંબર અને ભૂમિકા ફક્ત એડમિન બદલી શકે.')+'</p></div>'
   +'<div class="panel" style="margin-top:14px"><h3>'+t('My details','મારી વિગત')+'</h3><form id="accountForm" novalidate><input type="hidden" name="preferred_language" value="'+(me.preferred_language==='en'?'en':'gu')+'">'
   +'<div class="field"><label for="acName">'+t('Name','નામ')+' *</label><input id="acName" name="display_name" type="text" autocomplete="name" maxlength="120" value="'+escapeHtml(me.display_name)+'"></div>'
@@ -870,6 +996,28 @@ async function renderAccount(c){
   +'<div class="field"><label for="acPw1">'+t('New password','નવો પાસવર્ડ')+'</label><div class="pw-row"><input id="acPw1" name="pw1" type="password" autocomplete="new-password" minlength="8" placeholder="'+t('At least 8 characters','ઓછામાં ઓછા 8 અક્ષર')+'"><button type="button" class="btn" id="acPwToggle">'+t('Show','બતાવો')+'</button></div></div>'
   +'<div class="field"><label for="acPw2">'+t('Repeat new password','નવો પાસવર્ડ ફરી લખો')+'</label><input id="acPw2" name="pw2" type="password" autocomplete="new-password" minlength="8"></div>'
   +'<button class="btn primary" type="submit">'+t('Change password','પાસવર્ડ બદલો')+'</button><div id="passwordMsg" class="msg" role="alert"></div></form></div>';
+ // Residents can set their own festival member count until a payment or token exists (enforced in the database too).
+ if(!admin){
+  try{
+   const sn=await supabase.from('navratri_seasons').select('id,title').eq('status','active').order('starts_on',{ascending:false}).limit(1);
+   const season=sn.data&&sn.data[0];
+   const hh=season&&await supabase.from('navratri_households').select('id,participant_count,contribution_per_person_paise').eq('season_id',season.id).eq('house_number',me.house_number).maybeSingle();
+   if(hh&&hh.data){
+    const [pay,rf,tk]=await Promise.all([supabase.from('navratri_contributions').select('id').eq('household_id',hh.data.id).limit(1),supabase.from('navratri_refunds').select('id').eq('household_id',hh.data.id).limit(1),supabase.from('navratri_tokens').select('id').eq('season_id',season.id).eq('house_number',me.house_number).limit(1)]);
+    const locked=(pay.data&&pay.data.length)||(rf.data&&rf.data.length)||(tk.data&&tk.data.length);
+    const rate=Number(hh.data.contribution_per_person_paise)||0,cnt=Number(hh.data.participant_count)||0;
+    c.insertAdjacentHTML('beforeend','<div class="panel" style="margin-top:14px"><h3>'+escapeHtml(season.title)+' · '+t('my house members','મારા ઘરના સભ્યો')+'</h3><form id="membersForm" novalidate><div class="field"><label for="msCount">'+t('How many people from your house are taking part?','તમારા ઘરમાંથી કેટલા લોકો ભાગ લેશે?')+'</label><div class="stepper"><button type="button" class="step-btn" data-ms="-1"'+(locked?' disabled':'')+' aria-label="'+t('One less','એક ઓછું')+'">−</button><input id="msCount" name="count" type="number" inputmode="numeric" min="0" max="100" step="1" value="'+cnt+'"'+(locked?' disabled':'')+'><button type="button" class="step-btn" data-ms="1"'+(locked?' disabled':'')+' aria-label="'+t('One more','એક વધુ')+'">+</button></div></div><div class="calculated-due"><span>'+t('Contribution to pay','ચૂકવવાનો ફાળો')+'</span><strong id="msDue">'+money(cnt*rate)+'</strong><small>'+money(rate)+' × <span id="msN">'+cnt+'</span> '+t('people','વ્યક્તિ')+'</small></div>'+(locked?'<div class="noticebar">'+t('A payment or token is already recorded for your house, so only the administrator can change the members now.','તમારા ઘર માટે ચુકવણી કે ટોકન નોંધાઈ ગયા છે, એટલે હવે ફક્ત એડમિન સભ્યો બદલી શકે.')+'</div>':'<button class="btn primary" type="submit">'+t('Save members','સભ્યો સાચવો')+'</button>')+'<div id="membersMsg" class="msg" role="alert"></div></form></div>');
+    const mf=$('membersForm'),upd=()=>{const n=Math.min(100,Math.max(0,Math.round(Number(mf.elements.count.value)||0)));$('msDue').textContent=money(n*rate);$('msN').textContent=n};
+    mf.querySelectorAll('[data-ms]').forEach(b=>b.addEventListener('click',()=>{mf.elements.count.value=Math.min(100,Math.max(0,(Number(mf.elements.count.value)||0)+Number(b.dataset.ms)));upd()}));
+    mf.elements.count.addEventListener('input',upd);
+    if(!locked)mf.addEventListener('submit',e=>{e.preventDefault();const n=Math.round(Number(mf.elements.count.value));if(!Number.isInteger(n)||n<0||n>100){setMsg('membersMsg',t('Enter a number from 0 to 100.','0 થી 100 વચ્ચેની સંખ્યા લખો.'));return}
+     withBusy(mf.querySelector('button[type=submit]'),async()=>{setMsg('membersMsg','');const {error}=await supabase.rpc('set_my_member_count',{p_count:n});
+      if(error){setMsg('membersMsg',dbMissing(error,'set_my_member_count')?t('This is not switched on yet. Please ask the administrator.','આ હજી શરૂ થયું નથી. કૃપા કરી એડમિનને કહો.'):error.message);return}
+      setMsg('appMsg',t('Members saved. Contribution to pay: ','સભ્યો સાચવ્યા. ચૂકવવાનો ફાળો: ')+money(n*rate))});
+    });
+   }
+  }catch(err){console.error(err)}
+ }
  bindChips(c);
  const form=$('accountForm');
  form.addEventListener('submit',e=>{e.preventDefault();const fd=new FormData(form),name=String(fd.get('display_name')||'').trim(),phone=String(fd.get('contact_phone')||'').trim();
